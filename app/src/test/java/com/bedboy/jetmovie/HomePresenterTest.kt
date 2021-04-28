@@ -1,12 +1,9 @@
 package com.bedboy.jetmovie
 
-import com.bedboy.jetmovie.model.entity.DataResult
-import com.bedboy.jetmovie.model.entity.Results
-import com.bedboy.jetmovie.model.repository.RemoteRepoImplement
+import com.bedboy.jetmovie.data.entity.DataResult
+import com.bedboy.jetmovie.data.entity.Results
+import com.bedboy.jetmovie.data.repository.RemoteRepoImplement
 import com.bedboy.jetmovie.network.SchedulerProvider
-import com.bedboy.jetmovie.ui.home.HomeContract
-import com.bedboy.jetmovie.ui.home.HomePresenter
-import com.bedboy.jetmovie.utils.TestSchedulerProvider
 import io.reactivex.Flowable
 import org.junit.Before
 import org.junit.Test
