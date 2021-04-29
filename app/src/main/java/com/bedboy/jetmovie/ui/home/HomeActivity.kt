@@ -5,15 +5,30 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bedboy.jetmovie.databinding.ActivityMainBinding
+import com.bedboy.jetmovie.databinding.ContentHomePopularBinding
 
 class HomeActivity : AppCompatActivity() {
+
+    private lateinit var detailContentHomePopularBinding: ContentHomePopularBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val homeBinding = ActivityMainBinding.inflate(layoutInflater)
+        detailContentHomePopularBinding = homeBinding.detailContentHomePopular
         setContentView(homeBinding.root)
 
+        initToolbar(homeBinding) // Setup Toolbar
+        initViewModel(detailContentHomePopularBinding) // Setup ViewModel
+    }
+
+    private fun initToolbar(homeBinding: ActivityMainBinding) {
+        setSupportActionBar(homeBinding.toolbar)
+        supportActionBar?.hide()
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+    }
+
+    private fun initViewModel(detailContentHomePopularBinding: ContentHomePopularBinding) {
         val viewModel = ViewModelProvider(
             this,
             ViewModelProvider.NewInstanceFactory()
@@ -23,12 +38,11 @@ class HomeActivity : AppCompatActivity() {
         val adapter = MoviesAdapter()
         adapter.setMovies(movies)
 
-        with(homeBinding.rvResultsMovie) {
+        with(detailContentHomePopularBinding.rvResultsMovie) {
             layoutManager =
                 StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             setHasFixedSize(true)
             this.adapter = adapter
         }
-
     }
 }

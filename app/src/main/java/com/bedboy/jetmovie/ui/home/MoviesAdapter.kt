@@ -34,19 +34,9 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
 
         fun bind(film: MovieEntity) {
             with(binding) {
-                tvTitleFilmItemHome.text = film.title
-                tvReleaseFilmItemHome.text = film.releaseDate
-                tvRatingFilmItemHome.text = film.rating
-
                 Glide.with(itemView.context)
                     .load(film.imagePath)
                     .into(ivPosterFilmItemHome)
-
-//                itemView.setOnClickListener {
-//                    val intent = Intent(itemView.context, DetailActivity::class.java)
-//                    intent.putExtra(DATA_RESULT, film)
-//                    itemView.context.startActivity(intent)
-//                }
             }
         }
 
