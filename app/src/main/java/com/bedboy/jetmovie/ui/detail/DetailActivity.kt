@@ -3,12 +3,10 @@ package com.bedboy.jetmovie.ui.detail
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.bedboy.jetmovie.R
-import com.bedboy.jetmovie.data.MovieEntity
+import com.bedboy.jetmovie.data.DetailMovieEntity
 import com.bedboy.jetmovie.databinding.ActivityDetailBinding
 import com.bedboy.jetmovie.databinding.ContentDetailMovieBinding
 import com.bedboy.jetmovie.utils.DataDummy
-import com.bumptech.glide.Glide
 
 class DetailActivity : AppCompatActivity() {
 
@@ -26,18 +24,29 @@ class DetailActivity : AppCompatActivity() {
         detailMovieBinding = activityDetailBinding.contentDetailMovie
         setContentView(activityDetailBinding.root)
 
-        initViewModel(detailMovieBinding)
+        initViewModel()
     }
 
-    private fun initViewModel(detailMovieBinding: ContentDetailMovieBinding) {
-        val extras = intent.getParcelableExtra<MovieEntity>(DATA_RESULT)
+    private fun initViewModel() {
 
-        detailMovieBinding.tvTitleFilmDetail.text = extras?.title
-        detailMovieBinding.tvReleaseFilmDetail.text = extras?.releaseDate
-        detailMovieBinding.tvDescriptionFilmDetail.text = extras?.sinopsis
+        val viewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[DetailViewModel::class.java]
 
-        Glide.with(this)
-            .load(extras?.imagePath)
-            .into(detailMovieBinding.ivPosterFilmDetail)
+        val bundle = intent.extras
+        if (bundle != null) {
+            val movieID = bundle.getString(DATA_RESULT)
+            if (movieID != null) {
+                viewModel.setSelectedMovie(movieID)
+                populateDetailContent(viewModel.getSelectedMovie())
+            }
+        }
+    }
+
+    private fun populateDetailContent(movie: DetailMovieEntity) {
+        detailMovieBinding.tvTitleFilmDetail.text = movie.title
+        detailMovieBinding.tvReleaseFilmDetail.text = movie.genre
+        detailMovieBinding.tvDescriptionFilmDetail.text = movie.overview
     }
 }

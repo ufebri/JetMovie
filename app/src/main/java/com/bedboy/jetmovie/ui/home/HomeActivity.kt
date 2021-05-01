@@ -3,6 +3,7 @@ package com.bedboy.jetmovie.ui.home
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bedboy.jetmovie.databinding.ActivityMainBinding
 import com.bedboy.jetmovie.databinding.ContentHomePopularBinding
@@ -40,7 +41,7 @@ class HomeActivity : AppCompatActivity() {
 
         with(detailContentHomePopularBinding.rvResultsMovie) {
             layoutManager =
-                StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                GridLayoutManager(context, 2)
             setHasFixedSize(true)
             this.adapter = adapter
         }
