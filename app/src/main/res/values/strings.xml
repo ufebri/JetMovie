@@ -4,5 +4,7 @@
     <string name="search_menu">Search Menu</string>
     <string name="lastpage">Your in the last page</string>
     <string name="popular">Popular</string>
+    <string name="share">Share</string>
+    <string name="share_text">Mari Kita Coba</string>
 
 </resources>

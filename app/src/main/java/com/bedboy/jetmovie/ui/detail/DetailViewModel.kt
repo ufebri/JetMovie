@@ -12,7 +12,7 @@ class DetailViewModel : ViewModel() {
         this.idMovie = id
     }
 
-    fun getDetailMovie(): List<DetailMovieEntity> = DataDummy.generateDetailMovie(idMovie)
+    private fun getDetailMovie(): List<DetailMovieEntity> = DataDummy.generateDetailMovie(idMovie)
 
     fun getSelectedMovie(): DetailMovieEntity {
         lateinit var movie: DetailMovieEntity
