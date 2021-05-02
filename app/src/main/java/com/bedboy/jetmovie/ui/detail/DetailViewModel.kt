@@ -1,7 +1,7 @@
 package com.bedboy.jetmovie.ui.detail
 
 import androidx.lifecycle.ViewModel
-import com.bedboy.jetmovie.data.DetailMovieEntity
+import com.bedboy.jetmovie.data.DetailDataEntity
 import com.bedboy.jetmovie.utils.DataDummy
 
 class DetailViewModel : ViewModel() {
@@ -12,10 +12,10 @@ class DetailViewModel : ViewModel() {
         this.idMovie = id
     }
 
-    private fun getDetailMovie(): List<DetailMovieEntity> = DataDummy.generateDetailMovie(idMovie)
+    private fun getDetailMovie(): List<DetailDataEntity> = DataDummy.generateDetailData(idMovie)
 
-    fun getSelectedMovie(): DetailMovieEntity {
-        lateinit var movie: DetailMovieEntity
+    fun getSelectedMovie(): DetailDataEntity {
+        lateinit var movie: DetailDataEntity
         val movieEntities = getDetailMovie()
         for (movieEntity in movieEntities) {
             if (movieEntity.id == idMovie) {

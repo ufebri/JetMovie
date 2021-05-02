@@ -1,6 +1,6 @@
 package com.bedboy.jetmovie.data
 
-data class MovieEntity(
+data class DataEntity(
     var id: String,
     var imagePath: String
 )

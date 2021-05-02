@@ -6,5 +6,7 @@
     <string name="popular">Popular</string>
     <string name="share">Share</string>
     <string name="share_text">Mari Kita Coba</string>
+    <string name="navigation_drawer_open">drawer open</string>
+    <string name="navigation_drawer_close">drawer close</string>
 
 </resources>

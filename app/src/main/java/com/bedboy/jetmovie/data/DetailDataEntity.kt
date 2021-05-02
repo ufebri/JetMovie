@@ -1,6 +1,6 @@
 package com.bedboy.jetmovie.data
 
-data class DetailMovieEntity(
+data class DetailDataEntity(
     var id: String,
     var title: String,
     var vote: String,

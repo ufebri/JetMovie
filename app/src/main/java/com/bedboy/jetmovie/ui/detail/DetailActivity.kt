@@ -1,7 +1,6 @@
 package com.bedboy.jetmovie.ui.detail
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bedboy.jetmovie.R
-import com.bedboy.jetmovie.data.DetailMovieEntity
+import com.bedboy.jetmovie.data.DetailDataEntity
 import com.bedboy.jetmovie.databinding.ActivityDetailBinding
 import com.bedboy.jetmovie.databinding.ContentDetailMovieBinding
 
@@ -68,7 +67,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun populateDetailContent(movie: DetailMovieEntity) {
+    private fun populateDetailContent(movie: DetailDataEntity) {
         movieTitle = movie.title
         detailMovieBinding.apply {
             tvTitleFilmDetail.text = movie.title
