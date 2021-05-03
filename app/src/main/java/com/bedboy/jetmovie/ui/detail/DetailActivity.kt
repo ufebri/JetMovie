@@ -60,8 +60,8 @@ class DetailActivity : AppCompatActivity() {
         if (bundle != null) {
             val movieID = bundle.getString(DATA_RESULT)
             if (movieID != null) {
-                viewModel.setSelectedMovie(movieID)
-                populateDetailContent(viewModel.getSelectedMovie())
+                viewModel.setSelectedData(movieID)
+                populateDetailContent(viewModel.getSelectedData())
             }
         }
     }

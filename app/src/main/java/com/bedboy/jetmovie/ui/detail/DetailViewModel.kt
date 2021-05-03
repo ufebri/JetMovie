@@ -6,22 +6,22 @@ import com.bedboy.jetmovie.utils.DataDummy
 
 class DetailViewModel : ViewModel() {
 
-    private lateinit var idMovie: String
+    private lateinit var dataID: String
 
-    fun setSelectedMovie(id: String) {
-        this.idMovie = id
+    fun setSelectedData(id: String) {
+        this.dataID = id
     }
 
-    private fun getDetailMovie(): List<DetailDataEntity> = DataDummy.generateDetailData(idMovie)
+    private fun getDetailData(): List<DetailDataEntity> = DataDummy.generateDetailData(dataID)
 
-    fun getSelectedMovie(): DetailDataEntity {
-        lateinit var movie: DetailDataEntity
-        val movieEntities = getDetailMovie()
-        for (movieEntity in movieEntities) {
-            if (movieEntity.id == idMovie) {
-                movie = movieEntity
+    fun getSelectedData(): DetailDataEntity {
+        lateinit var data: DetailDataEntity
+        val dataEntities = getDetailData()
+        for (dataEntity in dataEntities) {
+            if (dataEntity.id == dataID) {
+                data = dataEntity
             }
         }
-        return movie
+        return data
     }
 }
