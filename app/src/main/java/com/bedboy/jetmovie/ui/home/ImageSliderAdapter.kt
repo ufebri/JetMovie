@@ -12,7 +12,6 @@ import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.bedboy.jetmovie.R
-import com.bedboy.jetmovie.data.DataEntity
 import com.bedboy.jetmovie.data.FeaturedEntity
 import com.bedboy.jetmovie.ui.detail.DetailActivity
 import com.bedboy.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
@@ -48,7 +47,7 @@ class ImageSliderAdapter(var list: List<FeaturedEntity>, var ctx: Context) : Pag
         title.text = list[position].title
         vote.text = list[position].vote
         voteBar.rating = list[position].vote.toFloat()
-        genre.text = list[position].genre[0]
+        genre.text = list[position].genre
 
         with(view) {
             Glide.with(context)
@@ -73,7 +72,7 @@ class ImageSliderAdapter(var list: List<FeaturedEntity>, var ctx: Context) : Pag
         return view
     }
 
-    fun addPageIndicator() {
+    private fun addPageIndicator() {
         indicator.removeAllViews()
         for (i in list.indices) {
             val view = ImageView(ctx)

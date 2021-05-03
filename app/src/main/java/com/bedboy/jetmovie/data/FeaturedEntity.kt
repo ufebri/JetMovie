@@ -6,5 +6,5 @@ data class FeaturedEntity(
     var imagePath: String,
     var title: String,
     var vote: String,
-    var genre: List<String?>
+    var genre: String
 )

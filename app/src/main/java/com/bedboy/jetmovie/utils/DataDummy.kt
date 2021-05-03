@@ -92,49 +92,49 @@ object DataDummy {
         tvShow.add(
             FeaturedEntity(
                 "11", "${imgLink}/suopoADq0k8YZr4dQXcU6pToj6s.jpg", "Game Of Thrones",
-                "8.4", listOf("Action", "Mystery", "Thriller")
+                "8.4", "Action"
             )
         )
         tvShow.add(
             FeaturedEntity(
                 "12", "${imgLink}/dVHeJXUzHJJGadB2wvpuAn6fsdN.jpg", "Lupin",
-                "8.5", listOf("Mystery", "Action", "History")
+                "8.5", "Mystery"
             )
         )
         tvShow.add(
             FeaturedEntity(
                 "13", "${imgLink}/uAjMQlbPkVHmUahhCouANlHSDW2.jpg", "The Promised Neverland",
-                "9.1", listOf("Animation", "Horror", "Thriller", "Action", "Sci-Fi")
+                "9.1", "Animation"
             )
         )
         tvShow.add(
             FeaturedEntity(
                 "14", "${imgLink}/7RySzFeK3LPVMXcPtqfZnl6u4p1.jpg", "The Big Bang Theory",
-                "7.7", listOf("Drama, Comedy, Romance")
+                "7.7", "Drama"
             )
         )
         tvShow.add(
             FeaturedEntity(
                 "15", "${imgLink}/5BMwFwNzSidVYArn561acqtktxv.jpg", "How I Met Your Mother",
-                "8.1", listOf("Drama", "Romance", "Comedy")
+                "8.1", "Drama"
             )
         )
         tvShow.add(
             FeaturedEntity(
                 "16", "${imgLink}/qBw99h23veY7bTccAzV4bRCg86n.jpg", "The End of the F***ing World",
-                "8.3", listOf("Drama", "Comedy", "Romance", "Thriller")
+                "8.3", "Drama"
             )
         )
         tvShow.add(
             FeaturedEntity(
                 "17", "${imgLink}/4pfXAnWxOfEJsUgDPW0zqzs5UWv.jpg", "Silicon Valley",
-                "8.1", listOf("Drama", "Comedy")
+                "8.1", "Drama"
             )
         )
         tvShow.add(
             FeaturedEntity(
                 "18", "${imgLink}/8NK9un1DPUTgRzGtJHMvpdIB5Ay.jpg", "Start-Up",
-                "8.4", listOf("Drama", "Comedy", "Romance")
+                "8.4", "Drama"
             )
         )
         tvShow.add(
@@ -142,13 +142,13 @@ object DataDummy {
                 "19",
                 "${imgLink}/b0WmHGc8LHTdGCVzxRb3IBMur57.jpg",
                 "The Falcon and the Winter Soldier",
-                "7.9", listOf("Action")
+                "7.9", "Action"
             )
         )
         tvShow.add(
             FeaturedEntity(
                 "20", "${imgLink}/57vVjteucIF3bGnZj6PmaoJRScw.jpg", "Wandavision",
-                "8.4", listOf("Action", "Romance", "Comedy")
+                "8.4", "Action"
             )
         )
 
