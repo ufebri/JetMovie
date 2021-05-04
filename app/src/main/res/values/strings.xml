@@ -1,12 +1,7 @@
 <resources>
     <string name="app_name">JetMovie</string>
     <string name="poster_film">Poster Film</string>
-    <string name="search_menu">Search Menu</string>
-    <string name="lastpage">Your in the last page</string>
     <string name="popular">Popular</string>
     <string name="share">Share</string>
-    <string name="share_text">Mari Kita Coba</string>
-    <string name="navigation_drawer_open">drawer open</string>
-    <string name="navigation_drawer_close">drawer close</string>
 
 </resources>

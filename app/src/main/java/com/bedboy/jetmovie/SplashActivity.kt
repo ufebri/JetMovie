@@ -3,11 +3,11 @@ package com.bedboy.jetmovie
 import android.app.Activity
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.bedboy.jetmovie.databinding.ActivitySplashBinding
 import com.bedboy.jetmovie.ui.home.HomeActivity
