@@ -9,19 +9,25 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import androidx.constraintlayout.motion.widget.MotionLayout
+import com.bedboy.jetmovie.databinding.ActivitySplashBinding
 import com.bedboy.jetmovie.ui.home.HomeActivity
 
 class SplashActivity : AppCompatActivity() {
 
-    private lateinit var motionLayout: MotionLayout
+    private lateinit var splashBinding: ActivitySplashBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
 
-        motionLayout = findViewById(R.id.motionLayout)
+        val binding = ActivitySplashBinding.inflate(layoutInflater)
+        splashBinding = binding
+        setContentView(binding.root)
 
-        motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
+        setupMotion()
+    }
+
+    private fun setupMotion() {
+        splashBinding.motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
                 startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
             }
@@ -36,7 +42,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        motionLayout.startLayoutAnimation()
+        splashBinding.motionLayout.startLayoutAnimation()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
