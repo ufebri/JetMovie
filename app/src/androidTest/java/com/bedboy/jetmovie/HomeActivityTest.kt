@@ -16,7 +16,7 @@ import org.junit.Test
 
 class HomeActivityTest {
 
-    private val dummyData = DataDummy.generateMovie()
+    private val dummyMovie = DataDummy.generateMovie()
 
     @get:Rule
     var activityRule = ActivityScenarioRule(HomeActivity::class.java)
@@ -31,15 +31,16 @@ class HomeActivityTest {
     fun loadPopular() {
         onView(withId(R.id.rv_resultsMovie)).apply {
             check(matches(isDisplayed()))
+            perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(dummyMovie.size))
             perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
         }
     }
 
     @Test
-    fun loadDetail() {
+    fun loadDetailData() {
         onView(withId(R.id.rv_resultsMovie)).apply {
             check(matches(isDisplayed()))
-            perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(7, click()))
+            perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
         }
         onView(withId(R.id.tv_titleFilm_detail)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_categoryFilm_detail)).check(matches(isDisplayed()))
