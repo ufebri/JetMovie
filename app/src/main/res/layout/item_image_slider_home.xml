@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_slide_home"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.9"
+        android:fitsSystemWindows="true"
+        android:scaleType="fitXY"
+        app:layout_collapseMode="parallax"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/tv_titleFeatured"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        android:fontFamily="sans-serif-thin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tv_genreFeatured"
+        tools:text="Wakanda" />
+
+    <TextView
+        android:id="@+id/tv_genreFeatured"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        android:background="@drawable/bg_rating_home"
+        android:fontFamily="monospace"
+        android:gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/rb_ratingFeatured"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Action" />
+
+    <androidx.appcompat.widget.AppCompatRatingBar
+        android:id="@+id/rb_ratingFeatured"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        android:isIndicator="true"
+        android:progressBackgroundTint="@android:color/white"
+        android:progressTint="@android:color/holo_orange_light"
+        android:secondaryProgressTint="@android:color/holo_red_light"
+        android:stepSize="1"
+        app:layout_constraintBottom_toTopOf="@id/ll_slide_home"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:rating="2.5" />
+
+    <TextView
+        android:id="@+id/tv_ratingFeatured"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        android:fontFamily="sans-serif-black"
+        android:textColor="@android:color/holo_red_light"
+        app:layout_constraintBottom_toBottomOf="@id/rb_ratingFeatured"
+        app:layout_constraintStart_toEndOf="@id/rb_ratingFeatured"
+        app:layout_constraintTop_toTopOf="@id/rb_ratingFeatured"
+        tools:text="7.6" />
+
+    <LinearLayout
+        android:id="@+id/ll_slide_home"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_margin="@dimen/margin_small"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
