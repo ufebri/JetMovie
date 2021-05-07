@@ -17,7 +17,8 @@ import com.bedboy.jetmovie.ui.detail.DetailActivity
 import com.bedboy.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
 import com.bumptech.glide.Glide
 
-class ImageSliderAdapter(var list: List<FeaturedEntity>, var ctx: Context) : PagerAdapter() {
+class ImageSliderAdapter(private var list: List<FeaturedEntity>, private var ctx: Context) :
+    PagerAdapter() {
 
 
     private lateinit var layoutInflater: LayoutInflater
