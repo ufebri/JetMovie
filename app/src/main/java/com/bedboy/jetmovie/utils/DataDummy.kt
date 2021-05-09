@@ -1,12 +1,13 @@
 package com.bedboy.jetmovie.utils
 
+import com.bedboy.jetmovie.BuildConfig
 import com.bedboy.jetmovie.data.DataEntity
 import com.bedboy.jetmovie.data.DetailDataEntity
 import com.bedboy.jetmovie.data.FeaturedEntity
 
 object DataDummy {
 
-    private const val imgLink: String = "https://image.tmdb.org/t/p/w400"
+    private const val imgLink: String = BuildConfig.IMGLINK
 
     fun generateMovie(): List<DataEntity> {
 
