@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bedboy.jetmovie.R
-import com.bedboy.jetmovie.data.DetailDataEntity
+import com.bedboy.jetmovie.data.source.local.entity.DetailDataEntity
 import com.bedboy.jetmovie.databinding.ActivityDetailBinding
 import com.bedboy.jetmovie.databinding.ContentDetailMovieBinding
 

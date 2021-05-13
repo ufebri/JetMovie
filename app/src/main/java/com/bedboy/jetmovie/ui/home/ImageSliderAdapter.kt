@@ -11,13 +11,14 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.bedboy.jetmovie.BuildConfig
 import com.bedboy.jetmovie.R
-import com.bedboy.jetmovie.data.FeaturedEntity
+import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
 import com.bedboy.jetmovie.ui.detail.DetailActivity
 import com.bedboy.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
 import com.bumptech.glide.Glide
 
-class ImageSliderAdapter(private var list: List<FeaturedEntity>, private var ctx: Context) :
+class ImageSliderAdapter(private var list: List<ResultsItem>, private var ctx: Context) :
     PagerAdapter() {
 
 
@@ -45,14 +46,14 @@ class ImageSliderAdapter(private var list: List<FeaturedEntity>, private var ctx
         indicator = view.findViewById(R.id.ll_slide_home)
 
 
-        title.text = list[position].title
-        vote.text = list[position].vote
-        voteBar.rating = list[position].vote.toFloat()
-        genre.text = list[position].genre
+        title.text = list[position].name ?: list[position].title
+        vote.text = list[position].voteAverage.toString()
+        voteBar.rating = list[position].voteAverage.toFloat()
+        genre.text = list[position].genreIds!![0].toString()
 
         with(view) {
             Glide.with(context)
-                .load(list[position].imagePath)
+                .load(BuildConfig.IMGLINK + list[position].backdropPath)
                 .into(img)
         }
 

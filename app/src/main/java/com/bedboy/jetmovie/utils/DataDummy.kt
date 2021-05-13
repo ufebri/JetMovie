@@ -1,9 +1,9 @@
 package com.bedboy.jetmovie.utils
 
 import com.bedboy.jetmovie.BuildConfig
-import com.bedboy.jetmovie.data.DataEntity
-import com.bedboy.jetmovie.data.DetailDataEntity
-import com.bedboy.jetmovie.data.FeaturedEntity
+import com.bedboy.jetmovie.data.source.local.entity.DataEntity
+import com.bedboy.jetmovie.data.source.local.entity.DetailDataEntity
+import com.bedboy.jetmovie.data.source.local.entity.FeaturedEntity
 
 object DataDummy {
 

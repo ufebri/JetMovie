@@ -6,28 +6,34 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager.widget.ViewPager
-import com.bedboy.jetmovie.data.DataEntity
-import com.bedboy.jetmovie.data.FeaturedEntity
 import com.bedboy.jetmovie.databinding.ActivityMainBinding
 import com.bedboy.jetmovie.databinding.ContentHomePopularBinding
+import com.bedboy.jetmovie.utils.ViewModelFactory
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var detailContentHomePopularBinding: ContentHomePopularBinding
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val factory = ViewModelFactory.getInstance(this)
+        val viewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
         val homeBinding = ActivityMainBinding.inflate(layoutInflater)
         detailContentHomePopularBinding = homeBinding.detailContentHomePopular
         setContentView(homeBinding.root)
 
         initToolbar(homeBinding) // Setup Toolbar
-        initViewModel(homeBinding) // Setup ViewModel
+
+        initPropertyMovies(homeBinding)
+        initPropertyTVShow(homeBinding)
 
     }
 
@@ -37,53 +43,42 @@ class HomeActivity : AppCompatActivity() {
         title = ""
     }
 
-    private fun initViewModel(homeBinding: ActivityMainBinding) {
-        val viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[HomeViewModel::class.java]
+    private fun initPropertyMovies(homeBinding: ActivityMainBinding) {
+        homeViewModel.popular.observe(this, { result ->
+            val adapter = MoviesAdapter()
+            adapter.setMovies(result)
 
-        //Movies
-        val movies = viewModel.getMovies()
-        initPropertyMovies(movies, homeBinding)
+            with(homeBinding.detailContentHomePopular.rvResultsMovie) {
+                layoutManager =
+                    GridLayoutManager(context, 2)
+                setHasFixedSize(true)
+                this.adapter = adapter
+            }
+        })
 
-
-        //TVShow
-        val tvShow = viewModel.getTVShow()
-        initPropertyTVShow(tvShow, homeBinding)
     }
 
-    private fun initPropertyMovies(movies: List<DataEntity>, homeBinding: ActivityMainBinding) {
-        val adapter = MoviesAdapter()
-        adapter.setMovies(movies)
+    private fun initPropertyTVShow(homeBinding: ActivityMainBinding) {
+        homeViewModel.trending.observe(this, { result ->
+            val adapters = ImageSliderAdapter(result, this)
+            homeBinding.vpHome.adapter = adapters
+            homeBinding.vpHome.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) {
+                }
 
-        with(homeBinding.detailContentHomePopular.rvResultsMovie) {
-            layoutManager =
-                GridLayoutManager(context, 2)
-            setHasFixedSize(true)
-            this.adapter = adapter
-        }
-    }
+                override fun onPageSelected(position: Int) {
+                    adapters.updatePageIndicator(position)
+                }
 
-    private fun initPropertyTVShow(tvShow: List<FeaturedEntity>, homeBinding: ActivityMainBinding) {
-        val adapters = ImageSliderAdapter(tvShow, this)
-        homeBinding.vpHome.adapter = adapters
-        homeBinding.vpHome.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-            }
+                override fun onPageScrollStateChanged(state: Int) {
 
-            override fun onPageSelected(position: Int) {
-                adapters.updatePageIndicator(position)
-            }
+                }
 
-            override fun onPageScrollStateChanged(state: Int) {
-
-            }
-
+            })
         })
     }
 
