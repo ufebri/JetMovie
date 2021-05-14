@@ -30,9 +30,6 @@ data class DataResponse(
 @Parcelize
 data class ResultsItem(
 
-    @field:SerializedName("first_air_date")
-    val firstAirDate: String,
-
     @field:SerializedName("overview")
     val overview: String,
 

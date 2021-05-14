@@ -7,17 +7,22 @@ import android.view.MenuItem
 import android.webkit.WebChromeClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.bedboy.jetmovie.R
-import com.bedboy.jetmovie.data.source.local.entity.DetailDataEntity
+import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
+import com.bedboy.jetmovie.data.source.remote.response.ResultsVideos
 import com.bedboy.jetmovie.databinding.ActivityDetailBinding
 import com.bedboy.jetmovie.databinding.ContentDetailMovieBinding
+import com.bedboy.jetmovie.utils.ViewModelFactory
 
 class DetailActivity : AppCompatActivity() {
 
     companion object {
         const val DATA_RESULT: String = "data"
-        var movieTitle: String = "title"
+        var dataTitle: String = "title"
+        var dataID: String = "1"
+        var mediaType: String = "movie"
     }
 
     private lateinit var detailMovieBinding: ContentDetailMovieBinding
@@ -25,12 +30,16 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+        val factory = ViewModelFactory.getInstance()
+        val viewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
+
         //setContentView
         val activityDetailBinding = ActivityDetailBinding.inflate(layoutInflater)
         detailMovieBinding = activityDetailBinding.contentDetailMovie
         setContentView(activityDetailBinding.root)
 
-        initViewModel()
+        initViewModel(viewModel)
         initToolbar(activityDetailBinding)
     }
 
@@ -40,7 +49,7 @@ class DetailActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
             elevation = 0f
-            title = movieTitle
+            title = dataTitle
         }
     }
 
@@ -49,36 +58,33 @@ class DetailActivity : AppCompatActivity() {
         return true
     }
 
-    private fun initViewModel() {
-
-        val viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[DetailViewModel::class.java]
-
-        val bundle = intent.extras
+    private fun initViewModel(viewModel: DetailViewModel) {
+        val bundle = intent.getParcelableExtra<ResultsItem>(DATA_RESULT)
         if (bundle != null) {
-            val movieID = bundle.getString(DATA_RESULT)
-            if (movieID != null) {
-                viewModel.setSelectedData(movieID)
-                populateDetailContent(viewModel.getSelectedData())
-            }
+            dataID = bundle.id.toString()
+            mediaType = bundle.mediaType
+            populateDetailContent(bundle, viewModel.videos)
         }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun populateDetailContent(movie: DetailDataEntity) {
-        movieTitle = movie.title
+    private fun populateDetailContent(bundle: ResultsItem, data: LiveData<List<ResultsVideos>>) {
+        dataTitle = bundle.name ?: bundle.title
         detailMovieBinding.apply {
-            tvTitleFilmDetail.text = movie.title
-            tvCategoryFilmDetail.text = movie.genre
-            tvRatingFilmDetail.text = movie.vote
-            tvDescriptionFilmDetail.text = movie.overview
-            wvYoutube.apply {
-                settings.javaScriptEnabled = true
-                webChromeClient = object : WebChromeClient() {}
-                loadUrl("https://www.youtube.com/embed/${movie.linkyt}")
-            }
+            tvTitleFilmDetail.text = bundle.name ?: bundle.title
+            tvCategoryFilmDetail.text = bundle.genreIds.toString()
+            tvRatingFilmDetail.text = bundle.voteAverage.toString()
+            tvDescriptionFilmDetail.text = bundle.overview
+
+            data.observe(this@DetailActivity, { result ->
+                wvYoutube.apply {
+                    settings.javaScriptEnabled = true
+                    webChromeClient = object : WebChromeClient() {}
+                    loadUrl("https://www.youtube.com/embed/${result[0].key}")
+                }
+            })
+
+
         }
     }
 
@@ -104,7 +110,7 @@ class DetailActivity : AppCompatActivity() {
             .from(this)
             .setType(mimeType)
             .setChooserTitle("Bagikan aplikasi ini sekarang.")
-            .setText(movieTitle)
+            .setText(dataTitle)
             .startChooser()
     }
 }

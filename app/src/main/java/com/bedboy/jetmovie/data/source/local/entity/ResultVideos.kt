@@ -1,6 +1,6 @@
 package com.bedboy.jetmovie.data.source.local.entity
 
-data class DetailDataEntity(
+data class ResultVideos(
     var id: String,
     var title: String,
     var vote: String,

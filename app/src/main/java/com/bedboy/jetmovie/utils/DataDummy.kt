@@ -2,7 +2,7 @@ package com.bedboy.jetmovie.utils
 
 import com.bedboy.jetmovie.BuildConfig
 import com.bedboy.jetmovie.data.source.local.entity.DataEntity
-import com.bedboy.jetmovie.data.source.local.entity.DetailDataEntity
+import com.bedboy.jetmovie.data.source.local.entity.ResultVideos
 import com.bedboy.jetmovie.data.source.local.entity.FeaturedEntity
 
 object DataDummy {
@@ -156,12 +156,12 @@ object DataDummy {
         return tvShow
     }
 
-    fun generateDetailData(idData: String): List<DetailDataEntity> {
+    fun generateDetailData(idData: String): List<ResultVideos> {
 
-        val detailData = ArrayList<DetailDataEntity>()
+        val detailData = ArrayList<ResultVideos>()
 
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "1",
                 "A Star is Born",
                 "7.6",
@@ -173,7 +173,7 @@ object DataDummy {
         )
 
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "2",
                 "Alita - The Battle Angel",
                 "7.2",
@@ -185,7 +185,7 @@ object DataDummy {
         )
 
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "3",
                 "Aquaman",
                 "6.9",
@@ -197,7 +197,7 @@ object DataDummy {
         )
 
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "4",
                 "Bohemian Rhapsody",
                 "8.0",
@@ -209,7 +209,7 @@ object DataDummy {
         )
 
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "5",
                 "Cold Pursuit",
                 "5.7",
@@ -221,7 +221,7 @@ object DataDummy {
         )
 
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "6",
                 "Creed",
                 "7.4",
@@ -233,7 +233,7 @@ object DataDummy {
         )
 
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "7",
                 "Fantastic Beasts: The Crimes of Grindelwald",
                 "6.9",
@@ -245,7 +245,7 @@ object DataDummy {
         )
 
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "8",
                 "Glass",
                 "6.7",
@@ -257,7 +257,7 @@ object DataDummy {
         )
 
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "9",
                 "How to Train Your Dragon",
                 "7.8",
@@ -269,7 +269,7 @@ object DataDummy {
         )
 
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "10",
                 "The Avengers: Infinity War",
                 "8.3",
@@ -281,7 +281,7 @@ object DataDummy {
         )
 
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "11",
                 "Game Of Thrones",
                 "8.4",
@@ -293,7 +293,7 @@ object DataDummy {
         )
 
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "12",
                 "Lupin",
                 "8.5",
@@ -305,7 +305,7 @@ object DataDummy {
         )
 
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "13",
                 "The Promised Neverland",
                 "9.1",
@@ -316,7 +316,7 @@ object DataDummy {
             )
         )
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "14",
                 "The Big Bang Theory",
                 "7.7",
@@ -327,7 +327,7 @@ object DataDummy {
             )
         )
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "15",
                 "How I Met Your Mother",
                 "8.1",
@@ -338,7 +338,7 @@ object DataDummy {
             )
         )
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "16",
                 "The End of the F***ing World",
                 "8.3",
@@ -349,7 +349,7 @@ object DataDummy {
             )
         )
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "17",
                 "Silicon Valley",
                 "8.1",
@@ -360,7 +360,7 @@ object DataDummy {
             )
         )
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "18",
                 "Start-Up",
                 "8.4",
@@ -371,7 +371,7 @@ object DataDummy {
             )
         )
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "19",
                 "The Falcon and the Winter Soldier",
                 "7.9",
@@ -382,7 +382,7 @@ object DataDummy {
             )
         )
         detailData.add(
-            DetailDataEntity(
+            ResultVideos(
                 "20",
                 "Wandavision",
                 "8.4",

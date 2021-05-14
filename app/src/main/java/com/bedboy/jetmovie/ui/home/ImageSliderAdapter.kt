@@ -60,8 +60,7 @@ class ImageSliderAdapter(private var list: List<ResultsItem>, private var ctx: C
         view.setOnClickListener {
             view.context.startActivity(
                 Intent(view.context, DetailActivity::class.java).putExtra(
-                    DATA_RESULT,
-                    list[position].id
+                    DATA_RESULT, list[position]
                 )
             )
         }

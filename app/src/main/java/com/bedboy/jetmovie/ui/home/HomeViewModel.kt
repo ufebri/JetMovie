@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.bedboy.jetmovie.data.source.DataRepository
 import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
 
-class HomeViewModel(private val dataRepository: DataRepository) : ViewModel() {
+class HomeViewModel(dataRepository: DataRepository) : ViewModel() {
 
     val trending: LiveData<List<ResultsItem>> = dataRepository.getTrending()
     val popular: LiveData<List<ResultsItem>> = dataRepository.getPopular()
