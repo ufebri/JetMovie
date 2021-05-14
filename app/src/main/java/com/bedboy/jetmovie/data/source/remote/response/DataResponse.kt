@@ -97,3 +97,24 @@ data class ResultsVideos(
     @field:SerializedName("key")
     val key: String
 ) : Parcelable
+
+/**
+ * Genre
+ *  - The ID probably updated in the future
+ * */
+
+@Parcelize
+data class DataGenre(
+
+    @field:SerializedName("genres")
+    val genres: List<ResultsGenre>
+) : Parcelable
+
+@Parcelize
+data class ResultsGenre(
+    @field:SerializedName("id")
+    var id: Int,
+
+    @field:SerializedName("name")
+    var name: String
+) : Parcelable

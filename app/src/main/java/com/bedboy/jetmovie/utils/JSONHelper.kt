@@ -1,7 +1,7 @@
 package com.bedboy.jetmovie.utils
 
 import android.content.Context
-import com.bedboy.jetmovie.data.source.remote.response.GenreResponse
+import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
@@ -22,9 +22,9 @@ class JSONHelper(private val context: Context) {
         }
     }
 
-    fun loadGenre(): List<GenreResponse> {
+    fun loadGenre(): List<ResultsGenre> {
 
-        val list = ArrayList<GenreResponse>()
+        val list = ArrayList<ResultsGenre>()
 
         try {
             val responseObject = JSONObject(parsingFileToString("genre.json").toString())
@@ -35,7 +35,7 @@ class JSONHelper(private val context: Context) {
                 val id = course.getInt("id")
                 val name = course.getString("name")
 
-                val genreResponse = GenreResponse(id, name)
+                val genreResponse = ResultsGenre(id, name)
                 list.add(genreResponse)
             }
         } catch (e: JSONException) {

@@ -1,6 +1,7 @@
 package com.bedboy.jetmovie.network
 
 import com.bedboy.jetmovie.BuildConfig
+import com.bedboy.jetmovie.data.source.remote.response.DataGenre
 import com.bedboy.jetmovie.data.source.remote.response.DataResponse
 import com.bedboy.jetmovie.data.source.remote.response.GetDetailVideos
 import retrofit2.Call
@@ -31,4 +32,11 @@ interface ApiService {
         @Path("id") id: String,
         @Query("api_key") api_key: String = BuildConfig.APIKEY
     ): Call<GetDetailVideos>
+
+    //Get Genre
+    @GET("genre/{media_type}/list")
+    fun getGenre(
+        @Path("media_type") media_type: String,
+        @Query("api_key") api_key: String = BuildConfig.APIKEY
+    ): Call<DataGenre>
 }

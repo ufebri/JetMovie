@@ -3,10 +3,7 @@ package com.bedboy.jetmovie.data.source.remote
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.bedboy.jetmovie.data.source.remote.response.DataResponse
-import com.bedboy.jetmovie.data.source.remote.response.GetDetailVideos
-import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
-import com.bedboy.jetmovie.data.source.remote.response.ResultsVideos
+import com.bedboy.jetmovie.data.source.remote.response.*
 import com.bedboy.jetmovie.network.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
@@ -99,7 +96,7 @@ class RemoteDataSource private constructor(private val apiConfig: ApiConfig) {
                     if (response.isSuccessful) {
                         response.body()?.results.let { callback.onAllVideosReceived(it) }
                     } else {
-                        Log.e(TAG, "onFailure: ${response.message()}")
+                        Log.e(TAG, "onResponse: ${response.message()}")
                     }
                 }
 
@@ -111,6 +108,24 @@ class RemoteDataSource private constructor(private val apiConfig: ApiConfig) {
         }, SERVICE_LATENCY_IN_MILLIS)
     }
 
+    fun getAllGenre(callback: LoadGenreCallback) {
+        handler.postDelayed({
+            client.getGenre(media_type).enqueue(object : Callback<DataGenre> {
+                override fun onResponse(call: Call<DataGenre>, response: Response<DataGenre>) {
+                    if (response.isSuccessful) {
+                        response.body()?.genres.let { callback.onAllGenreReceived(it) }
+                    } else {
+                        Log.e(TAG, "onResponse: ${response.message()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<DataGenre>, t: Throwable) {
+                    Log.e(TAG, "onFailure: ${t.message}")
+                }
+            })
+        }, SERVICE_LATENCY_IN_MILLIS)
+    }
+
     //The data model for TVShow & Movies are same
     interface LoadHomeDataCallback {
         fun onAllHomeDataReceived(homeResponse: List<ResultsItem>?)
@@ -118,5 +133,9 @@ class RemoteDataSource private constructor(private val apiConfig: ApiConfig) {
 
     interface LoadVideosCallback {
         fun onAllVideosReceived(videoDetailResponse: List<ResultsVideos>?)
+    }
+
+    interface LoadGenreCallback {
+        fun onAllGenreReceived(genreResponse: List<ResultsGenre>?)
     }
 }

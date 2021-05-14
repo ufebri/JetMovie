@@ -10,11 +10,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager.widget.ViewPager
+import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
 import com.bedboy.jetmovie.databinding.ActivityMainBinding
 import com.bedboy.jetmovie.databinding.ContentHomePopularBinding
 import com.bedboy.jetmovie.utils.ViewModelFactory
 
 class HomeActivity : AppCompatActivity() {
+
+    companion object {
+        var MEDIATYPE: String = ""
+        lateinit var GENRES: List<ResultsGenre>
+
+    }
 
     private lateinit var detailContentHomePopularBinding: ContentHomePopularBinding
 
@@ -77,8 +84,14 @@ class HomeActivity : AppCompatActivity() {
                 }
 
             })
+
+        })
+
+        viewModel.genre.observe(this, { result ->
+            GENRES = result
         })
     }
+
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)

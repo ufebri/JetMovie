@@ -3,6 +3,7 @@ package com.bedboy.jetmovie.data.source
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bedboy.jetmovie.data.source.remote.RemoteDataSource
+import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
 import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
 import com.bedboy.jetmovie.data.source.remote.response.ResultsVideos
 
@@ -48,5 +49,16 @@ class DataRepository private constructor(private val remoteDataSource: RemoteDat
             }
         })
         return dataVideos
+    }
+
+    override fun getGenre(media_type: String): LiveData<List<ResultsGenre>> {
+        val dataGenre = MutableLiveData<List<ResultsGenre>>()
+        remoteDataSource.getAllGenre(object : RemoteDataSource.LoadGenreCallback {
+            override fun onAllGenreReceived(genreResponse: List<ResultsGenre>?) {
+                dataGenre.postValue(genreResponse)
+            }
+
+        })
+        return dataGenre
     }
 }
