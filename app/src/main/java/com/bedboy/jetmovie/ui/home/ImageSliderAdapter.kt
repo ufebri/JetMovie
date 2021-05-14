@@ -52,7 +52,7 @@ class ImageSliderAdapter(private var list: List<ResultsItem>, private var ctx: C
         title.text = list[position].name ?: list[position].title
         vote.text = list[position].voteAverage.toString()
         voteBar.rating = list[position].voteAverage.toFloat()
-        genre.text = genreName
+        genre.text = genreName.split(",")[0]
 
         with(view) {
             Glide.with(context)
