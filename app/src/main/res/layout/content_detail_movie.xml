@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:visibility="gone">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_youtube"
@@ -77,8 +78,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_large"
         android:alpha="0.5"
-        android:padding="6dp"
         android:fontFamily="sans-serif-condensed-light"
+        android:padding="6dp"
         android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

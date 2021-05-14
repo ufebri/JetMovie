@@ -7,10 +7,12 @@
     tools:context=".ui.detail.DetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abl_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"
+        android:visibility="gone"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
@@ -22,6 +24,15 @@
             tools:title="mantap" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/shimmer_placeholder_detail" />
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

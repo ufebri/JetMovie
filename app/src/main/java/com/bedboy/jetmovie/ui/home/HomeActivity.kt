@@ -7,9 +7,12 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager.widget.ViewPager
+import com.bedboy.jetmovie.R
 import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
 import com.bedboy.jetmovie.databinding.ActivityMainBinding
 import com.bedboy.jetmovie.databinding.ContentHomePopularBinding
@@ -22,6 +25,7 @@ class HomeActivity : AppCompatActivity() {
         var GENRES: List<ResultsGenre>? = null
     }
 
+    private lateinit var homeBinding: ActivityMainBinding
     private lateinit var detailContentHomePopularBinding: ContentHomePopularBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,25 +34,30 @@ class HomeActivity : AppCompatActivity() {
         val factory = ViewModelFactory.getInstance()
         val viewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
-        val homeBinding = ActivityMainBinding.inflate(layoutInflater)
+        homeBinding = ActivityMainBinding.inflate(layoutInflater)
         detailContentHomePopularBinding = homeBinding.detailContentHomePopular
         setContentView(homeBinding.root)
 
-        initToolbar(homeBinding) // Setup Toolbar
+        initToolbar() // Setup Toolbar
 
-        initPropertyMovies(homeBinding, viewModel)
-        initPropertyTVShow(homeBinding, viewModel)
-
+        initPropertyMovies(viewModel)
+        initPropertyTVShow(viewModel)
     }
 
-    private fun initToolbar(homeBinding: ActivityMainBinding) {
+    private fun initToolbar() {
         setSupportActionBar(homeBinding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         title = ""
     }
 
-    private fun initPropertyMovies(homeBinding: ActivityMainBinding, viewModel: HomeViewModel) {
+    private fun initPropertyMovies(viewModel: HomeViewModel) {
         viewModel.popular.observe(this, { result ->
+
+
+            //SHOW PROPERTIES
+            homeBinding.detailContentHomePopular.rvResultsMovie.isVisible = true
+            homeBinding.detailContentHomePopular.tvPopularHome.isVisible = true
+
             val adapter = MoviesAdapter()
             adapter.setMovies(result)
 
@@ -58,12 +67,22 @@ class HomeActivity : AppCompatActivity() {
                 setHasFixedSize(true)
                 this.adapter = adapter
             }
+
+            homeBinding.detailContentHomePopular.tvPopularHome.text = getString(R.string.popular)
         })
 
     }
 
-    private fun initPropertyTVShow(homeBinding: ActivityMainBinding, viewModel: HomeViewModel) {
+    private fun initPropertyTVShow(viewModel: HomeViewModel) {
         viewModel.trending.observe(this, { result ->
+            //STOP SHIMMER
+            homeBinding.shimmerHome.stopShimmer()
+            homeBinding.shimmerHome.hideShimmer()
+            homeBinding.shimmerHome.isGone = true
+
+            //SHOW PROPERTIES
+            homeBinding.ablHome.isVisible = true
+
             val adapters = ImageSliderAdapter(result, this)
             homeBinding.vpHome.adapter = adapters
             homeBinding.vpHome.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -83,6 +102,7 @@ class HomeActivity : AppCompatActivity() {
                 }
 
             })
+
 
         })
 
@@ -115,5 +135,15 @@ class HomeActivity : AppCompatActivity() {
                     or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                     or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        homeBinding.shimmerHome.startShimmer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        homeBinding.shimmerHome.stopShimmer()
     }
 }

@@ -7,6 +7,8 @@ import android.view.MenuItem
 import android.webkit.WebChromeClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.bedboy.jetmovie.R
 import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
@@ -21,6 +23,7 @@ class DetailActivity : AppCompatActivity() {
         const val DATA_RESULT: String = "data"
     }
 
+    private lateinit var activityDetailBinding: ActivityDetailBinding
     private lateinit var detailMovieBinding: ContentDetailMovieBinding
     private lateinit var genres: List<ResultsGenre>
     private var dataTitle: String? = null
@@ -33,7 +36,7 @@ class DetailActivity : AppCompatActivity() {
         val viewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
 
         //setContentView
-        val activityDetailBinding = ActivityDetailBinding.inflate(layoutInflater)
+        activityDetailBinding = ActivityDetailBinding.inflate(layoutInflater)
         detailMovieBinding = activityDetailBinding.contentDetailMovie
         setContentView(activityDetailBinding.root)
 
@@ -43,10 +46,10 @@ class DetailActivity : AppCompatActivity() {
             populateDetailContent(bundle, viewModel)
         }
 
-        initToolbar(activityDetailBinding)
+        initToolbar()
     }
 
-    private fun initToolbar(activityDetailBinding: ActivityDetailBinding) {
+    private fun initToolbar() {
         setSupportActionBar(activityDetailBinding.toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -83,6 +86,15 @@ class DetailActivity : AppCompatActivity() {
                         webChromeClient = object : WebChromeClient() {}
                         loadUrl("https://www.youtube.com/embed/${result[0].key}")
                     }
+
+                    //STOP SHIMMER
+                    activityDetailBinding.shimmerDetail.stopShimmer()
+                    activityDetailBinding.shimmerDetail.hideShimmer()
+                    activityDetailBinding.shimmerDetail.isGone = true
+
+                    //INIT PROPERTIES
+                    activityDetailBinding.ablDetail.isVisible = true
+                    activityDetailBinding.contentDetailMovie.root.isVisible = true
                 })
 
         }
@@ -122,5 +134,16 @@ class DetailActivity : AppCompatActivity() {
             .setChooserTitle("Bagikan aplikasi ini sekarang.")
             .setText(dataTitle)
             .startChooser()
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        activityDetailBinding.shimmerDetail.startShimmer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        activityDetailBinding.shimmerDetail.stopShimmer()
     }
 }
