@@ -1,14 +1,14 @@
 package com.bedboy.jetmovie.utils
 
-import android.content.Context
-import com.bedboy.jetmovie.data.source.GenreRepository
+import com.bedboy.jetmovie.data.source.DataRepository
 import com.bedboy.jetmovie.data.source.remote.RemoteDataSource
+import com.bedboy.jetmovie.network.ApiConfig
 
 object Injection {
-    fun provideRepository(context: Context): GenreRepository {
+    fun provideRepository(): DataRepository {
 
-        val remoteDataSource = RemoteDataSource.getInstance(JSONHelper(context))
+        val remoteDataSource = RemoteDataSource.getInstance(ApiConfig())
 
-        return GenreRepository.getInstance(remoteDataSource)
+        return DataRepository.getInstance(remoteDataSource)
     }
 }

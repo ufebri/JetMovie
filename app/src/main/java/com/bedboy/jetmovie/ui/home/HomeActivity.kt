@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,12 +17,11 @@ import com.bedboy.jetmovie.utils.ViewModelFactory
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var detailContentHomePopularBinding: ContentHomePopularBinding
-    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val factory = ViewModelFactory.getInstance(this)
+        val factory = ViewModelFactory.getInstance()
         val viewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
         val homeBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -32,8 +30,8 @@ class HomeActivity : AppCompatActivity() {
 
         initToolbar(homeBinding) // Setup Toolbar
 
-        initPropertyMovies(homeBinding)
-        initPropertyTVShow(homeBinding)
+        initPropertyMovies(homeBinding, viewModel)
+        initPropertyTVShow(homeBinding, viewModel)
 
     }
 
@@ -43,8 +41,8 @@ class HomeActivity : AppCompatActivity() {
         title = ""
     }
 
-    private fun initPropertyMovies(homeBinding: ActivityMainBinding) {
-        homeViewModel.popular.observe(this, { result ->
+    private fun initPropertyMovies(homeBinding: ActivityMainBinding, viewModel: HomeViewModel) {
+        viewModel.popular.observe(this, { result ->
             val adapter = MoviesAdapter()
             adapter.setMovies(result)
 
@@ -58,8 +56,8 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
-    private fun initPropertyTVShow(homeBinding: ActivityMainBinding) {
-        homeViewModel.trending.observe(this, { result ->
+    private fun initPropertyTVShow(homeBinding: ActivityMainBinding, viewModel: HomeViewModel) {
+        viewModel.trending.observe(this, { result ->
             val adapters = ImageSliderAdapter(result, this)
             homeBinding.vpHome.adapter = adapters
             homeBinding.vpHome.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {

@@ -1,21 +1,20 @@
 package com.bedboy.jetmovie.utils
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.bedboy.jetmovie.data.source.GenreRepository
+import com.bedboy.jetmovie.data.source.DataRepository
 import com.bedboy.jetmovie.ui.home.HomeViewModel
 
-class ViewModelFactory private constructor(private val genreRepository: GenreRepository) :
+class ViewModelFactory private constructor(private val dataRepository: DataRepository) :
     ViewModelProvider.NewInstanceFactory() {
 
     companion object {
         @Volatile
         private var instance: ViewModelFactory? = null
 
-        fun getInstance(context: Context): ViewModelFactory =
+        fun getInstance(): ViewModelFactory =
             instance ?: synchronized(this) {
-                instance ?: ViewModelFactory(Injection.provideRepository(context)).apply {
+                instance ?: ViewModelFactory(Injection.provideRepository()).apply {
                     instance = this
                 }
             }
@@ -25,7 +24,7 @@ class ViewModelFactory private constructor(private val genreRepository: GenreRep
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         when {
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
-                return HomeViewModel(genreRepository) as T
+                return HomeViewModel(dataRepository) as T
             }
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)
         }
