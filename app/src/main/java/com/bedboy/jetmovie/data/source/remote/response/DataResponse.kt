@@ -58,7 +58,7 @@ data class ResultsItem(
     val id: Int,
 
     @field:SerializedName("title")
-    val title: String,
+    val title: String?,
 
     @field:SerializedName("adult")
     val adult: Boolean

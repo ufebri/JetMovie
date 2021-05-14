@@ -5,12 +5,11 @@ import androidx.lifecycle.ViewModel
 import com.bedboy.jetmovie.data.source.DataRepository
 import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
 import com.bedboy.jetmovie.data.source.remote.response.ResultsVideos
-import com.bedboy.jetmovie.ui.detail.DetailActivity.Companion.dataID
-import com.bedboy.jetmovie.ui.detail.DetailActivity.Companion.mediaType
 
-class DetailViewModel(dataRepository: DataRepository) : ViewModel() {
+class DetailViewModel(private val dataRepository: DataRepository) : ViewModel() {
 
-    val videos: LiveData<List<ResultsVideos>> = dataRepository.getVideoDetail(mediaType, dataID)
+    fun getvideos(media_type: String, idData: String): LiveData<List<ResultsVideos>> =
+        dataRepository.getVideoDetail(media_type, idData)
 
-    val genre: LiveData<List<ResultsGenre>> = dataRepository.getGenre(mediaType)
+    fun getGenre(media_type: String): LiveData<List<ResultsGenre>> = dataRepository.getGenre(media_type)
 }

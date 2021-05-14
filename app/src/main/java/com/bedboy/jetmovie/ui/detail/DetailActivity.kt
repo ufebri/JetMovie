@@ -19,13 +19,11 @@ class DetailActivity : AppCompatActivity() {
 
     companion object {
         const val DATA_RESULT: String = "data"
-        var dataID: String = "1"
-        var mediaType: String = "movie"
     }
 
     private lateinit var detailMovieBinding: ContentDetailMovieBinding
     private lateinit var genres: List<ResultsGenre>
-    private var dataTitle: String = "title"
+    private var dataTitle: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +37,12 @@ class DetailActivity : AppCompatActivity() {
         detailMovieBinding = activityDetailBinding.contentDetailMovie
         setContentView(activityDetailBinding.root)
 
-        initViewModel(viewModel)
+        val bundle = intent.getParcelableExtra<ResultsItem>(DATA_RESULT)
+        if (bundle != null) {
+            dataTitle = bundle.name ?: bundle.title
+            populateDetailContent(bundle, viewModel)
+        }
+
         initToolbar(activityDetailBinding)
     }
 
@@ -58,23 +61,13 @@ class DetailActivity : AppCompatActivity() {
         return true
     }
 
-    private fun initViewModel(viewModel: DetailViewModel) {
-        val bundle = intent.getParcelableExtra<ResultsItem>(DATA_RESULT)
-        if (bundle != null) {
-            dataID = bundle.id.toString()
-            mediaType = bundle.mediaType
-            populateDetailContent(bundle, viewModel)
-        }
-    }
-
     @SuppressLint("SetJavaScriptEnabled")
     private fun populateDetailContent(bundle: ResultsItem, data: DetailViewModel) {
 
 
-        dataTitle = bundle.name ?: bundle.title
         detailMovieBinding.apply {
 
-            data.genre.observe(this@DetailActivity, { result ->
+            data.getGenre(bundle.mediaType).observe(this@DetailActivity, { result ->
                 genres = result
                 tvCategoryFilmDetail.text = convertGenre(bundle.genreIds).replace(",", " | ")
             })
@@ -83,13 +76,14 @@ class DetailActivity : AppCompatActivity() {
             tvRatingFilmDetail.text = bundle.voteAverage.toString()
             tvDescriptionFilmDetail.text = bundle.overview
 
-            data.videos.observe(this@DetailActivity, { result ->
-                wvYoutube.apply {
-                    settings.javaScriptEnabled = true
-                    webChromeClient = object : WebChromeClient() {}
-                    loadUrl("https://www.youtube.com/embed/${result[0].key}")
-                }
-            })
+            data.getvideos(bundle.mediaType, bundle.id.toString())
+                .observe(this@DetailActivity, { result ->
+                    wvYoutube.apply {
+                        settings.javaScriptEnabled = true
+                        webChromeClient = object : WebChromeClient() {}
+                        loadUrl("https://www.youtube.com/embed/${result[0].key}")
+                    }
+                })
 
         }
     }

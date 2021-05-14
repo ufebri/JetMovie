@@ -20,7 +20,6 @@ class HomeActivity : AppCompatActivity() {
     companion object {
         var MEDIATYPE: String = ""
         var GENRES: List<ResultsGenre>? = null
-
     }
 
     private lateinit var detailContentHomePopularBinding: ContentHomePopularBinding

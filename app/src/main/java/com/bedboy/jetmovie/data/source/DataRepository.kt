@@ -43,17 +43,20 @@ class DataRepository private constructor(private val remoteDataSource: RemoteDat
 
     override fun getVideoDetail(media_type: String, id: String): LiveData<List<ResultsVideos>> {
         val dataVideos = MutableLiveData<List<ResultsVideos>>()
-        remoteDataSource.getDetailVideos(object : RemoteDataSource.LoadVideosCallback {
-            override fun onAllVideosReceived(videoDetailResponse: List<ResultsVideos>?) {
-                dataVideos.postValue(videoDetailResponse)
-            }
-        })
+        remoteDataSource.getDetailVideos(
+            media_type,
+            id,
+            object : RemoteDataSource.LoadVideosCallback {
+                override fun onAllVideosReceived(videoDetailResponse: List<ResultsVideos>?) {
+                    dataVideos.postValue(videoDetailResponse)
+                }
+            })
         return dataVideos
     }
 
     override fun getGenre(media_type: String): LiveData<List<ResultsGenre>> {
         val dataGenre = MutableLiveData<List<ResultsGenre>>()
-        remoteDataSource.getAllGenre(object : RemoteDataSource.LoadGenreCallback {
+        remoteDataSource.getAllGenre(media_type, object : RemoteDataSource.LoadGenreCallback {
             override fun onAllGenreReceived(genreResponse: List<ResultsGenre>?) {
                 dataGenre.postValue(genreResponse)
             }

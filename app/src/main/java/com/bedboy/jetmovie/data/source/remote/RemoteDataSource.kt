@@ -9,24 +9,22 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RemoteDataSource private constructor(private val apiConfig: ApiConfig) {
+class RemoteDataSource private constructor() {
 
     private val handler = Handler(Looper.getMainLooper())
 
     companion object {
         private const val SERVICE_LATENCY_IN_MILLIS: Long = 2000
         private val client = ApiConfig.getApiService()
-        private var media_type: String = "movie"
-        private var dataID: String = "1"
         private val TAG = this::class.java.simpleName
 
 
         @Volatile
         private var instance: RemoteDataSource? = null
 
-        fun getInstance(apiConfig: ApiConfig): RemoteDataSource =
+        fun getInstance(): RemoteDataSource =
             instance ?: synchronized(this) {
-                instance ?: RemoteDataSource(apiConfig).apply { instance = this }
+                instance ?: RemoteDataSource().apply { instance = this }
             }
     }
 
@@ -38,17 +36,7 @@ class RemoteDataSource private constructor(private val apiConfig: ApiConfig) {
                     call: Call<DataResponse>,
                     response: Response<DataResponse>
                 ) {
-                    if (response.isSuccessful) {
-                        response.body()?.apply {
-                            results.let { callback.onAllHomeDataReceived(it) }
-                            results[0].apply {
-                                media_type = mediaType
-                                dataID = id.toString()
-                            }
-                        }
-                    } else {
-                        Log.e(TAG, "onFailure: ${response.message()}")
-                    }
+                    response.body()?.results?.let { callback.onAllHomeDataReceived(it) }
                 }
 
                 override fun onFailure(call: Call<DataResponse>, t: Throwable) {
@@ -66,17 +54,7 @@ class RemoteDataSource private constructor(private val apiConfig: ApiConfig) {
                     call: Call<DataResponse>,
                     response: Response<DataResponse>
                 ) {
-                    if (response.isSuccessful) {
-                        response.body()?.apply {
-                            results.let { callback.onAllHomeDataReceived(it) }
-                            results[0].apply {
-                                media_type = mediaType
-                                dataID = id.toString()
-                            }
-                        }
-                    } else {
-                        Log.e(TAG, "onFailure: ${response.message()}")
-                    }
+                    response.body()?.results?.let { callback.onAllHomeDataReceived(it) }
                 }
 
                 override fun onFailure(call: Call<DataResponse>, t: Throwable) {
@@ -86,18 +64,14 @@ class RemoteDataSource private constructor(private val apiConfig: ApiConfig) {
         }, SERVICE_LATENCY_IN_MILLIS)
     }
 
-    fun getDetailVideos(callback: LoadVideosCallback) {
+    fun getDetailVideos(media_type: String, dataID: String, callback: LoadVideosCallback) {
         handler.postDelayed({
             client.getDetailVideo(media_type, dataID).enqueue(object : Callback<GetDetailVideos> {
                 override fun onResponse(
                     call: Call<GetDetailVideos>,
                     response: Response<GetDetailVideos>
                 ) {
-                    if (response.isSuccessful) {
-                        response.body()?.results.let { callback.onAllVideosReceived(it) }
-                    } else {
-                        Log.e(TAG, "onResponse: ${response.message()}")
-                    }
+                    response.body()?.results?.let { callback.onAllVideosReceived(it) }
                 }
 
                 override fun onFailure(call: Call<GetDetailVideos>, t: Throwable) {
@@ -108,15 +82,11 @@ class RemoteDataSource private constructor(private val apiConfig: ApiConfig) {
         }, SERVICE_LATENCY_IN_MILLIS)
     }
 
-    fun getAllGenre(callback: LoadGenreCallback) {
+    fun getAllGenre(media_type: String, callback: LoadGenreCallback) {
         handler.postDelayed({
             client.getGenre(media_type).enqueue(object : Callback<DataGenre> {
                 override fun onResponse(call: Call<DataGenre>, response: Response<DataGenre>) {
-                    if (response.isSuccessful) {
-                        response.body()?.genres.let { callback.onAllGenreReceived(it) }
-                    } else {
-                        Log.e(TAG, "onResponse: ${response.message()}")
-                    }
+                    response.body()?.genres?.let { callback.onAllGenreReceived(it) }
                 }
 
                 override fun onFailure(call: Call<DataGenre>, t: Throwable) {
