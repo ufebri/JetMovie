@@ -79,7 +79,7 @@ class ImageSliderAdapter(private var list: List<ResultsItem>, private var ctx: C
     private fun convertGenre(genreID: List<Int>): String {
         val filteredGenre = ArrayList<ResultsGenre>()
         for (id in genreID) {
-            val genre = GENRES.find { it.id == id }
+            val genre = GENRES?.find { it.id == id }
             if (genre != null)
                 filteredGenre.add(genre)
         }

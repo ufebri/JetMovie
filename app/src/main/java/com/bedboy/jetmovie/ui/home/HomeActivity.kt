@@ -19,7 +19,7 @@ class HomeActivity : AppCompatActivity() {
 
     companion object {
         var MEDIATYPE: String = ""
-        lateinit var GENRES: List<ResultsGenre>
+        var GENRES: List<ResultsGenre>? = null
 
     }
 

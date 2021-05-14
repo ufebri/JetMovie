@@ -9,7 +9,6 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.bedboy.jetmovie.ui.home.HomeActivity
-import com.bedboy.jetmovie.utils.DataDummy
 import org.junit.Rule
 import org.junit.Test
 

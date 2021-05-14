@@ -15,21 +15,6 @@ class HomeViewModel(dataRepository: DataRepository) : ViewModel() {
     val genre: LiveData<List<ResultsGenre>> = dataRepository.getGenre(MEDIATYPE)
 
 
-//
-//    private fun getDetailData(): List<ResultsGenre> =
-//
-//
-//    fun getSelectedData(): ResultsGenre {
-//        lateinit var data: ResultsGenre
-//        val dataEntities = getDetailData()
-//        for (dataEntity in dataEntities) {
-//            if (dataEntity.id == dataID) {
-//                data = dataEntity
-//            }
-//        }
-//        return data
-//    }
-
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 

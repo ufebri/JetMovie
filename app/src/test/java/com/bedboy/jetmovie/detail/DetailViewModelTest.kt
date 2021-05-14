@@ -1,7 +1,6 @@
 package com.bedboy.jetmovie.detail
 
 import com.bedboy.jetmovie.ui.detail.DetailViewModel
-import com.bedboy.jetmovie.utils.DataDummy
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before

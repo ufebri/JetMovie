@@ -7,11 +7,10 @@ import android.view.MenuItem
 import android.webkit.WebChromeClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.bedboy.jetmovie.R
+import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
 import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
-import com.bedboy.jetmovie.data.source.remote.response.ResultsVideos
 import com.bedboy.jetmovie.databinding.ActivityDetailBinding
 import com.bedboy.jetmovie.databinding.ContentDetailMovieBinding
 import com.bedboy.jetmovie.utils.ViewModelFactory
@@ -20,16 +19,17 @@ class DetailActivity : AppCompatActivity() {
 
     companion object {
         const val DATA_RESULT: String = "data"
-        var dataTitle: String = "title"
         var dataID: String = "1"
         var mediaType: String = "movie"
     }
 
     private lateinit var detailMovieBinding: ContentDetailMovieBinding
+    private lateinit var genres: List<ResultsGenre>
+    private var dataTitle: String = "title"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         val factory = ViewModelFactory.getInstance()
         val viewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
@@ -63,20 +63,27 @@ class DetailActivity : AppCompatActivity() {
         if (bundle != null) {
             dataID = bundle.id.toString()
             mediaType = bundle.mediaType
-            populateDetailContent(bundle, viewModel.videos)
+            populateDetailContent(bundle, viewModel)
         }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun populateDetailContent(bundle: ResultsItem, data: LiveData<List<ResultsVideos>>) {
+    private fun populateDetailContent(bundle: ResultsItem, data: DetailViewModel) {
+
+
         dataTitle = bundle.name ?: bundle.title
         detailMovieBinding.apply {
+
+            data.genre.observe(this@DetailActivity, { result ->
+                genres = result
+                tvCategoryFilmDetail.text = convertGenre(bundle.genreIds).replace(",", " | ")
+            })
+
             tvTitleFilmDetail.text = bundle.name ?: bundle.title
-            tvCategoryFilmDetail.text = bundle.genreIds.toString()
             tvRatingFilmDetail.text = bundle.voteAverage.toString()
             tvDescriptionFilmDetail.text = bundle.overview
 
-            data.observe(this@DetailActivity, { result ->
+            data.videos.observe(this@DetailActivity, { result ->
                 wvYoutube.apply {
                     settings.javaScriptEnabled = true
                     webChromeClient = object : WebChromeClient() {}
@@ -84,8 +91,17 @@ class DetailActivity : AppCompatActivity() {
                 }
             })
 
-
         }
+    }
+
+    private fun convertGenre(genreID: List<Int>): String {
+        val filteredGenre = ArrayList<ResultsGenre>()
+        for (id in genreID) {
+            val genre = genres.find { it.id == id }
+            if (genre != null)
+                filteredGenre.add(genre)
+        }
+        return filteredGenre.joinToString { it.name }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
