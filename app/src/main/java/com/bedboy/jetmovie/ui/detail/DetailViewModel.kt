@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.bedboy.jetmovie.data.source.DataRepository
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
-import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
-import com.bedboy.jetmovie.data.source.remote.response.ResultsVideos
 
 class DetailViewModel(private val dataRepository: DataRepository) : ViewModel() {
 

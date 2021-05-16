@@ -15,8 +15,6 @@ import com.bedboy.jetmovie.BuildConfig
 import com.bedboy.jetmovie.R
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
-import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
-import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
 import com.bedboy.jetmovie.ui.detail.DetailActivity
 import com.bedboy.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
 import com.bedboy.jetmovie.ui.home.HomeActivity.Companion.GENRES

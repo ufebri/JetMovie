@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
-import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
-import com.bedboy.jetmovie.data.source.remote.response.ResultsVideos
 
 interface DataSource {
 
