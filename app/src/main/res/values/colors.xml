@@ -6,4 +6,5 @@
     <color name="colorTitle">#09080C</color>
     <color name="colorBackground">#FFFFFF</color>
     <color name="rating_color">#66B38A</color>
+    <color name="shimmer_grey">#dddddd</color>
 </resources>

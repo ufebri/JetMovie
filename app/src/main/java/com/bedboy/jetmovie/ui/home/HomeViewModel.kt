@@ -1,13 +1,17 @@
 package com.bedboy.jetmovie.ui.home
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.bedboy.jetmovie.data.DataEntity
-import com.bedboy.jetmovie.data.FeaturedEntity
-import com.bedboy.jetmovie.utils.DataDummy
+import com.bedboy.jetmovie.data.source.DataRepository
+import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
+import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
+import com.bedboy.jetmovie.ui.home.HomeActivity.Companion.MEDIATYPE
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val dataRepository: DataRepository) : ViewModel() {
 
-    fun getMovies(): List<DataEntity> = DataDummy.generateMovie()
 
-    fun getTVShow(): List<FeaturedEntity> = DataDummy.generateTVShow()
+    fun trending(): LiveData<List<DataMovieTVEntity>> = dataRepository.getTrending()
+    fun popular(): LiveData<List<DataMovieTVEntity>> = dataRepository.getPopular()
+    fun genre(): LiveData<List<GenreEntity>> = dataRepository.getGenre(MEDIATYPE)
+
 }

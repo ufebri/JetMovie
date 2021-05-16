@@ -7,40 +7,55 @@ import android.view.MenuItem
 import android.webkit.WebChromeClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.bedboy.jetmovie.R
-import com.bedboy.jetmovie.data.DetailDataEntity
+import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
+import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.databinding.ActivityDetailBinding
 import com.bedboy.jetmovie.databinding.ContentDetailMovieBinding
+import com.bedboy.jetmovie.utils.ViewModelFactory
 
 class DetailActivity : AppCompatActivity() {
 
     companion object {
         const val DATA_RESULT: String = "data"
-        var movieTitle: String = "title"
     }
 
+    private lateinit var activityDetailBinding: ActivityDetailBinding
     private lateinit var detailMovieBinding: ContentDetailMovieBinding
+    private lateinit var genres: List<GenreEntity>
+    private var dataTitle: String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val factory = ViewModelFactory.getInstance()
+        val viewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
+
         //setContentView
-        val activityDetailBinding = ActivityDetailBinding.inflate(layoutInflater)
+        activityDetailBinding = ActivityDetailBinding.inflate(layoutInflater)
         detailMovieBinding = activityDetailBinding.contentDetailMovie
         setContentView(activityDetailBinding.root)
 
-        initViewModel()
-        initToolbar(activityDetailBinding)
+        val bundle = intent.getParcelableExtra<DataMovieTVEntity>(DATA_RESULT)
+        if (bundle != null) {
+            dataTitle = bundle.name ?: bundle.title
+            populateDetailContent(bundle, viewModel)
+        }
+
+        initToolbar()
     }
 
-    private fun initToolbar(activityDetailBinding: ActivityDetailBinding) {
+    private fun initToolbar() {
         setSupportActionBar(activityDetailBinding.toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
             elevation = 0f
-            title = movieTitle
+            title = dataTitle
         }
     }
 
@@ -49,37 +64,50 @@ class DetailActivity : AppCompatActivity() {
         return true
     }
 
-    private fun initViewModel() {
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun populateDetailContent(bundle: DataMovieTVEntity, data: DetailViewModel) {
 
-        val viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[DetailViewModel::class.java]
 
-        val bundle = intent.extras
-        if (bundle != null) {
-            val movieID = bundle.getString(DATA_RESULT)
-            if (movieID != null) {
-                viewModel.setSelectedData(movieID)
-                populateDetailContent(viewModel.getSelectedData())
-            }
+        detailMovieBinding.apply {
+
+            data.getGenre(bundle.media_type).observe(this@DetailActivity, { result ->
+                genres = result
+                tvCategoryFilmDetail.text = convertGenre(bundle.genre).replace(",", " | ")
+            })
+
+            tvTitleFilmDetail.text = bundle.name ?: bundle.title
+            tvRatingFilmDetail.text = bundle.vote.toString()
+            tvDescriptionFilmDetail.text = bundle.overview
+
+            data.getvideos(bundle.media_type, bundle.id)
+                .observe(this@DetailActivity, { result ->
+                    wvYoutube.apply {
+                        settings.javaScriptEnabled = true
+                        webChromeClient = object : WebChromeClient() {}
+                        loadUrl("https://www.youtube.com/embed/${result[0].key}")
+                    }
+
+                    //STOP SHIMMER
+                    activityDetailBinding.shimmerDetail.stopShimmer()
+                    activityDetailBinding.shimmerDetail.hideShimmer()
+                    activityDetailBinding.shimmerDetail.isGone = true
+
+                    //INIT PROPERTIES
+                    activityDetailBinding.ablDetail.isVisible = true
+                    activityDetailBinding.contentDetailMovie.root.isVisible = true
+                })
+
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    private fun populateDetailContent(movie: DetailDataEntity) {
-        movieTitle = movie.title
-        detailMovieBinding.apply {
-            tvTitleFilmDetail.text = movie.title
-            tvCategoryFilmDetail.text = movie.genre
-            tvRatingFilmDetail.text = movie.vote
-            tvDescriptionFilmDetail.text = movie.overview
-            wvYoutube.apply {
-                settings.javaScriptEnabled = true
-                webChromeClient = object : WebChromeClient() {}
-                loadUrl("https://www.youtube.com/embed/${movie.linkyt}")
-            }
+    private fun convertGenre(genreID: List<Int>): String {
+        val filteredGenre = ArrayList<GenreEntity>()
+        for (id in genreID) {
+            val genre = genres.find { it.id == id }
+            if (genre != null)
+                filteredGenre.add(genre)
         }
+        return filteredGenre.joinToString { it.name }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -104,7 +132,18 @@ class DetailActivity : AppCompatActivity() {
             .from(this)
             .setType(mimeType)
             .setChooserTitle("Bagikan aplikasi ini sekarang.")
-            .setText(movieTitle)
+            .setText(dataTitle)
             .startChooser()
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        activityDetailBinding.shimmerDetail.startShimmer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        activityDetailBinding.shimmerDetail.stopShimmer()
     }
 }

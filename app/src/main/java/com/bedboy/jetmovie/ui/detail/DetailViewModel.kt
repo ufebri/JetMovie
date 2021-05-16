@@ -1,27 +1,15 @@
 package com.bedboy.jetmovie.ui.detail
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.bedboy.jetmovie.data.DetailDataEntity
-import com.bedboy.jetmovie.utils.DataDummy
+import com.bedboy.jetmovie.data.source.DataRepository
+import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
+import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
 
-class DetailViewModel : ViewModel() {
+class DetailViewModel(private val dataRepository: DataRepository) : ViewModel() {
 
-    private lateinit var dataID: String
+    fun getvideos(media_type: String, idData: String): LiveData<List<VideoEntity>> =
+        dataRepository.getVideoDetail(media_type, idData)
 
-    fun setSelectedData(id: String) {
-        this.dataID = id
-    }
-
-    private fun getDetailData(): List<DetailDataEntity> = DataDummy.generateDetailData(dataID)
-
-    fun getSelectedData(): DetailDataEntity {
-        lateinit var data: DetailDataEntity
-        val dataEntities = getDetailData()
-        for (dataEntity in dataEntities) {
-            if (dataEntity.id == dataID) {
-                data = dataEntity
-            }
-        }
-        return data
-    }
+    fun getGenre(media_type: String): LiveData<List<GenreEntity>> = dataRepository.getGenre(media_type)
 }
