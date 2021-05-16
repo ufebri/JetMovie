@@ -11,6 +11,8 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.bedboy.jetmovie.R
+import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
+import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
 import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
 import com.bedboy.jetmovie.databinding.ActivityDetailBinding
@@ -25,7 +27,7 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var activityDetailBinding: ActivityDetailBinding
     private lateinit var detailMovieBinding: ContentDetailMovieBinding
-    private lateinit var genres: List<ResultsGenre>
+    private lateinit var genres: List<GenreEntity>
     private var dataTitle: String? = null
 
 
@@ -40,7 +42,7 @@ class DetailActivity : AppCompatActivity() {
         detailMovieBinding = activityDetailBinding.contentDetailMovie
         setContentView(activityDetailBinding.root)
 
-        val bundle = intent.getParcelableExtra<ResultsItem>(DATA_RESULT)
+        val bundle = intent.getParcelableExtra<DataMovieTVEntity>(DATA_RESULT)
         if (bundle != null) {
             dataTitle = bundle.name ?: bundle.title
             populateDetailContent(bundle, viewModel)
@@ -65,21 +67,21 @@ class DetailActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun populateDetailContent(bundle: ResultsItem, data: DetailViewModel) {
+    private fun populateDetailContent(bundle: DataMovieTVEntity, data: DetailViewModel) {
 
 
         detailMovieBinding.apply {
 
-            data.getGenre(bundle.mediaType).observe(this@DetailActivity, { result ->
+            data.getGenre(bundle.media_type).observe(this@DetailActivity, { result ->
                 genres = result
-                tvCategoryFilmDetail.text = convertGenre(bundle.genreIds).replace(",", " | ")
+                tvCategoryFilmDetail.text = convertGenre(bundle.genre).replace(",", " | ")
             })
 
             tvTitleFilmDetail.text = bundle.name ?: bundle.title
-            tvRatingFilmDetail.text = bundle.voteAverage.toString()
+            tvRatingFilmDetail.text = bundle.vote.toString()
             tvDescriptionFilmDetail.text = bundle.overview
 
-            data.getvideos(bundle.mediaType, bundle.id.toString())
+            data.getvideos(bundle.media_type, bundle.id.toString())
                 .observe(this@DetailActivity, { result ->
                     wvYoutube.apply {
                         settings.javaScriptEnabled = true
@@ -101,7 +103,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun convertGenre(genreID: List<Int>): String {
-        val filteredGenre = ArrayList<ResultsGenre>()
+        val filteredGenre = ArrayList<GenreEntity>()
         for (id in genreID) {
             val genre = genres.find { it.id == id }
             if (genre != null)

@@ -48,9 +48,6 @@ data class ResultsItem(
     @field:SerializedName("vote_average")
     val voteAverage: Double,
 
-    @field:SerializedName("popularity")
-    val popularity: Double,
-
     @field:SerializedName("name")
     val name: String?,
 
@@ -60,8 +57,6 @@ data class ResultsItem(
     @field:SerializedName("title")
     val title: String?,
 
-    @field:SerializedName("adult")
-    val adult: Boolean
 ) : Parcelable
 
 /**
@@ -87,9 +82,6 @@ data class ResultsVideos(
 
     @field:SerializedName("name")
     val name: String,
-
-    @field:SerializedName("id")
-    val id: String,
 
     @field:SerializedName("type")
     val type: String,

@@ -9,7 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RemoteDataSource private constructor() {
+class RemoteDataSource {
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -98,14 +98,14 @@ class RemoteDataSource private constructor() {
 
     //The data model for TVShow & Movies are same
     interface LoadHomeDataCallback {
-        fun onAllHomeDataReceived(homeResponse: List<ResultsItem>?)
+        fun onAllHomeDataReceived(homeResponse: List<ResultsItem>)
     }
 
     interface LoadVideosCallback {
-        fun onAllVideosReceived(videoDetailResponse: List<ResultsVideos>?)
+        fun onAllVideosReceived(videoDetailResponse: List<ResultsVideos>)
     }
 
     interface LoadGenreCallback {
-        fun onAllGenreReceived(genreResponse: List<ResultsGenre>?)
+        fun onAllGenreReceived(genreResponse: List<ResultsGenre>)
     }
 }

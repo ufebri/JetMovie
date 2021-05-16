@@ -13,6 +13,8 @@ import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.bedboy.jetmovie.BuildConfig
 import com.bedboy.jetmovie.R
+import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
+import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
 import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
 import com.bedboy.jetmovie.ui.detail.DetailActivity
@@ -20,7 +22,7 @@ import com.bedboy.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
 import com.bedboy.jetmovie.ui.home.HomeActivity.Companion.GENRES
 import com.bumptech.glide.Glide
 
-class ImageSliderAdapter(private var list: List<ResultsItem>, private var ctx: Context) :
+class ImageSliderAdapter(private var list: List<DataMovieTVEntity>, private var ctx: Context) :
     PagerAdapter() {
 
 
@@ -47,16 +49,16 @@ class ImageSliderAdapter(private var list: List<ResultsItem>, private var ctx: C
         val genre = view.findViewById<TextView>(R.id.tv_genreFeatured)
         indicator = view.findViewById(R.id.ll_slide_home)
 
-        val genreName = convertGenre(list[position].genreIds)
+        val genreName = convertGenre(list[position].genre)
 
         title.text = list[position].name ?: list[position].title
-        vote.text = list[position].voteAverage.toString()
-        voteBar.rating = list[position].voteAverage.toFloat()
+        vote.text = list[position].vote.toString()
+        voteBar.rating = list[position].vote.toFloat()
         genre.text = genreName.split(",")[0]
 
         with(view) {
             Glide.with(context)
-                .load(BuildConfig.IMGLINK + list[position].backdropPath)
+                .load(BuildConfig.IMGLINK + list[position].backDropPath)
                 .into(img)
         }
 
@@ -77,7 +79,7 @@ class ImageSliderAdapter(private var list: List<ResultsItem>, private var ctx: C
     }
 
     private fun convertGenre(genreID: List<Int>): String {
-        val filteredGenre = ArrayList<ResultsGenre>()
+        val filteredGenre = ArrayList<GenreEntity>()
         for (id in genreID) {
             val genre = GENRES?.find { it.id == id }
             if (genre != null)

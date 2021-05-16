@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.bedboy.jetmovie.R
+import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
 import com.bedboy.jetmovie.databinding.ActivityMainBinding
 import com.bedboy.jetmovie.databinding.ContentHomePopularBinding
@@ -22,7 +23,7 @@ class HomeActivity : AppCompatActivity() {
 
     companion object {
         var MEDIATYPE: String = ""
-        var GENRES: List<ResultsGenre>? = null
+        var GENRES: List<GenreEntity>? = null
     }
 
     private lateinit var homeBinding: ActivityMainBinding
