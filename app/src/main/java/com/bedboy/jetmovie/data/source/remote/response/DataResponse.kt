@@ -30,34 +30,34 @@ data class DataResponse(
 @Parcelize
 data class ResultsItem(
 
-    @field:SerializedName("overview")
-    val overview: String,
-
-    @field:SerializedName("genre_ids")
-    val genreIds: List<Int>,
+    @field:SerializedName("id")
+    val id: String,
 
     @field:SerializedName("poster_path")
     val posterPath: String,
 
-    @field:SerializedName("backdrop_path")
-    val backdropPath: String,
-
-    @field:SerializedName("media_type")
-    val mediaType: String,
+    @field:SerializedName("title")
+    val title: String?,
 
     @field:SerializedName("vote_average")
     val voteAverage: Double,
 
+    @field:SerializedName("genre_ids")
+    val genreIds: List<Int>,
+
     @field:SerializedName("name")
     val name: String?,
 
-    @field:SerializedName("id")
-    val id: Int,
+    @field:SerializedName("media_type")
+    val mediaType: String,
 
-    @field:SerializedName("title")
-    val title: String?,
+    @field:SerializedName("backdrop_path")
+    val backdropPath: String,
 
-) : Parcelable
+    @field:SerializedName("overview")
+    val overview: String,
+
+    ) : Parcelable
 
 /**
  * Detail Videos Model

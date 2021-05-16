@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.bedboy.jetmovie.R
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
-import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
 import com.bedboy.jetmovie.databinding.ActivityMainBinding
 import com.bedboy.jetmovie.databinding.ContentHomePopularBinding
 import com.bedboy.jetmovie.utils.ViewModelFactory
@@ -52,7 +51,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initPropertyMovies(viewModel: HomeViewModel) {
-        viewModel.popular.observe(this, { result ->
+        viewModel.popular().observe(this, { result ->
 
 
             //SHOW PROPERTIES
@@ -75,7 +74,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initPropertyTVShow(viewModel: HomeViewModel) {
-        viewModel.trending.observe(this, { result ->
+        viewModel.trending().observe(this, { result ->
             //STOP SHIMMER
             homeBinding.shimmerHome.stopShimmer()
             homeBinding.shimmerHome.hideShimmer()
@@ -107,7 +106,7 @@ class HomeActivity : AppCompatActivity() {
 
         })
 
-        viewModel.genre.observe(this, { result ->
+        viewModel.genre().observe(this, { result ->
             GENRES = result
         })
     }

@@ -1,12 +1,11 @@
-package com.bedboy.jetmovie.home
+package com.bedboy.jetmovie.ui.home
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.bedboy.jetmovie.data.source.DataRepository
-import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
+import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.utils.DataDummy
-import com.bedboy.jetmovie.ui.home.HomeViewModel
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -15,7 +14,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -28,10 +26,10 @@ class HomeViewModelTest {
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock
-    private var dataRepository = Mockito.mock(DataRepository::class.java)
+    private lateinit var dataRepository: DataRepository
 
     @Mock
-    private lateinit var observer: Observer<List<ResultsItem>>
+    private lateinit var observer: Observer<List<DataMovieTVEntity>>
 
     @Before
     fun setUp() {
@@ -41,28 +39,35 @@ class HomeViewModelTest {
     @Test
     fun getTrending() {
 
-        val dummyTrending = DataDummy.generateTrending()
-        val trending = MutableLiveData<List<ResultsItem>>()
+        val dummyTrending = DataDummy.generateData()
+        val trending = MutableLiveData<List<DataMovieTVEntity>>()
         trending.value = dummyTrending
 
         `when`(dataRepository.getTrending()).thenReturn(trending)
-        val trendingEntities = homeViewModel.trending.value
+        val trendingEntities = homeViewModel.trending().value
         verify(dataRepository).getTrending()
 
         assertNotNull(trendingEntities)
-        assertEquals(4, trendingEntities?.size)
+        assertEquals(20, trendingEntities?.size)
 
-        homeViewModel.trending.observeForever(observer)
+        homeViewModel.trending().observeForever(observer)
         verify(observer).onChanged(dummyTrending)
     }
 
-//    @Test
-//    fun getPopular() {
-//        val popular = MutableLiveData<List<ResultsItem>>()
-//        popular.value = DataDummy.generatePopular()
-//        `when`(dataRepository.getPopular()).thenReturn(popular)
-//        val observer = Mockito.mock(Observer::class.java)
-//        homeViewModel.trending.observeForever(observer as Observer<List<ResultsItem>>)
-//        Mockito.verify(dataRepository).getPopular()
-//    }
+    @Test
+    fun getPopular() {
+        val dummyPopular = DataDummy.generateData()
+        val popular = MutableLiveData<List<DataMovieTVEntity>>()
+        popular.value = dummyPopular
+
+        `when`(dataRepository.getPopular()).thenReturn(popular)
+        val popularEntities = homeViewModel.popular().value
+        verify(dataRepository).getPopular()
+
+        assertNotNull(popularEntities)
+        assertEquals(20, popularEntities?.size)
+
+        homeViewModel.popular().observeForever(observer)
+        verify(observer).onChanged(dummyPopular)
+    }
 }

@@ -13,8 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.bedboy.jetmovie.R
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
-import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
-import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
 import com.bedboy.jetmovie.databinding.ActivityDetailBinding
 import com.bedboy.jetmovie.databinding.ContentDetailMovieBinding
 import com.bedboy.jetmovie.utils.ViewModelFactory
@@ -81,7 +79,7 @@ class DetailActivity : AppCompatActivity() {
             tvRatingFilmDetail.text = bundle.vote.toString()
             tvDescriptionFilmDetail.text = bundle.overview
 
-            data.getvideos(bundle.media_type, bundle.id.toString())
+            data.getvideos(bundle.media_type, bundle.id)
                 .observe(this@DetailActivity, { result ->
                     wvYoutube.apply {
                         settings.javaScriptEnabled = true
