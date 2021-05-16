@@ -96,7 +96,7 @@ class JetMovieRepositoryTest {
     @Test
     fun getVideoTVShow() {
         doAnswer { invocation ->
-            (invocation.arguments[0] as RemoteDataSource.LoadVideosCallback)
+            (invocation.arguments[2] as RemoteDataSource.LoadVideosCallback)
                 .onAllVideosReceived(dataResponseVideo)
             null
         }.`when`(remote).getDetailVideos(
@@ -113,16 +113,17 @@ class JetMovieRepositoryTest {
     @Test
     fun getVideoMovie() {
         doAnswer { invocation ->
-            (invocation.arguments[1] as RemoteDataSource.LoadVideosCallback)
+            (invocation.arguments[2] as RemoteDataSource.LoadVideosCallback)
                 .onAllVideosReceived(dataResponseVideo)
             null
         }.`when`(remote).getDetailVideos(
             eq(mediaTypeMovie), eq(idMovie), any()
         )
 
-        val videoMovie = repository.getVideoDetail(mediaTypeMovie, idMovie)
+        val videoMovie =
+            LiveDataTestUtil.getValue(repository.getVideoDetail(mediaTypeMovie, idMovie))
         verify(remote).getDetailVideos(eq(mediaTypeMovie), eq(idMovie), any())
         Assert.assertNotNull(videoMovie)
-        assertEquals(dataResponseVideo.size, videoMovie.value?.size)
+        assertEquals(dataResponseVideo.size, videoMovie.size)
     }
 }
