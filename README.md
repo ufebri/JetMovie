@@ -19,7 +19,7 @@ Dependencies
 
 Screenshot
 ==========
-<img src=""screenshoots/v0.3.0.gif" height="400" alt="JetMovie v0.3.0"/> <img src="screenshots/Splashscreen.png" height="400" alt="Screenshot Splash Screen JetMovie"/> 
+<img src="screenshoots/v0.3.0.gif" height="400" alt="JetMovie v0.3.0"/> <img src="screenshots/Splashscreen.png" height="400" alt="Screenshot Splash Screen JetMovie"/> 
 <img src="screenshots/Homescreen.png" height="400" alt="Screenshot Splash Screen JetMovie"/> <img src="screenshots/Detailscreen.png" height="400" alt="Screenshot Splash Screen JetMovie"/>
 
 
