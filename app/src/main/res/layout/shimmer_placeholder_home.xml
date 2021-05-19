@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container_shimmer_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -26,56 +27,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vs_featured" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/lns_line1"
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow_item"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:orientation="horizontal"
-        android:weightSum="2"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_medium"
+        app:constraint_referenced_ids="item_first, item_two, item_three, item_four"
+        app:flow_horizontalGap="@dimen/margin_small"
+        app:flow_horizontalStyle="spread_inside"
+        app:flow_verticalGap="@dimen/margin_small"
+        app:flow_wrapMode="aligned"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvs_popular">
+        app:layout_constraintTop_toBottomOf="@id/tvs_popular" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_medium"
-            android:layout_weight="1"
-            android:background="@color/shimmer_grey" />
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_medium"
-            android:layout_weight="1"
-            android:background="@color/shimmer_grey" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/lns_line2"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        app:layout_constraintTop_toBottomOf="@id/lns_line1"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_medium"
-            android:layout_weight="1"
-            android:background="@color/shimmer_grey" />
+    <View
+        android:id="@+id/item_first"
+        android:layout_width="170dp"
+        android:layout_height="250dp"
+        android:background="@color/shimmer_grey" />
 
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_medium"
-            android:layout_weight="1"
-            android:background="@color/shimmer_grey" />
+    <View
+        android:id="@+id/item_two"
+        android:layout_width="170dp"
+        android:layout_height="250dp"
+        android:background="@color/shimmer_grey"
+        tools:ignore="MissingConstraints" />
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    <View
+        android:id="@+id/item_three"
+        android:layout_width="170dp"
+        android:layout_height="250dp"
+        android:background="@color/shimmer_grey"
+        tools:ignore="MissingConstraints" />
+
+
+    <View
+        android:id="@+id/item_four"
+        android:layout_width="170dp"
+        android:layout_height="250dp"
+        android:background="@color/shimmer_grey"
+        tools:ignore="MissingConstraints" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
