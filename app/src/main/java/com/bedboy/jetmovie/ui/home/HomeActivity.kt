@@ -15,18 +15,11 @@ import androidx.viewpager.widget.ViewPager
 import com.bedboy.jetmovie.R
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.databinding.ActivityMainBinding
-import com.bedboy.jetmovie.databinding.ContentHomePopularBinding
 import com.bedboy.jetmovie.utils.ViewModelFactory
 
 class HomeActivity : AppCompatActivity() {
 
-    companion object {
-        var MEDIATYPE: String = ""
-        var GENRES: List<GenreEntity>? = null
-    }
-
     private lateinit var homeBinding: ActivityMainBinding
-    private lateinit var detailContentHomePopularBinding: ContentHomePopularBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +28,6 @@ class HomeActivity : AppCompatActivity() {
         val viewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
         homeBinding = ActivityMainBinding.inflate(layoutInflater)
-        detailContentHomePopularBinding = homeBinding.detailContentHomePopular
         setContentView(homeBinding.root)
 
         initToolbar() // Setup Toolbar
@@ -145,5 +137,10 @@ class HomeActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         homeBinding.shimmerHome.stopShimmer()
+    }
+
+    companion object {
+        var MEDIATYPE: String = ""
+        var GENRES: List<GenreEntity>? = null
     }
 }
