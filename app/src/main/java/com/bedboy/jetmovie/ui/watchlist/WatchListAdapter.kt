@@ -3,6 +3,8 @@ package com.bedboy.jetmovie.ui.watchlist
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bedboy.jetmovie.BuildConfig
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
@@ -10,16 +12,30 @@ import com.bedboy.jetmovie.databinding.ItemHomeBinding
 import com.bedboy.jetmovie.ui.detail.DetailActivity
 import com.bumptech.glide.Glide
 
-class WatchListAdapter : RecyclerView.Adapter<WatchListAdapter.MoviesViewHolder>() {
+class WatchListAdapter :
+    PagedListAdapter<DataMovieTVEntity, WatchListAdapter.MoviesViewHolder>(DIFF_CALLBACK) {
 
     private var listMovie = ArrayList<DataMovieTVEntity>()
 
-    fun setMovies(movies: List<DataMovieTVEntity>?) {
-        if (movies == null) return
-        this.listMovie.clear()
-        this.listMovie.addAll(movies)
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataMovieTVEntity>() {
+            override fun areItemsTheSame(
+                oldItem: DataMovieTVEntity,
+                newItem: DataMovieTVEntity
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(
+                oldItem: DataMovieTVEntity,
+                newItem: DataMovieTVEntity
+            ): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 
+    fun getSwipedData(swipedPosition: Int): DataMovieTVEntity? = getItem(swipedPosition)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
         val itemHomeBinding =

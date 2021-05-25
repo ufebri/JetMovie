@@ -3,6 +3,8 @@ package com.bedboy.jetmovie.ui.home
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bedboy.jetmovie.BuildConfig
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
@@ -11,14 +13,25 @@ import com.bedboy.jetmovie.ui.detail.DetailActivity
 import com.bedboy.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
 import com.bumptech.glide.Glide
 
-class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
+class MoviesAdapter :
+    PagedListAdapter<DataMovieTVEntity, MoviesAdapter.MoviesViewHolder>(DIFF_CALLBACK) {
 
-    private var listMovie = ArrayList<DataMovieTVEntity>()
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataMovieTVEntity>() {
+            override fun areItemsTheSame(
+                oldItem: DataMovieTVEntity,
+                newItem: DataMovieTVEntity
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
 
-    fun setMovies(movies: List<DataMovieTVEntity>?) {
-        if (movies == null) return
-        this.listMovie.clear()
-        this.listMovie.addAll(movies)
+            override fun areContentsTheSame(
+                oldItem: DataMovieTVEntity,
+                newItem: DataMovieTVEntity
+            ): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
@@ -27,10 +40,12 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
         return MoviesViewHolder(itemHomeBinding)
     }
 
-    override fun getItemCount(): Int = listMovie.size
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
-        holder.bind(listMovie[position])
+        val trending = getItem(position)
+        if (trending != null) {
+            holder.bind(trending)
+        }
     }
 
     class MoviesViewHolder(private val binding: ItemHomeBinding) :

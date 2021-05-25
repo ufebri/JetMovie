@@ -1,6 +1,7 @@
 package com.bedboy.jetmovie.data.source.local
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
@@ -21,13 +22,13 @@ class LocalDataSource(private val mJetMovieDao: JetMovieDao) {
 
 
     //Trending Operations
-    fun getTrending(): LiveData<List<DataMovieTVEntity>> = mJetMovieDao.getTrending()
+    fun getTrending(): DataSource.Factory<Int, DataMovieTVEntity> = mJetMovieDao.getTrending()
 
     fun insertTrending(trending: List<DataMovieTVEntity>) = mJetMovieDao.insertTrending(trending)
 
 
     //Popular Operations
-    fun getPopular(): LiveData<List<DataMovieTVEntity>> = mJetMovieDao.getPopular()
+    fun getPopular(): DataSource.Factory<Int, DataMovieTVEntity> = mJetMovieDao.getPopular()
 
     fun insertPopular(popular: List<DataMovieTVEntity>) = mJetMovieDao.insertPopular(popular)
 
@@ -53,10 +54,10 @@ class LocalDataSource(private val mJetMovieDao: JetMovieDao) {
 
 
     //WatchList Operations
-    fun getWatchList(): LiveData<List<DataMovieTVEntity>> = mJetMovieDao.getWatchList()
+    fun getWatchList(): DataSource.Factory<Int, DataMovieTVEntity> = mJetMovieDao.getWatchList()
 
     fun setWatchList(watchList: DataMovieTVEntity, newState: Boolean) {
         watchList.isFavorite = newState
-        mJetMovieDao.updateWatchList(watchList)
+        mJetMovieDao.updateDetailByID(watchList)
     }
 }

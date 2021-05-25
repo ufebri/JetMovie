@@ -1,6 +1,7 @@
 package com.bedboy.jetmovie.data.source.local.room
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.*
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
@@ -11,14 +12,14 @@ interface JetMovieDao {
 
     //Trending Operations
     @Query("SELECT * FROM DataMovieTVEntity")
-    fun getTrending(): LiveData<List<DataMovieTVEntity>>
+    fun getTrending(): DataSource.Factory<Int, DataMovieTVEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTrending(trending: List<DataMovieTVEntity>)
 
     //Popular Operations
     @Query("SELECT * FROM DataMovieTVEntity")
-    fun getPopular(): LiveData<List<DataMovieTVEntity>>
+    fun getPopular(): DataSource.Factory<Int, DataMovieTVEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPopular(popular: List<DataMovieTVEntity>)
@@ -46,8 +47,6 @@ interface JetMovieDao {
 
     //WatchList Operations
     @Query("SELECT * FROM DataMovieTVEntity WHERE isFavorite = 1")
-    fun getWatchList(): LiveData<List<DataMovieTVEntity>>
+    fun getWatchList(): DataSource.Factory<Int, DataMovieTVEntity>
 
-    @Update
-    fun updateWatchList(watchList: DataMovieTVEntity)
 }

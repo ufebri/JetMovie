@@ -6,14 +6,19 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.bedboy.jetmovie.R
 import com.bedboy.jetmovie.databinding.ActivityWatchListBinding
 import com.bedboy.jetmovie.utils.ViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 
 class WatchListActivity : AppCompatActivity() {
 
     private lateinit var watchListBinding: ActivityWatchListBinding
     private lateinit var viewModel: WatchListViewModel
+    private val watchListAdapter = WatchListAdapter()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,15 +32,14 @@ class WatchListActivity : AppCompatActivity() {
 
         initToolbar()
         showLoading(true)
-//        itemTouchHelper.attachToRecyclerView(watchListBinding.contentWatchList.rvWatchList)
+        itemTouchHelper.attachToRecyclerView(watchListBinding.contentWatchList.rvWatchList)
         showData()
     }
 
     private fun showData() {
-        val watchListAdapter = WatchListAdapter()
         viewModel.getWatchList().observe(this, { result ->
             showLoading(false)
-            watchListAdapter.setMovies(result)
+            watchListAdapter.submitList(result)
         })
 
         watchListBinding.contentWatchList.rvWatchList.apply {
@@ -58,27 +62,36 @@ class WatchListActivity : AppCompatActivity() {
         }
     }
 
-//    private val itemTouchHelper =
-//        object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-//            override fun onMove(
-//                recyclerView: RecyclerView,
-//                viewHolder: RecyclerView.ViewHolder,
-//                target: RecyclerView.ViewHolder
-//            ): Boolean = true
-//
-//            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//                val swipedPosition = viewHolder.absoluteAdapterPosition
-//                val movieEntity = watchListAdapter.getSwipedData(swipedPosition)
-//                movieEntity?.let { viewModel.setFavoriteMovie(it) }
-//
-//                val snackbar = Snackbar.make(view as View, R.string.message_undo_movie, Snackbar.LENGTH_LONG)
-//                snackbar.setAction(R.string.undo) { _ ->
-//                    movieEntity?.let { viewModel.setFavoriteMovie(it) }
-//                }
-//                snackbar.show()
-//            }
-//
-//        }
+    private val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
+        override fun getMovementFlags(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder
+        ): Int =
+            makeMovementFlags(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean = true
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val swipedPosition = viewHolder.absoluteAdapterPosition
+            val dataEntity = watchListAdapter.getSwipedData(swipedPosition)
+            dataEntity?.let { viewModel.addToWatchList(it) }
+
+            val snackbar =
+                Snackbar.make(
+                    watchListBinding.root,
+                    getString(R.string.snackbar_msg_undo),
+                    Snackbar.LENGTH_LONG
+                )
+            snackbar.setAction(R.string.undo) { _ ->
+                dataEntity?.let { viewModel.addToWatchList(it) }
+            }
+            snackbar.show()
+        }
+    })
 
     private fun initToolbar() {
         setSupportActionBar(watchListBinding.toolbar)

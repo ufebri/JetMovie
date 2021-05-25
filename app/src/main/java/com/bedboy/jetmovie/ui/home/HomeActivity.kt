@@ -62,7 +62,7 @@ class HomeActivity : AppCompatActivity() {
                     Status.SUCCESS -> {
                         showLoading(false)
                         val adapter = MoviesAdapter()
-                        adapter.setMovies(result.data)
+                        adapter.submitList(result.data)
 
                         with(homeBinding.detailContentHomePopular.rvResultsMovie) {
                             layoutManager =
@@ -146,7 +146,6 @@ class HomeActivity : AppCompatActivity() {
             GENRES = result.data
         })
     }
-
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
