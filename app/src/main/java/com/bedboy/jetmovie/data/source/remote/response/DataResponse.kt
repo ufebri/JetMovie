@@ -57,7 +57,10 @@ data class ResultsItem(
     @field:SerializedName("overview")
     val overview: String,
 
-    ) : Parcelable
+    @field:SerializedName("genres")
+    val genres: List<ResultsGenre>?
+
+) : Parcelable
 
 /**
  * Detail Videos Model

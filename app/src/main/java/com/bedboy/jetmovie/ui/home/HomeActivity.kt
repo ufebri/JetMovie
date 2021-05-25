@@ -1,11 +1,13 @@
 package com.bedboy.jetmovie.ui.home
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -15,7 +17,9 @@ import androidx.viewpager.widget.ViewPager
 import com.bedboy.jetmovie.R
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.databinding.ActivityMainBinding
+import com.bedboy.jetmovie.ui.watchlist.WatchListActivity
 import com.bedboy.jetmovie.utils.ViewModelFactory
+import com.bedboy.jetmovie.vo.Status
 
 class HomeActivity : AppCompatActivity() {
 
@@ -24,16 +28,23 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val factory = ViewModelFactory.getInstance()
+        val factory = ViewModelFactory.getInstance(this)
         val viewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
         homeBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(homeBinding.root)
 
         initToolbar() // Setup Toolbar
-
+        showLoading(true)
         initPropertyMovies(viewModel)
         initPropertyTVShow(viewModel)
+        gotoWatchList()
+    }
+
+    private fun gotoWatchList() {
+        homeBinding.detailContentHomePopular.tvPopularHomeMore.setOnClickListener {
+            startActivity(Intent(this, WatchListActivity::class.java))
+        }
     }
 
     private fun initToolbar() {
@@ -45,61 +56,94 @@ class HomeActivity : AppCompatActivity() {
     private fun initPropertyMovies(viewModel: HomeViewModel) {
         viewModel.popular().observe(this, { result ->
 
+            if (result != null) {
+                when (result.status) {
+                    Status.LOADING -> showLoading(true)
+                    Status.SUCCESS -> {
+                        showLoading(false)
+                        val adapter = MoviesAdapter()
+                        adapter.setMovies(result.data)
 
-            //SHOW PROPERTIES
-            homeBinding.detailContentHomePopular.rvResultsMovie.isVisible = true
-            homeBinding.detailContentHomePopular.tvPopularHome.isVisible = true
+                        with(homeBinding.detailContentHomePopular.rvResultsMovie) {
+                            layoutManager =
+                                GridLayoutManager(context, 2)
+                            setHasFixedSize(true)
+                            this.adapter = adapter
+                        }
 
-            val adapter = MoviesAdapter()
-            adapter.setMovies(result)
-
-            with(homeBinding.detailContentHomePopular.rvResultsMovie) {
-                layoutManager =
-                    GridLayoutManager(context, 2)
-                setHasFixedSize(true)
-                this.adapter = adapter
+                        homeBinding.detailContentHomePopular.tvPopularHome.text =
+                            getString(R.string.popular)
+                    }
+                    Status.ERROR -> {
+                        showLoading(false)
+                        Toast.makeText(this, "Trending: Failed to get Data", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
             }
 
-            homeBinding.detailContentHomePopular.tvPopularHome.text = getString(R.string.popular)
+
         })
 
     }
 
-    private fun initPropertyTVShow(viewModel: HomeViewModel) {
-        viewModel.trending().observe(this, { result ->
-            //STOP SHIMMER
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            homeBinding.shimmerHome.isVisible = true
+            homeBinding.shimmerHome.startShimmer()
+        } else {
             homeBinding.shimmerHome.stopShimmer()
             homeBinding.shimmerHome.hideShimmer()
             homeBinding.shimmerHome.isGone = true
 
-            //SHOW PROPERTIES
+            homeBinding.detailContentHomePopular.rvResultsMovie.isVisible = true
+            homeBinding.detailContentHomePopular.tvPopularHome.isVisible = true
             homeBinding.ablHome.isVisible = true
+            homeBinding.detailContentHomePopular.tvPopularHomeMore.isVisible = true
+        }
+    }
 
-            val adapters = ImageSliderAdapter(result, this)
-            homeBinding.vpHome.adapter = adapters
-            homeBinding.vpHome.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-                override fun onPageScrolled(
-                    position: Int,
-                    positionOffset: Float,
-                    positionOffsetPixels: Int
-                ) {
+    private fun initPropertyTVShow(viewModel: HomeViewModel) {
+        viewModel.trending().observe(this, { result ->
+
+            if (result != null) {
+                when (result.status) {
+                    Status.LOADING -> showLoading(true)
+                    Status.SUCCESS -> {
+                        showLoading(false)
+                        val adapters = ImageSliderAdapter(result.data!!, this)
+                        homeBinding.vpHome.adapter = adapters
+                        homeBinding.vpHome.addOnPageChangeListener(object :
+                            ViewPager.OnPageChangeListener {
+                            override fun onPageScrolled(
+                                position: Int,
+                                positionOffset: Float,
+                                positionOffsetPixels: Int
+                            ) {
+                            }
+
+                            override fun onPageSelected(position: Int) {
+                                adapters.updatePageIndicator(position)
+                            }
+
+                            override fun onPageScrollStateChanged(state: Int) {
+
+                            }
+
+                        })
+                    }
+                    Status.ERROR -> {
+                        showLoading(false)
+                        Toast.makeText(this, "Popular: Failed to get Data", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
-
-                override fun onPageSelected(position: Int) {
-                    adapters.updatePageIndicator(position)
-                }
-
-                override fun onPageScrollStateChanged(state: Int) {
-
-                }
-
-            })
-
+            }
 
         })
 
         viewModel.genre().observe(this, { result ->
-            GENRES = result
+            GENRES = result.data
         })
     }
 

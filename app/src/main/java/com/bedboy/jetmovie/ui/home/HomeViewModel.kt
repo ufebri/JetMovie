@@ -6,12 +6,12 @@ import com.bedboy.jetmovie.data.source.DataRepository
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.ui.home.HomeActivity.Companion.MEDIATYPE
+import com.bedboy.jetmovie.vo.Resource
 
 class HomeViewModel(private val dataRepository: DataRepository) : ViewModel() {
 
-
-    fun trending(): LiveData<List<DataMovieTVEntity>> = dataRepository.getTrending()
-    fun popular(): LiveData<List<DataMovieTVEntity>> = dataRepository.getPopular()
-    fun genre(): LiveData<List<GenreEntity>> = dataRepository.getGenre(MEDIATYPE)
+    fun trending(): LiveData<Resource<List<DataMovieTVEntity>>> = dataRepository.getTrending()
+    fun popular(): LiveData<Resource<List<DataMovieTVEntity>>> = dataRepository.getPopular()
+    fun genre(): LiveData<Resource<List<GenreEntity>>> = dataRepository.getGenre(MEDIATYPE)
 
 }

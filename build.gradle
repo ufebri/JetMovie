@@ -21,6 +21,9 @@ buildscript {
         mockito_version = '3.6.28'
         mockitoKotlin_version = '2.2.0'
         androidCoreTest_version = '2.1.0'
+        room_version = '2.2.3'
+        roomRuntime_version = '2.3.0'
+        paging_version = '3.0.0'
     }
 
     repositories {

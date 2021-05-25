@@ -47,12 +47,10 @@ class ImageSliderAdapter(private var list: List<DataMovieTVEntity>, private var 
         val genre = view.findViewById<TextView>(R.id.tv_genreFeatured)
         indicator = view.findViewById(R.id.ll_slide_home)
 
-        val genreName = convertGenre(list[position].genre)
-
         title.text = list[position].name ?: list[position].title
         vote.text = list[position].vote.toString()
-        voteBar.rating = list[position].vote.toFloat()
-        genre.text = genreName.split(",")[0]
+        voteBar.rating = list[position].vote!!.toFloat()
+        genre.text = list[position].genre
 
         with(view) {
             Glide.with(context)

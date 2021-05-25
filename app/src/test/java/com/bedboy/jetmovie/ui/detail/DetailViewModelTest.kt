@@ -71,13 +71,13 @@ class DetailViewModelTest {
         video.value = dummyVideo
 
         `when`(dataRepository.getVideoDetail(mediaTypeMovie, idMovie)).thenReturn(video)
-        val videoEntity = viewModel.getvideos(mediaTypeMovie, idMovie).value
+        val videoEntity = viewModel.getVideos(mediaTypeMovie, idMovie).value
         verify(dataRepository).getVideoDetail(mediaTypeMovie, idMovie)
 
         assertNotNull(videoEntity)
         assertEquals(20, dummyVideo.size)
 
-        viewModel.getvideos(mediaTypeMovie, idMovie).observeForever(observerVideo)
+        viewModel.getVideos(mediaTypeMovie, idMovie).observeForever(observerVideo)
         verify(observerVideo).onChanged(dummyVideo)
     }
 
@@ -108,13 +108,13 @@ class DetailViewModelTest {
                 idTVShow
             )
         ).thenReturn(video)
-        val videoEntity = viewModel.getvideos(mediaTypeTVShow, idTVShow).value
+        val videoEntity = viewModel.getVideos(mediaTypeTVShow, idTVShow).value
         verify(dataRepository).getVideoDetail(mediaTypeTVShow, idTVShow)
 
         assertNotNull(videoEntity)
         assertEquals(20, dummyVideo.size)
 
-        viewModel.getvideos(mediaTypeTVShow, idTVShow).observeForever(observerVideo)
+        viewModel.getVideos(mediaTypeTVShow, idTVShow).observeForever(observerVideo)
         verify(observerVideo).onChanged(dummyVideo)
     }
 }
