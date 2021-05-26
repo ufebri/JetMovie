@@ -6,10 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
+import com.bedboy.jetmovie.data.source.local.entity.PopularEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
 
 @Database(
-    entities = [DataMovieTVEntity::class, GenreEntity::class, VideoEntity::class],
+    entities = [DataMovieTVEntity::class, GenreEntity::class, VideoEntity::class, PopularEntity::class],
     version = 1,
     exportSchema = false
 )
