@@ -27,7 +27,7 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var activityDetailBinding: ActivityDetailBinding
     private lateinit var detailMovieBinding: ContentDetailMovieBinding
-    private var dataTitle: String? = null
+    private var dataTitle: String? = ""
     private lateinit var viewModel: DetailViewModel
     private var menu: Menu? = null
     private var mMediaType: String = ""
@@ -47,10 +47,10 @@ class DetailActivity : AppCompatActivity() {
 
         val bundle = intent.getParcelableExtra<DataMovieTVEntity>(DATA_RESULT)
         if (bundle != null) {
-            viewModel.selectedData(bundle.id)
-            mMediaType = bundle.media_type.toString()
-            viewModel.selectedMediaType(mMediaType)
+            val dataID = bundle.id
             dataTitle = bundle.title ?: bundle.name
+            mMediaType = bundle.media_type.toString()
+            viewModel.selectedData(dataID)
             populateDetailContent(mMediaType)
         }
 
@@ -160,9 +160,7 @@ class DetailActivity : AppCompatActivity() {
                         Status.LOADING -> showLoading(true)
                         Status.SUCCESS -> if (result.data != null) {
                             showLoading(false)
-                            showDetail("tv", result.data)
-                            val state = result.data.isFavorite
-                            setFavoriteState(state)
+                            setFavoriteState(result.data.isFavorite)
                         }
                         Status.ERROR -> {
                             showLoading(false)
@@ -179,9 +177,7 @@ class DetailActivity : AppCompatActivity() {
                         Status.LOADING -> showLoading(true)
                         Status.SUCCESS -> if (result.data != null) {
                             showLoading(false)
-                            showDetail("movie", result.data)
-                            val state = result.data.isFavorite
-                            setFavoriteState(state)
+                            setFavoriteState(result.data.isFavorite)
                         }
                         Status.ERROR -> {
                             showLoading(false)

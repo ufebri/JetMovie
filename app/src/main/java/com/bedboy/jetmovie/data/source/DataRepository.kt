@@ -37,7 +37,7 @@ class DataRepository private constructor(
                     localDataSource,
                     appExecutors,
                     remoteData
-                ).apply { instance = this }
+                )
             }
     }
 
@@ -61,19 +61,16 @@ class DataRepository private constructor(
 
             override fun saveCallResult(data: List<ResultsItem>) {
                 val listTrending = ArrayList<DataMovieTVEntity>()
-
                 for (response in data) {
                     with(response) {
                         val trending = DataMovieTVEntity(
-                            id,
-                            posterPath,
-                            title,
-                            voteAverage,
-                            genreIds.toString(),
-                            name,
-                            mediaType,
-                            backdropPath,
-                            overview
+                            id = id,
+                            title = title,
+                            vote = voteAverage,
+                            genre = genreIds.toString(),
+                            name = name,
+                            media_type = mediaType,
+                            backDropPath = backdropPath
                         )
                         listTrending.add(trending)
                     }
@@ -107,15 +104,9 @@ class DataRepository private constructor(
                 for (response in data) {
                     with(response) {
                         val popular = DataMovieTVEntity(
-                            id,
-                            posterPath,
-                            title,
-                            voteAverage,
-                            genreIds.toString(),
-                            name,
-                            mediaType,
-                            backdropPath,
-                            overview
+                            id = id,
+                            imagePath = posterPath,
+                            media_type = mediaType
                         )
                         listPopular.add(popular)
                     }
@@ -145,8 +136,8 @@ class DataRepository private constructor(
                 for (response in data) {
                     with(response) {
                         val video = VideoEntity(
-                            id,
-                            key
+                            id = id,
+                            key = key
                         )
                         listVideo.add(video)
                     }
@@ -172,8 +163,8 @@ class DataRepository private constructor(
                 for (response in data) {
                     with(response) {
                         val genre = GenreEntity(
-                            id,
-                            name
+                            id = id,
+                            name = name
                         )
                         listGenre.add(genre)
                     }
@@ -204,7 +195,7 @@ class DataRepository private constructor(
                 localDataSource.getDetail(id)
 
             override fun shouldFetch(data: DataMovieTVEntity?): Boolean =
-                data != null
+                data != null && data.genre == "" && data.overview == ""
 
             override fun createCall(): LiveData<ApiResponse<ResultsItem>> =
                 remoteDataSource.getDetailTV(id)
@@ -217,12 +208,9 @@ class DataRepository private constructor(
 
                 val detailResult = DataMovieTVEntity(
                     id = data.id,
-                    imagePath = data.posterPath,
-                    title = data.title,
                     vote = data.voteAverage,
                     genre = listGenre.joinToString(),
                     name = data.name,
-                    backDropPath = data.backdropPath,
                     overview = data.overview,
                     isFavorite = false
                 )
@@ -237,7 +225,7 @@ class DataRepository private constructor(
                 localDataSource.getDetail(id)
 
             override fun shouldFetch(data: DataMovieTVEntity?): Boolean =
-                data != null
+                data != null && data.genre == "" && data.overview == ""
 
             override fun createCall(): LiveData<ApiResponse<ResultsItem>> =
                 remoteDataSource.getDetailMovie(id)
@@ -250,12 +238,9 @@ class DataRepository private constructor(
 
                 val detailResult = DataMovieTVEntity(
                     id = data.id,
-                    imagePath = data.posterPath,
                     title = data.title,
                     vote = data.voteAverage,
                     genre = listGenre.joinToString(),
-                    name = data.name,
-                    backDropPath = data.backdropPath,
                     overview = data.overview,
                     isFavorite = false
                 )

@@ -22,7 +22,7 @@ class RemoteDataSource {
 
         fun getInstance(): RemoteDataSource =
             instance ?: synchronized(this) {
-                instance ?: RemoteDataSource().apply { instance = this }
+                instance ?: RemoteDataSource()
             }
     }
 

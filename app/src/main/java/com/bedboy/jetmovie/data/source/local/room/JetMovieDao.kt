@@ -11,14 +11,14 @@ import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
 interface JetMovieDao {
 
     //Trending Operations
-    @Query("SELECT * FROM DataMovieTVEntity")
+    @Query("SELECT * FROM dataMovieTVEntities")
     fun getTrending(): DataSource.Factory<Int, DataMovieTVEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTrending(trending: List<DataMovieTVEntity>)
 
     //Popular Operations
-    @Query("SELECT * FROM DataMovieTVEntity")
+    @Query("SELECT * FROM dataMovieTVEntities")
     fun getPopular(): DataSource.Factory<Int, DataMovieTVEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -39,14 +39,14 @@ interface JetMovieDao {
     fun insertVideo(video: List<VideoEntity>)
 
     //Detail Operations
-    @Query("SELECT * FROM DataMovieTVEntity WHERE id = :id")
+    @Query("SELECT * FROM dataMovieTVEntities WHERE id = :id")
     fun getDetailByID(id: String): LiveData<DataMovieTVEntity>
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.ABORT)
     fun updateDetailByID(detail: DataMovieTVEntity)
 
     //WatchList Operations
-    @Query("SELECT * FROM DataMovieTVEntity WHERE isFavorite = 1")
+    @Query("SELECT * FROM dataMovieTVEntities WHERE isFavorite = 1")
     fun getWatchList(): DataSource.Factory<Int, DataMovieTVEntity>
 
 }

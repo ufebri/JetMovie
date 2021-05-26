@@ -27,9 +27,7 @@ abstract class JetMovieDatabase : RoomDatabase() {
                 INSTANCE ?: Room.databaseBuilder(
                     context.applicationContext,
                     JetMovieDatabase::class.java, "JetMovie.db"
-                ).build().apply {
-                    INSTANCE = this
-                }
+                ).build()
             }
     }
 }

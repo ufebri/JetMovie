@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide
 class WatchListAdapter :
     PagedListAdapter<DataMovieTVEntity, WatchListAdapter.MoviesViewHolder>(DIFF_CALLBACK) {
 
-    private var listMovie = ArrayList<DataMovieTVEntity>()
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataMovieTVEntity>() {
@@ -43,10 +42,12 @@ class WatchListAdapter :
         return MoviesViewHolder(itemHomeBinding)
     }
 
-    override fun getItemCount(): Int = listMovie.size
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
-        holder.bind(listMovie[position])
+        val watchList = getItem(position)
+        if (watchList != null) {
+            holder.bind(watchList)
+        }
     }
 
     class MoviesViewHolder(private val binding: ItemHomeBinding) :

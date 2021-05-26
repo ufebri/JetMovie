@@ -13,14 +13,9 @@ import com.bedboy.jetmovie.vo.Resource
 class DetailViewModel(private val dataRepository: DataRepository) : ViewModel() {
 
     private val dataID = MutableLiveData<String>()
-    private var mMediaType: String = ""
 
     fun selectedData(dataID: String) {
         this.dataID.value = dataID
-    }
-
-    fun selectedMediaType(media_type: String) {
-        this.mMediaType = media_type
     }
 
     fun getVideos(media_type: String, idData: String): LiveData<Resource<List<VideoEntity>>> =
@@ -43,7 +38,6 @@ class DetailViewModel(private val dataRepository: DataRepository) : ViewModel() 
         val dataResource = getDetailTV.value ?: getDetailMovie.value
         if (dataResource?.data != null) {
             val newState = !dataResource.data.isFavorite
-            dataResource.data.media_type = mMediaType
             dataRepository.setWatchList(dataResource.data, newState)
         }
     }
