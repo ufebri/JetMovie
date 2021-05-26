@@ -7,6 +7,7 @@ import com.bedboy.jetmovie.data.NetworkBoundResource
 import com.bedboy.jetmovie.data.source.local.LocalDataSource
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
+import com.bedboy.jetmovie.data.source.local.entity.PopularEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
 import com.bedboy.jetmovie.data.source.remote.ApiResponse
 import com.bedboy.jetmovie.data.source.remote.RemoteDataSource
@@ -81,10 +82,10 @@ class DataRepository private constructor(
         }.asLiveData()
     }
 
-    override fun getPopular(): LiveData<Resource<PagedList<DataMovieTVEntity>>> {
+    override fun getPopular(): LiveData<Resource<PagedList<PopularEntity>>> {
         return object :
-            NetworkBoundResource<PagedList<DataMovieTVEntity>, List<ResultsItem>>(appExecutors) {
-            override fun loadFromDB(): LiveData<PagedList<DataMovieTVEntity>> {
+            NetworkBoundResource<PagedList<PopularEntity>, List<ResultsItem>>(appExecutors) {
+            override fun loadFromDB(): LiveData<PagedList<PopularEntity>> {
                 val config = PagedList.Config.Builder()
                     .setEnablePlaceholders(false)
                     .setInitialLoadSizeHint(10)
@@ -94,17 +95,17 @@ class DataRepository private constructor(
             }
 
 
-            override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean =
+            override fun shouldFetch(data: PagedList<PopularEntity>?): Boolean =
                 data == null || data.isEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<ResultsItem>>> =
                 remoteDataSource.getAllPopular()
 
             override fun saveCallResult(data: List<ResultsItem>) {
-                val listPopular = ArrayList<DataMovieTVEntity>()
+                val listPopular = ArrayList<PopularEntity>()
                 for (response in data) {
                     with(response) {
-                        val popular = DataMovieTVEntity(
+                        val popular = PopularEntity(
                             id = id,
                             imagePath = posterPath,
                             media_type = mediaType,

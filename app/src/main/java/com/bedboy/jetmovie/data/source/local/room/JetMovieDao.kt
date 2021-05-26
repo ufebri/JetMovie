@@ -5,6 +5,7 @@ import androidx.paging.DataSource
 import androidx.room.*
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
+import com.bedboy.jetmovie.data.source.local.entity.PopularEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
 
 @Dao
@@ -18,11 +19,11 @@ interface JetMovieDao {
     fun insertTrending(trending: List<DataMovieTVEntity>)
 
     //Popular Operations
-    @Query("SELECT * FROM dataMovieTVEntities")
-    fun getPopular(): DataSource.Factory<Int, DataMovieTVEntity>
+    @Query("SELECT * FROM popularEntities")
+    fun getPopular(): DataSource.Factory<Int, PopularEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertPopular(popular: List<DataMovieTVEntity>)
+    fun insertPopular(popular: List<PopularEntity>)
 
     //Genre Operations
     @Query("SELECT * FROM GenreEntity")

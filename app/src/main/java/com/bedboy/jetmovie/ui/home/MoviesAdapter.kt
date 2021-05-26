@@ -8,26 +8,27 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bedboy.jetmovie.BuildConfig
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
+import com.bedboy.jetmovie.data.source.local.entity.PopularEntity
 import com.bedboy.jetmovie.databinding.ItemHomeBinding
 import com.bedboy.jetmovie.ui.detail.DetailActivity
 import com.bedboy.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
 import com.bumptech.glide.Glide
 
 class MoviesAdapter :
-    PagedListAdapter<DataMovieTVEntity, MoviesAdapter.MoviesViewHolder>(DIFF_CALLBACK) {
+    PagedListAdapter<PopularEntity, MoviesAdapter.MoviesViewHolder>(DIFF_CALLBACK) {
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataMovieTVEntity>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PopularEntity>() {
             override fun areItemsTheSame(
-                oldItem: DataMovieTVEntity,
-                newItem: DataMovieTVEntity
+                oldItem: PopularEntity,
+                newItem: PopularEntity
             ): Boolean {
                 return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
-                oldItem: DataMovieTVEntity,
-                newItem: DataMovieTVEntity
+                oldItem: PopularEntity,
+                newItem: PopularEntity
             ): Boolean {
                 return oldItem == newItem
             }
@@ -50,7 +51,13 @@ class MoviesAdapter :
 
     class MoviesViewHolder(private val binding: ItemHomeBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(film: DataMovieTVEntity) {
+        fun bind(film: PopularEntity) {
+            val data = DataMovieTVEntity(
+                id = film.id,
+                media_type = film.media_type,
+                title = film.title,
+                name = film.name
+            )
 
             //glide
             with(binding) {
@@ -63,7 +70,7 @@ class MoviesAdapter :
             itemView.setOnClickListener {
                 itemView.context.startActivity(
                     Intent(itemView.context, DetailActivity::class.java)
-                        .putExtra(DATA_RESULT, film)
+                        .putExtra(DATA_RESULT, data)
                 )
             }
         }
