@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
-import com.bedboy.jetmovie.data.source.local.entity.PopularEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
 import com.bedboy.jetmovie.data.source.local.room.JetMovieDao
 
@@ -29,9 +28,9 @@ class LocalDataSource(private val mJetMovieDao: JetMovieDao) {
 
 
     //Popular Operations
-    fun getPopular(): DataSource.Factory<Int, PopularEntity> = mJetMovieDao.getPopular()
+    fun getPopular(): DataSource.Factory<Int, DataMovieTVEntity> = mJetMovieDao.getPopular()
 
-    fun insertPopular(popular: List<PopularEntity>) = mJetMovieDao.insertPopular(popular)
+    fun insertPopular(popular: List<DataMovieTVEntity>) = mJetMovieDao.insertPopular(popular)
 
 
     //Genre Operations
