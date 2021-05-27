@@ -14,6 +14,7 @@ import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
 import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
 import com.bedboy.jetmovie.data.source.remote.response.ResultsVideos
 import com.bedboy.jetmovie.utils.AppExecutors
+import com.bedboy.jetmovie.utils.DataHelper
 import com.bedboy.jetmovie.vo.Resource
 
 class DataRepository private constructor(
@@ -67,7 +68,7 @@ class DataRepository private constructor(
                             id = id,
                             title = title,
                             vote = voteAverage,
-                            genre = genreIds.toString(),
+                            genre = DataHelper.convertGenre(genreIds),
                             name = name,
                             media_type = mediaType,
                             backDropPath = backdropPath,
@@ -170,6 +171,7 @@ class DataRepository private constructor(
                             name = name
                         )
                         listGenre.add(genre)
+                        DataHelper.genres.add(genre)
                     }
                 }
                 localDataSource.insertGenre(listGenre)

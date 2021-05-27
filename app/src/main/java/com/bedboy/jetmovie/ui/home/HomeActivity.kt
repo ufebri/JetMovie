@@ -12,10 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.bedboy.jetmovie.R
-import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
+import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.databinding.ActivityMainBinding
 import com.bedboy.jetmovie.ui.watchlist.WatchListActivity
 import com.bedboy.jetmovie.utils.ViewModelFactory
@@ -110,27 +111,30 @@ class HomeActivity : AppCompatActivity() {
                 when (result.status) {
                     Status.LOADING -> showLoading(true)
                     Status.SUCCESS -> {
-                        showLoading(false)
-                        val adapters = ImageSliderAdapter(result.data!!, this)
-                        homeBinding.vpHome.adapter = adapters
-                        homeBinding.vpHome.addOnPageChangeListener(object :
-                            ViewPager.OnPageChangeListener {
-                            override fun onPageScrolled(
-                                position: Int,
-                                positionOffset: Float,
-                                positionOffsetPixels: Int
-                            ) {
-                            }
+                        if (result.data != null) {
+                            showLoading(false)
+                            setGenre(result.data, viewModel)
+                            val adapters = ImageSliderAdapter(result.data, this)
+                            homeBinding.vpHome.adapter = adapters
+                            homeBinding.vpHome.addOnPageChangeListener(object :
+                                ViewPager.OnPageChangeListener {
+                                override fun onPageScrolled(
+                                    position: Int,
+                                    positionOffset: Float,
+                                    positionOffsetPixels: Int
+                                ) {
+                                }
 
-                            override fun onPageSelected(position: Int) {
-                                adapters.updatePageIndicator(position)
-                            }
+                                override fun onPageSelected(position: Int) {
+                                    adapters.updatePageIndicator(position)
+                                }
 
-                            override fun onPageScrollStateChanged(state: Int) {
+                                override fun onPageScrollStateChanged(state: Int) {
 
-                            }
+                                }
 
-                        })
+                            })
+                        }
                     }
                     Status.ERROR -> {
                         showLoading(false)
@@ -141,10 +145,20 @@ class HomeActivity : AppCompatActivity() {
             }
 
         })
+    }
 
-        viewModel.genre().observe(this, { result ->
-            GENRES = result.data
-        })
+    private fun setGenre(data: PagedList<DataMovieTVEntity>, viewModel: HomeViewModel) {
+        val listGenre = ArrayList<DataMovieTVEntity>()
+        for (response in data) {
+            with(response) {
+                val genre = DataMovieTVEntity(
+                    media_type = media_type,
+                    id = id
+                )
+                listGenre.add(genre)
+                genre.media_type?.let { viewModel.selectedData(it) }
+            }
+        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -180,10 +194,5 @@ class HomeActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         homeBinding.shimmerHome.stopShimmer()
-    }
-
-    companion object {
-        var MEDIATYPE: String = ""
-        var GENRES: List<GenreEntity>? = null
     }
 }

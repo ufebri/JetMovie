@@ -14,10 +14,8 @@ import androidx.viewpager.widget.ViewPager
 import com.bedboy.jetmovie.BuildConfig
 import com.bedboy.jetmovie.R
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
-import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.ui.detail.DetailActivity
 import com.bedboy.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
-import com.bedboy.jetmovie.ui.home.HomeActivity.Companion.GENRES
 import com.bumptech.glide.Glide
 
 class ImageSliderAdapter(private var list: List<DataMovieTVEntity>, private var ctx: Context) :
@@ -50,7 +48,8 @@ class ImageSliderAdapter(private var list: List<DataMovieTVEntity>, private var 
         title.text = list[position].name ?: list[position].title
         vote.text = list[position].vote.toString()
         voteBar.rating = list[position].vote!!.toFloat()
-        genre.text = list[position].genre
+
+        genre.text = list[position].genre?.split(",")?.first()
 
         with(view) {
             Glide.with(context)
@@ -72,16 +71,6 @@ class ImageSliderAdapter(private var list: List<DataMovieTVEntity>, private var 
         addPageIndicator()
 
         return view
-    }
-
-    private fun convertGenre(genreID: List<Int>): String {
-        val filteredGenre = ArrayList<GenreEntity>()
-        for (id in genreID) {
-            val genre = GENRES?.find { it.id == id }
-            if (genre != null)
-                filteredGenre.add(genre)
-        }
-        return filteredGenre.joinToString { it.name }
     }
 
     private fun addPageIndicator() {
