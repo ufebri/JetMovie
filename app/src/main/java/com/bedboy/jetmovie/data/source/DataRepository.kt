@@ -200,7 +200,7 @@ class DataRepository private constructor(
                 localDataSource.getDetail(id)
 
             override fun shouldFetch(data: DataMovieTVEntity?): Boolean =
-                data != null && data.genre == "" && data.overview == ""
+                data != null && data.genre == "" && data.overview == "" && data.name == ""
 
             override fun createCall(): LiveData<ApiResponse<ResultsItem>> =
                 remoteDataSource.getDetailTV(id)
@@ -230,7 +230,7 @@ class DataRepository private constructor(
                 localDataSource.getDetail(id)
 
             override fun shouldFetch(data: DataMovieTVEntity?): Boolean =
-                data != null && data.genre == "" && data.overview == ""
+                data != null && data.genre == "" && data.overview == "" && data.title == ""
 
             override fun createCall(): LiveData<ApiResponse<ResultsItem>> =
                 remoteDataSource.getDetailMovie(id)

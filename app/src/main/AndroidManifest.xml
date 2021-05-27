@@ -16,7 +16,8 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".SplashActivity"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:theme="@style/splashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +26,6 @@
         </activity>
         <activity android:name=".ui.detail.DetailActivity" />
         <activity android:name=".ui.home.HomeActivity" />
-        <activity android:name=".ui.watchlist.WatchListActivity" />
     </application>
 
 </manifest>
