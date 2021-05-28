@@ -28,7 +28,7 @@
         android:layout_height="match_parent"
         tools:visibility="gone">
 
-        <include layout="@layout/shimmer_placeholder_home" />
+        <include layout="@layout/shimmer_placeholder_watchlist" />
 
     </com.facebook.shimmer.ShimmerFrameLayout>
 
