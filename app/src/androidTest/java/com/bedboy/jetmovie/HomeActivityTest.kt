@@ -9,7 +9,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import com.bedboy.jetmovie.ui.home.HomeActivity
+import com.bedboy.jetmovie.ui.MainActivity
 import com.bedboy.jetmovie.utils.DataDummy
 import com.bedboy.jetmovie.utils.EspressoIdlingResource
 import org.junit.After
@@ -22,7 +22,7 @@ class HomeActivityTest {
     private val dummyMovie = DataDummy.generateData()
 
     @get:Rule
-    var activityRule = ActivityScenarioRule(HomeActivity::class.java)
+    var activityRule = ActivityScenarioRule(MainActivity::class.java)
 
 
     @Before

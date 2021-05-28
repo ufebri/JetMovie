@@ -1,4 +1,4 @@
-package com.bedboy.jetmovie.ui.home.popular
+package com.bedboy.jetmovie.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,13 +12,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.viewpager.widget.ViewPager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import com.bedboy.jetmovie.R
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.databinding.ContentHomePopularBinding
-import com.bedboy.jetmovie.ui.home.HomeViewModel
-import com.bedboy.jetmovie.ui.home.ImageSliderAdapter
-import com.bedboy.jetmovie.ui.home.MoviesAdapter
 import com.bedboy.jetmovie.utils.ViewModelFactory
 import com.bedboy.jetmovie.vo.Resource
 import com.bedboy.jetmovie.vo.Status
@@ -28,7 +26,7 @@ class PopularFragment : Fragment() {
     private var _popularBinding: ContentHomePopularBinding? = null
     private val binding get() = _popularBinding
     private lateinit var popularAdapter: MoviesAdapter
-    private lateinit var trendingAdapter: ImageSliderAdapter
+    private lateinit var trendingAdapter: TrendingAdapter
     private lateinit var viewModel: HomeViewModel
 
     override fun onCreateView(
@@ -49,11 +47,13 @@ class PopularFragment : Fragment() {
             viewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
             popularAdapter = MoviesAdapter()
+            trendingAdapter = TrendingAdapter()
 
             showLoading(true)
-            viewModel.popular().observe(viewLifecycleOwner, popularObserver)
             viewModel.trending().observe(viewLifecycleOwner, trendingObserver)
-            showRecyclerView()
+            viewModel.popular().observe(viewLifecycleOwner, popularObserver)
+            showTrending()
+            showPopular()
         }
     }
 
@@ -63,10 +63,7 @@ class PopularFragment : Fragment() {
                 Status.LOADING -> showLoading(true)
                 Status.SUCCESS -> {
                     if (result.data != null) {
-                        result.data.let {
-                            setGenre(it)
-                            showViewPager(it)
-                        }
+                        trendingAdapter.submitList(result.data)
                         showLoading(false)
                     }
                 }
@@ -79,29 +76,14 @@ class PopularFragment : Fragment() {
         }
     }
 
-    private fun showViewPager(pagedList: PagedList<DataMovieTVEntity>) {
-        trendingAdapter = ImageSliderAdapter(pagedList, requireActivity())
+    private fun showTrending() {
         binding?.let {
-            with(it) {
-                vpHome.adapter = trendingAdapter
-                vpHome.addOnPageChangeListener(object :
-                    ViewPager.OnPageChangeListener {
-                    override fun onPageScrolled(
-                        position: Int,
-                        positionOffset: Float,
-                        positionOffsetPixels: Int
-                    ) {
-                    }
-
-                    override fun onPageSelected(position: Int) {
-                        trendingAdapter.updatePageIndicator(position)
-                    }
-
-                    override fun onPageScrollStateChanged(state: Int) {
-
-                    }
-
-                })
+            with(it.rvResultTrending) {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                setHasFixedSize(true)
+                val snapHelper = LinearSnapHelper()
+                snapHelper.attachToRecyclerView(it.rvResultTrending)
+                adapter = trendingAdapter
             }
         }
     }
@@ -123,7 +105,7 @@ class PopularFragment : Fragment() {
         }
     }
 
-    private fun showRecyclerView() {
+    private fun showPopular() {
         binding?.let {
             with(it.rvResultsMovie) {
                 layoutManager =
@@ -142,7 +124,7 @@ class PopularFragment : Fragment() {
             binding?.apply {
                 rvResultsMovie.isGone = true
                 tvPopularHome.isGone = true
-                flPopular.isGone = true
+                rvResultTrending.isGone = true
 
                 shimmerHome.isVisible = true
                 shimmerHome.startShimmer()
@@ -153,26 +135,11 @@ class PopularFragment : Fragment() {
                 shimmerHome.hideShimmer()
                 shimmerHome.isGone = true
 
-                flPopular.isVisible = true
+                rvResultTrending.isVisible = true
                 rvResultsMovie.isVisible = true
                 tvPopularHome.isVisible = true
             }
         }
-    }
-
-    private fun setGenre(data: PagedList<DataMovieTVEntity>) {
-        val listGenre = ArrayList<DataMovieTVEntity>()
-        for (response in data) {
-            with(response) {
-                val genre = DataMovieTVEntity(
-                    media_type = media_type,
-                    id = id
-                )
-                listGenre.add(genre)
-                genre.media_type?.let { viewModel.selectedData(it) }
-            }
-        }
-        viewModel.genre.observe(viewLifecycleOwner, {})
     }
 
     override fun onDestroyView() {
