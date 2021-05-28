@@ -1,9 +1,14 @@
 package com.bedboy.jetmovie.data.source.local.entity
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import androidx.annotation.NonNull
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Parcelize
+@Entity
 data class VideoEntity(
+    @PrimaryKey
+    @NonNull
+    var id: String,
+
     var key: String
-) : Parcelable
+)

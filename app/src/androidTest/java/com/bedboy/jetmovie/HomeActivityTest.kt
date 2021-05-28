@@ -9,7 +9,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import com.bedboy.jetmovie.ui.home.HomeActivity
+import com.bedboy.jetmovie.ui.MainActivity
 import com.bedboy.jetmovie.utils.DataDummy
 import com.bedboy.jetmovie.utils.EspressoIdlingResource
 import org.junit.After
@@ -22,7 +22,7 @@ class HomeActivityTest {
     private val dummyMovie = DataDummy.generateData()
 
     @get:Rule
-    var activityRule = ActivityScenarioRule(HomeActivity::class.java)
+    var activityRule = ActivityScenarioRule(MainActivity::class.java)
 
 
     @Before
@@ -32,8 +32,8 @@ class HomeActivityTest {
 
     @Test
     fun loadFeatured() {
-        onView(withId(R.id.vp_home)).check(matches(isDisplayed()))
-        onView(withId(R.id.vp_home)).perform(swipeLeft())
+        onView(withId(R.id.rv_resultTrending)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_resultTrending)).perform(swipeLeft())
     }
 
     @Test
@@ -60,7 +60,7 @@ class HomeActivityTest {
 
     @Test
     fun loadDetailDataTVShow() {
-        onView(withId(R.id.vp_home)).apply {
+        onView(withId(R.id.rv_resultTrending)).apply {
             check(matches(isCompletelyDisplayed()))
             perform(click())
         }
@@ -69,6 +69,25 @@ class HomeActivityTest {
         onView(withId(R.id.tv_descriptionFilm_detail)).check(matches(isDisplayed()))
         onView(withId(R.id.tv_ratingFilm_detail)).check(matches(isDisplayed()))
         onView(withId(R.id.wv_youtube)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun addWatchList() {
+        onView(withId(R.id.rv_resultTrending)).apply {
+            check(matches(isCompletelyDisplayed()))
+            perform(click())
+        }
+        onView(withId(R.id.action_watchlist)).check(matches(isDisplayed()))
+        onView(withId(R.id.action_watchlist)).perform(click())
+    }
+
+    @Test
+    fun loadWatchList() {
+        onView(withId(R.id.navigation_watchlist)).perform(click())
+        onView(withId(R.id.rv_watchList)).apply {
+            check(matches(isCompletelyDisplayed()))
+            perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(dummyMovie.size))
+        }
     }
 
     @After

@@ -6,4 +6,9 @@
         android:icon="@drawable/ic_share"
         android:title="@string/share"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_watchlist"
+        android:icon="@drawable/ic_watchlist_border"
+        android:title="@string/watchlist"
+        app:showAsAction="ifRoom" />
 </menu>

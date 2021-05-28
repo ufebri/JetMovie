@@ -1,10 +1,12 @@
 package com.bedboy.jetmovie.utils
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bedboy.jetmovie.data.source.DataRepository
 import com.bedboy.jetmovie.ui.detail.DetailViewModel
 import com.bedboy.jetmovie.ui.home.HomeViewModel
+import com.bedboy.jetmovie.ui.watchlist.WatchListViewModel
 
 class ViewModelFactory private constructor(private val dataRepository: DataRepository) :
     ViewModelProvider.NewInstanceFactory() {
@@ -13,9 +15,9 @@ class ViewModelFactory private constructor(private val dataRepository: DataRepos
         @Volatile
         private var instance: ViewModelFactory? = null
 
-        fun getInstance(): ViewModelFactory =
+        fun getInstance(context: Context): ViewModelFactory =
             instance ?: synchronized(this) {
-                instance ?: ViewModelFactory(Injection.provideRepository()).apply {
+                instance ?: ViewModelFactory(Injection.provideRepository(context)).apply {
                     instance = this
                 }
             }
@@ -29,6 +31,9 @@ class ViewModelFactory private constructor(private val dataRepository: DataRepos
             }
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
                 return DetailViewModel(dataRepository) as T
+            }
+            modelClass.isAssignableFrom(WatchListViewModel::class.java) -> {
+                return WatchListViewModel(dataRepository) as T
             }
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)
         }
