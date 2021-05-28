@@ -4,6 +4,7 @@ import com.bedboy.jetmovie.BuildConfig
 import com.bedboy.jetmovie.data.source.remote.response.DataGenre
 import com.bedboy.jetmovie.data.source.remote.response.DataResponse
 import com.bedboy.jetmovie.data.source.remote.response.GetDetailVideos
+import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -39,4 +40,17 @@ interface ApiService {
         @Path("media_type") media_type: String,
         @Query("api_key") api_key: String = BuildConfig.APIKEY
     ): Call<DataGenre>
+
+    //Get Detail Data
+    @GET("tv/{id}")
+    fun getDetailTV(
+        @Path("id") id: String,
+        @Query("api_key") api_key: String = BuildConfig.APIKEY
+    ): Call<ResultsItem>
+
+    @GET("movie/{id}")
+    fun getDetailMovie(
+        @Path("id") id: String,
+        @Query("api_key") api_key: String = BuildConfig.APIKEY
+    ): Call<ResultsItem>
 }

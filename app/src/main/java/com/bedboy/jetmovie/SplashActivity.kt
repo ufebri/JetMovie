@@ -10,7 +10,7 @@ import android.view.WindowInsetsController
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.bedboy.jetmovie.databinding.ActivitySplashBinding
-import com.bedboy.jetmovie.ui.home.HomeActivity
+import com.bedboy.jetmovie.ui.MainActivity
 
 class SplashActivity : AppCompatActivity() {
 
@@ -29,7 +29,7 @@ class SplashActivity : AppCompatActivity() {
     private fun setupMotion() {
         splashBinding.motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-                startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
+                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
             }
 
             override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {}

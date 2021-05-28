@@ -1,6 +1,8 @@
 package com.bedboy.jetmovie.data.source.remote
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.bedboy.jetmovie.data.source.remote.response.*
 import com.bedboy.jetmovie.network.ApiConfig
 import com.bedboy.jetmovie.utils.EspressoIdlingResource
@@ -12,7 +14,7 @@ class RemoteDataSource {
 
     companion object {
         private val client = ApiConfig.getApiService()
-        private val TAG = this::class.java.simpleName
+        private const val TAG = "RemoteDataSource"
 
 
         @Volatile
@@ -20,19 +22,21 @@ class RemoteDataSource {
 
         fun getInstance(): RemoteDataSource =
             instance ?: synchronized(this) {
-                instance ?: RemoteDataSource().apply { instance = this }
+                instance ?: RemoteDataSource()
             }
     }
 
 
-    fun getAllTrending(callback: LoadHomeDataCallback) {
+    fun getAllTrending(): LiveData<ApiResponse<List<ResultsItem>>> {
         EspressoIdlingResource.increment()
+        val resultsItem = MutableLiveData<ApiResponse<List<ResultsItem>>>()
         client.getTrending().enqueue(object : Callback<DataResponse> {
             override fun onResponse(
                 call: Call<DataResponse>,
                 response: Response<DataResponse>
             ) {
-                response.body()?.results?.let { callback.onAllHomeDataReceived(it) }
+                resultsItem.value =
+                    ApiResponse.success(response.body()?.results as List<ResultsItem>)
                 EspressoIdlingResource.decrement()
             }
 
@@ -42,16 +46,19 @@ class RemoteDataSource {
             }
 
         })
+        return resultsItem
     }
 
-    fun getAllPopular(callback: LoadHomeDataCallback) {
+    fun getAllPopular(): LiveData<ApiResponse<List<ResultsItem>>> {
         EspressoIdlingResource.increment()
+        val resultsItem = MutableLiveData<ApiResponse<List<ResultsItem>>>()
         client.getPopular().enqueue(object : Callback<DataResponse> {
             override fun onResponse(
                 call: Call<DataResponse>,
                 response: Response<DataResponse>
             ) {
-                response.body()?.results?.let { callback.onAllHomeDataReceived(it) }
+                resultsItem.value =
+                    ApiResponse.success(response.body()?.results as List<ResultsItem>)
                 EspressoIdlingResource.decrement()
             }
 
@@ -60,16 +67,22 @@ class RemoteDataSource {
                 EspressoIdlingResource.decrement()
             }
         })
+        return resultsItem
     }
 
-    fun getDetailVideos(media_type: String, dataID: String, callback: LoadVideosCallback) {
+    fun getDetailVideos(
+        media_type: String,
+        dataID: String
+    ): LiveData<ApiResponse<List<ResultsVideos>>> {
+        val resultsVideos = MutableLiveData<ApiResponse<List<ResultsVideos>>>()
         EspressoIdlingResource.increment()
         client.getDetailVideo(media_type, dataID).enqueue(object : Callback<GetDetailVideos> {
             override fun onResponse(
                 call: Call<GetDetailVideos>,
                 response: Response<GetDetailVideos>
             ) {
-                response.body()?.results?.let { callback.onAllVideosReceived(it) }
+                resultsVideos.value =
+                    ApiResponse.success(response.body()?.results as List<ResultsVideos>)
                 EspressoIdlingResource.decrement()
             }
 
@@ -79,14 +92,50 @@ class RemoteDataSource {
             }
 
         })
-
+        return resultsVideos
     }
 
-    fun getAllGenre(media_type: String, callback: LoadGenreCallback) {
+    fun getDetailTV(dataID: String): LiveData<ApiResponse<ResultsItem>> {
+        EspressoIdlingResource.increment()
+        val resultDetailItem = MutableLiveData<ApiResponse<ResultsItem>>()
+        client.getDetailTV(dataID).enqueue(object : Callback<ResultsItem> {
+            override fun onResponse(call: Call<ResultsItem>, response: Response<ResultsItem>) {
+                resultDetailItem.value = ApiResponse.success(response.body() as ResultsItem)
+                EspressoIdlingResource.decrement()
+            }
+
+            override fun onFailure(call: Call<ResultsItem>, t: Throwable) {
+                Log.d(TAG, "onFailure: ${t.message}")
+                EspressoIdlingResource.decrement()
+            }
+        })
+        return resultDetailItem
+    }
+
+    fun getDetailMovie(dataID: String): LiveData<ApiResponse<ResultsItem>> {
+        EspressoIdlingResource.increment()
+        val resultDetailItem = MutableLiveData<ApiResponse<ResultsItem>>()
+        client.getDetailMovie(dataID).enqueue(object : Callback<ResultsItem> {
+            override fun onResponse(call: Call<ResultsItem>, response: Response<ResultsItem>) {
+                resultDetailItem.value = ApiResponse.success(response.body() as ResultsItem)
+                EspressoIdlingResource.decrement()
+            }
+
+            override fun onFailure(call: Call<ResultsItem>, t: Throwable) {
+                Log.d(TAG, "onFailure: ${t.message}")
+                EspressoIdlingResource.decrement()
+            }
+        })
+        return resultDetailItem
+    }
+
+    fun getAllGenre(media_type: String): LiveData<ApiResponse<List<ResultsGenre>>> {
+        val resultsGenre = MutableLiveData<ApiResponse<List<ResultsGenre>>>()
         EspressoIdlingResource.increment()
         client.getGenre(media_type).enqueue(object : Callback<DataGenre> {
             override fun onResponse(call: Call<DataGenre>, response: Response<DataGenre>) {
-                response.body()?.genres?.let { callback.onAllGenreReceived(it) }
+                resultsGenre.value =
+                    ApiResponse.success(response.body()?.genres as List<ResultsGenre>)
                 EspressoIdlingResource.decrement()
             }
 
@@ -95,19 +144,6 @@ class RemoteDataSource {
                 EspressoIdlingResource.decrement()
             }
         })
-
-    }
-
-    //The data model for TVShow & Movies are same
-    interface LoadHomeDataCallback {
-        fun onAllHomeDataReceived(homeResponse: List<ResultsItem>)
-    }
-
-    interface LoadVideosCallback {
-        fun onAllVideosReceived(videoDetailResponse: List<ResultsVideos>)
-    }
-
-    interface LoadGenreCallback {
-        fun onAllGenreReceived(genreResponse: List<ResultsGenre>)
+        return resultsGenre
     }
 }
