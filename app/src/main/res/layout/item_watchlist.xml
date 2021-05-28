@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/margin_medium"
+    android:layout_marginTop="@dimen/margin_medium"
+    android:layout_marginEnd="@dimen/margin_medium"
+    android:layout_marginBottom="@dimen/margin_small"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    app:cardCornerRadius="@dimen/margin_extra_small"
+    app:cardUseCompatPadding="true">
+
+    <ImageView
+        android:id="@+id/iv_posterWatchList"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:alpha="0.8"
+        android:scaleType="fitXY"
+        tools:ignore="ContentDescription"
+        tools:src="@tools:sample/backgrounds/scenic" />
+</androidx.cardview.widget.CardView>

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bedboy.jetmovie.BuildConfig
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
-import com.bedboy.jetmovie.databinding.ItemHomeBinding
+import com.bedboy.jetmovie.databinding.ItemWatchlistBinding
 import com.bedboy.jetmovie.ui.detail.DetailActivity
 import com.bumptech.glide.Glide
 
@@ -38,7 +38,7 @@ class WatchListAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
         val itemHomeBinding =
-            ItemHomeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemWatchlistBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MoviesViewHolder(itemHomeBinding)
     }
 
@@ -50,15 +50,15 @@ class WatchListAdapter :
         }
     }
 
-    class MoviesViewHolder(private val binding: ItemHomeBinding) :
+    class MoviesViewHolder(private val binding: ItemWatchlistBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(film: DataMovieTVEntity) {
 
             //glide
             with(binding) {
                 Glide.with(itemView.context)
-                    .load(BuildConfig.IMGLINK + film.imagePath)
-                    .into(ivPosterFilmItemHome)
+                    .load(BuildConfig.IMGLINK + film.backDropPath)
+                    .into(ivPosterWatchList)
             }
 
             //OnClick

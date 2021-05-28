@@ -8,17 +8,18 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bedboy.jetmovie.R
-import com.bedboy.jetmovie.databinding.FragmentWatchListBinding
+import com.bedboy.jetmovie.databinding.ContentWatchlistBinding
 import com.bedboy.jetmovie.utils.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 
 class WatchListFragment : Fragment() {
 
-    private var watchListBinding: FragmentWatchListBinding? = null
+    private var watchListBinding: ContentWatchlistBinding? = null
     private val binding get() = watchListBinding
     private lateinit var viewModel: WatchListViewModel
     private lateinit var watchListAdapter: WatchListAdapter
@@ -29,13 +30,13 @@ class WatchListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        watchListBinding = FragmentWatchListBinding.inflate(inflater, container, false)
+        watchListBinding = ContentWatchlistBinding.inflate(inflater, container, false)
         return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        itemTouchHelper.attachToRecyclerView(binding?.contentWatchList?.rvWatchList)
+        itemTouchHelper.attachToRecyclerView(binding?.rvWatchList)
 
         if (activity != null) {
 
@@ -54,10 +55,11 @@ class WatchListFragment : Fragment() {
     }
 
     private fun showRecyclerView() {
-        binding?.contentWatchList?.let {
+        binding?.let {
             with(it.rvWatchList) {
-                layoutManager = GridLayoutManager(context, 2)
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 setHasFixedSize(true)
+                addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
                 adapter = watchListAdapter
             }
         }
@@ -77,7 +79,7 @@ class WatchListFragment : Fragment() {
                 with(it) {
                     shimmerWatchList.stopShimmer()
                     shimmerWatchList.isGone = true
-                    contentWatchList.rvWatchList.isVisible = true
+                    rvWatchList.isVisible = true
                 }
             }
         }
