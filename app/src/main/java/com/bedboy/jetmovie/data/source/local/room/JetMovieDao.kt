@@ -11,7 +11,7 @@ import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
 interface JetMovieDao {
 
     //Trending Operations
-    @Query("SELECT * FROM dataMovieTVEntities WHERE  NOT backDropPath = \"\"")
+    @Query("SELECT * FROM dataMovieTVEntities")
     fun getTrending(): DataSource.Factory<Int, DataMovieTVEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -42,7 +42,7 @@ interface JetMovieDao {
     @Query("SELECT * FROM dataMovieTVEntities WHERE id = :id")
     fun getDetailByID(id: String): LiveData<DataMovieTVEntity>
 
-    @Update(onConflict = OnConflictStrategy.ABORT)
+    @Update
     fun updateDetailByID(detail: DataMovieTVEntity)
 
     //WatchList Operations

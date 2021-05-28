@@ -16,28 +16,28 @@ data class DataMovieTVEntity(
     var id: String,
 
     @ColumnInfo(name = "imagePath")
-    var imagePath: String? = "",
+    var imagePath: String?,
 
     @ColumnInfo(name = "title")
-    var title: String? = "",
+    var title: String?,
 
     @ColumnInfo(name = "vote")
-    var vote: Double? = 0.0,
+    var vote: Double?,
 
     @ColumnInfo(name = "genre")
-    var genre: String? = "",
+    var genre: String?,
 
     @ColumnInfo(name = "name")
-    var name: String? = "",
+    var name: String?,
 
     @ColumnInfo(name = "media_type")
-    var media_type: String? = "",
+    var media_type: String?,
 
     @ColumnInfo(name = "backDropPath")
-    var backDropPath: String? = "",
+    var backDropPath: String?,
 
     @ColumnInfo(name = "overview")
-    var overview: String? = "",
+    var overview: String?,
 
     @ColumnInfo(name = "isFavorite")
     var isFavorite: Boolean = false

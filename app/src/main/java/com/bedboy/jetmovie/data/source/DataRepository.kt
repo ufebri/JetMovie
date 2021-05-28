@@ -72,7 +72,8 @@ class DataRepository private constructor(
                             name = name,
                             media_type = mediaType,
                             backDropPath = backdropPath,
-                            imagePath = posterPath
+                            imagePath = posterPath,
+                            overview = overview
                         )
                         listTrending.add(trending)
                     }
@@ -110,7 +111,11 @@ class DataRepository private constructor(
                             imagePath = posterPath,
                             media_type = mediaType,
                             name = name,
-                            title = title
+                            title = title,
+                            backDropPath = backdropPath,
+                            vote = voteAverage,
+                            overview = overview,
+                            genre = DataHelper.convertGenre(genreIds)
                         )
                         listPopular.add(popular)
                     }
@@ -200,7 +205,7 @@ class DataRepository private constructor(
                 localDataSource.getDetail(id)
 
             override fun shouldFetch(data: DataMovieTVEntity?): Boolean =
-                data != null && data.genre == "" && data.overview == "" && data.name == ""
+                data != null && data.overview == "" && data.name == ""
 
             override fun createCall(): LiveData<ApiResponse<ResultsItem>> =
                 remoteDataSource.getDetailTV(id)
@@ -217,7 +222,11 @@ class DataRepository private constructor(
                     genre = listGenre.joinToString(),
                     name = data.name,
                     overview = data.overview,
-                    isFavorite = false
+                    isFavorite = false,
+                    backDropPath = data.backdropPath,
+                    imagePath = data.posterPath,
+                    title = null,
+                    media_type = data.mediaType
                 )
                 localDataSource.updateDetail(detailResult, false)
             }
@@ -230,7 +239,7 @@ class DataRepository private constructor(
                 localDataSource.getDetail(id)
 
             override fun shouldFetch(data: DataMovieTVEntity?): Boolean =
-                data != null && data.genre == "" && data.overview == "" && data.title == ""
+                data != null && data.title == "" && data.overview == ""
 
             override fun createCall(): LiveData<ApiResponse<ResultsItem>> =
                 remoteDataSource.getDetailMovie(id)
@@ -247,7 +256,11 @@ class DataRepository private constructor(
                     vote = data.voteAverage,
                     genre = listGenre.joinToString(),
                     overview = data.overview,
-                    isFavorite = false
+                    isFavorite = false,
+                    backDropPath = data.backdropPath,
+                    imagePath = data.posterPath,
+                    media_type = data.mediaType,
+                    name = data.name
                 )
                 localDataSource.updateDetail(detailResult, false)
             }
