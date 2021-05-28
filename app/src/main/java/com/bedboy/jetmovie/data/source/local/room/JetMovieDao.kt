@@ -11,7 +11,7 @@ import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
 interface JetMovieDao {
 
     //Trending Operations
-    @Query("SELECT * FROM dataMovieTVEntities")
+    @Query("SELECT * FROM dataMovieTVEntities WHERE  NOT backDropPath = \"\"")
     fun getTrending(): DataSource.Factory<Int, DataMovieTVEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
