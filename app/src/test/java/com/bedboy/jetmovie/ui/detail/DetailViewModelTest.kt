@@ -4,10 +4,12 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.bedboy.jetmovie.data.source.DataRepository
-import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
+import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
 import com.bedboy.jetmovie.utils.DataDummy
+import com.bedboy.jetmovie.vo.Resource
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -22,8 +24,10 @@ import org.mockito.junit.MockitoJUnitRunner
 class DetailViewModelTest {
 
     private lateinit var viewModel: DetailViewModel
-    private val dummyGenre = DataDummy.generateGenre()
-    private val dummyVideo = DataDummy.generateVideo()
+    private val dummyVideo = Resource.success(DataDummy.generateVideo())
+    private val dummyDetailMovie = Resource.success(DataDummy.generateDetailDataMovie())
+    private val dummyDetailTVShow = Resource.success(DataDummy.generateDetailDataTVShow())
+
 
     private val idMovie = DataDummy.generateData()[0].id
     private val idTVShow = DataDummy.generateData()[13].id
@@ -37,11 +41,10 @@ class DetailViewModelTest {
     private lateinit var dataRepository: DataRepository
 
     @Mock
-    private lateinit var observerGenre: Observer<List<GenreEntity>>
+    private lateinit var observerVideo: Observer<Resource<List<VideoEntity>>>
 
     @Mock
-    private lateinit var observerVideo: Observer<List<VideoEntity>>
-
+    private lateinit var observerDetail: Observer<Resource<DataMovieTVEntity>>
 
     @Before
     fun setup() {
@@ -50,71 +53,91 @@ class DetailViewModelTest {
 
 
     @Test
-    fun getGenreDetailMovie() {
-        val genre = MutableLiveData<List<GenreEntity>>()
-        genre.value = dummyGenre
-
-        `when`(dataRepository.getGenre(mediaTypeMovie)).thenReturn(genre)
-        val genreEntity = viewModel.getGenre(mediaTypeMovie).value
-        verify(dataRepository).getGenre(mediaTypeMovie)
-
-        assertNotNull(genreEntity)
-        assertEquals(5, dummyGenre.size)
-
-        viewModel.getGenre(mediaTypeMovie).observeForever(observerGenre)
-        verify(observerGenre).onChanged(dummyGenre)
-    }
-
-    @Test
     fun getVideoDetailMovie() {
-        val video = MutableLiveData<List<VideoEntity>>()
+        val video = MutableLiveData<Resource<List<VideoEntity>>>()
         video.value = dummyVideo
 
-        `when`(dataRepository.getVideoDetail(mediaTypeMovie, idMovie)).thenReturn(video)
-        val videoEntity = viewModel.getVideos(mediaTypeMovie, idMovie).value
-        verify(dataRepository).getVideoDetail(mediaTypeMovie, idMovie)
+        `when`(dataRepository.getVideoDetail(mediaTypeMovie.toString(), idMovie)).thenReturn(video)
+        val videoEntity = viewModel.getVideos(mediaTypeMovie.toString(), idMovie).value
+        verify(dataRepository).getVideoDetail(mediaTypeMovie.toString(), idMovie)
 
         assertNotNull(videoEntity)
-        assertEquals(20, dummyVideo.size)
+        assertEquals(20, dummyVideo.data?.size)
 
-        viewModel.getVideos(mediaTypeMovie, idMovie).observeForever(observerVideo)
+        viewModel.getVideos(mediaTypeMovie.toString(), idMovie).observeForever(observerVideo)
         verify(observerVideo).onChanged(dummyVideo)
-    }
-
-    @Test
-    fun getGenreTVShow() {
-        val genre = MutableLiveData<List<GenreEntity>>()
-        genre.value = dummyGenre
-
-        `when`(dataRepository.getGenre(mediaTypeTVShow)).thenReturn(genre)
-        val genreEntity = viewModel.getGenre(mediaTypeTVShow).value
-        verify(dataRepository).getGenre(mediaTypeTVShow)
-
-        assertNotNull(genreEntity)
-        assertEquals(5, dummyGenre.size)
-
-        viewModel.getGenre(mediaTypeTVShow).observeForever(observerGenre)
-        verify(observerGenre).onChanged(dummyGenre)
     }
 
     @Test
     fun getVideoDetailTVShow() {
-        val video = MutableLiveData<List<VideoEntity>>()
+        val video = MutableLiveData<Resource<List<VideoEntity>>>()
         video.value = dummyVideo
 
         `when`(
             dataRepository.getVideoDetail(
-                mediaTypeTVShow,
+                mediaTypeTVShow.toString(),
                 idTVShow
             )
         ).thenReturn(video)
-        val videoEntity = viewModel.getVideos(mediaTypeTVShow, idTVShow).value
-        verify(dataRepository).getVideoDetail(mediaTypeTVShow, idTVShow)
+        val videoEntity = viewModel.getVideos(mediaTypeTVShow.toString(), idTVShow).value
+        verify(dataRepository).getVideoDetail(mediaTypeTVShow.toString(), idTVShow)
 
         assertNotNull(videoEntity)
-        assertEquals(20, dummyVideo.size)
+        assertEquals(20, dummyVideo.data?.size)
 
-        viewModel.getVideos(mediaTypeTVShow, idTVShow).observeForever(observerVideo)
+        viewModel.getVideos(mediaTypeTVShow.toString(), idTVShow).observeForever(observerVideo)
         verify(observerVideo).onChanged(dummyVideo)
+    }
+
+    @Test
+    fun getDetailMovie() {
+        val detailMovie = MutableLiveData<Resource<DataMovieTVEntity>>()
+        detailMovie.value = dummyDetailMovie
+
+        `when`(dataRepository.getDetailMovie(idMovie)).thenReturn(
+            detailMovie
+        )
+
+        viewModel.selectedData(idMovie)
+        viewModel.getDetailMovie.observeForever(observerDetail)
+        verify(observerDetail).onChanged(dummyDetailMovie)
+    }
+
+    @Test
+    fun getDetailTVShow() {
+        val detailTVShow = MutableLiveData<Resource<DataMovieTVEntity>>()
+        detailTVShow.value = dummyDetailTVShow
+
+        `when`(dataRepository.getDetailTV(idTVShow)).thenReturn(
+            detailTVShow
+        )
+
+        viewModel.selectedData(idTVShow)
+        viewModel.getDetailTV.observeForever(observerDetail)
+        verify(observerDetail).onChanged(dummyDetailTVShow)
+    }
+
+    @Test
+    fun setWatchListMovie() {
+        val movie = MutableLiveData<Resource<DataMovieTVEntity>>()
+        movie.value = dummyDetailMovie
+
+        `when`(dataRepository.getDetailMovie(idMovie)).thenReturn(movie)
+        viewModel.getDetailMovie = dataRepository.getDetailMovie(idMovie)
+        viewModel.addToWatchList()
+        verify(dataRepository).setWatchList(movie.value?.data as DataMovieTVEntity, true)
+        verifyNoMoreInteractions(observerDetail)
+    }
+
+    @Test
+    fun setWatchListTVShow() {
+        val tv = MutableLiveData<Resource<DataMovieTVEntity>>()
+        tv.value = dummyDetailTVShow
+
+        `when`(dataRepository.getDetailTV(idTVShow)).thenReturn(tv)
+        viewModel.getDetailTV = dataRepository.getDetailTV(idTVShow)
+        viewModel.addToWatchList()
+        verify(dataRepository).setWatchList(tv.value?.data as DataMovieTVEntity, true)
+        verifyNoMoreInteractions(observerDetail)
     }
 }

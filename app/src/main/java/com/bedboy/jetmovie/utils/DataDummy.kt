@@ -324,6 +324,36 @@ object DataDummy {
         return detailData
     }
 
+    fun generateDetailDataMovie(): DataMovieTVEntity {
+        return DataMovieTVEntity(
+            "1",
+            "$imgLink/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg",
+            "A Star is Born",
+            7.6,
+            "Drama",
+            null,
+            "movie",
+            "",
+            "After falling in love with struggling artist Ally, Jackson, a musician, coaxes her to follow her dreams, while he battles with alcoholism and his personal demons.",
+            false
+        )
+    }
+
+    fun generateDetailDataTVShow(): DataMovieTVEntity {
+        return DataMovieTVEntity(
+            "14",
+            "",
+            null,
+            8.1,
+            "Drama",
+            "How I Met Your Mother",
+            "tv",
+            "$imgLink/5BMwFwNzSidVYArn561acqtktxv.jpg",
+            "A father recounts to his children - through a series of flashbacks - the journey he and his four best friends took leading up to him meeting their mother.",
+            false
+        )
+    }
+
     fun generateGenre(): List<GenreEntity> =
         arrayListOf(
             GenreEntity(10759, "Action & Adventure"),
