@@ -139,14 +139,15 @@ class DetailActivity : AppCompatActivity() {
         if (state) {
             activityDetailBinding.shimmerDetail.startShimmer()
         } else {
-            //STOP SHIMMER
-            activityDetailBinding.shimmerDetail.stopShimmer()
-            activityDetailBinding.shimmerDetail.hideShimmer()
-            activityDetailBinding.shimmerDetail.isGone = true
+            activityDetailBinding.apply {
+                shimmerDetail.stopShimmer()
+                shimmerDetail.hideShimmer()
+                shimmerDetail.isGone = true
 
-            //INIT PROPERTIES
-            activityDetailBinding.ablDetail.isVisible = true
-            activityDetailBinding.contentDetailMovie.root.isVisible = true
+                //INIT PROPERTIES
+                ablDetail.isVisible = true
+                contentDetailMovie.root.isVisible = true
+            }
         }
     }
 
