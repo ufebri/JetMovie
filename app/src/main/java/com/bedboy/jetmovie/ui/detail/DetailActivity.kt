@@ -1,13 +1,13 @@
 package com.bedboy.jetmovie.ui.detail
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebChromeClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -28,6 +28,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var activityDetailBinding: ActivityDetailBinding
     private lateinit var detailMovieBinding: ContentDetailMovieBinding
     private var dataTitle: String? = ""
+    private var ytURL: String? = ""
     private lateinit var viewModel: DetailViewModel
     private var menu: Menu? = null
     private var mMediaType: String = ""
@@ -123,7 +124,10 @@ class DetailActivity : AppCompatActivity() {
                         settings.javaScriptEnabled = true
                         webChromeClient = object : WebChromeClient() {}
                         if (result.data?.size != 0) {
-                            loadUrl("https://www.youtube.com/embed/${result.data?.get(0)?.key}")
+                            result.data?.get(0)?.key.let {
+                                ytURL = it
+                                loadUrl("https://www.youtube.com/embed/$it")
+                            }
                         } else {
                             loadUrl("https://www.youtube.com/embed/6vdMiG_syOE")
                         }
@@ -221,13 +225,15 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun onShareClick() {
-        val mimeType = "text/plain"
-        ShareCompat.IntentBuilder
-            .from(this)
-            .setType(mimeType)
-            .setChooserTitle("Bagikan aplikasi ini sekarang.")
-            .setText(dataTitle)
-            .startChooser()
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(
+                Intent.EXTRA_TEXT,
+                "Aye, check this out... i found it from JetMovie: \n $dataTitle - https://youtu.be/$ytURL"
+            )
+            type = "text/plain"
+        }
+        startActivity(Intent.createChooser(sendIntent, "Bagikan aplikasi ini sekarang"))
     }
 
     override fun onResume() {
