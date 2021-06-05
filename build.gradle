@@ -24,7 +24,7 @@ buildscript {
         room_version = '2.2.3'
         roomRuntime_version = '2.3.0'
         paging_version = '2.1.1'
-        archLifeCycle_version = '2.3.0'
+        archLifeCycle_version = '2.3.1'
         nav_version = '2.3.5'
     }
 

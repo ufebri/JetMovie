@@ -7,6 +7,7 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bedboy.jetmovie.BuildConfig
+import com.bedboy.jetmovie.R
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.databinding.ItemImageSliderHomeBinding
 import com.bedboy.jetmovie.ui.detail.DetailActivity
@@ -57,6 +58,8 @@ class TrendingAdapter :
             with(binding) {
                 Glide.with(itemView.context)
                     .load(BuildConfig.IMGLINK.plus(trending.backDropPath))
+                    .error(R.drawable.ic_broken_image)
+                    .placeholder(R.drawable.ic_no_image)
                     .into(ivSlideHome)
 
                 tvTitleFeatured.text = trending.name ?: trending.title
