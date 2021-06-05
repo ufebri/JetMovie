@@ -47,10 +47,22 @@ class WatchListFragment : Fragment() {
 
             showLoading(true)
             viewModel.getWatchList().observe(viewLifecycleOwner, { result ->
-                showLoading(false)
-                watchListAdapter.submitList(result)
+                if (result.size != 0) {
+                    showLoading(false)
+                    watchListAdapter.submitList(result)
+                } else {
+                    showLoading(false)
+                    showNoData()
+                }
             })
             showRecyclerView()
+        }
+    }
+
+    private fun showNoData() {
+        binding?.apply {
+            ivWatchListNoData.isVisible = true
+            tvNoData.isVisible = true
         }
     }
 
