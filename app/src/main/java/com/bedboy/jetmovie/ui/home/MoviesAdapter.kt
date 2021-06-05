@@ -7,11 +7,12 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bedboy.jetmovie.BuildConfig
+import com.bedboy.jetmovie.R
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.databinding.ItemHomeBinding
 import com.bedboy.jetmovie.ui.detail.DetailActivity
 import com.bedboy.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
-import com.bumptech.glide.Glide
+import com.bedboy.jetmovie.utils.GlideApp
 
 class MoviesAdapter :
     PagedListAdapter<DataMovieTVEntity, MoviesAdapter.MoviesViewHolder>(DIFF_CALLBACK) {
@@ -54,8 +55,12 @@ class MoviesAdapter :
 
             //glide
             with(binding) {
-                Glide.with(itemView.context)
+                GlideApp.with(itemView.context)
                     .load(BuildConfig.IMGLINK + film.imagePath)
+                    .error(R.drawable.ic_broken_image)
+                    .centerInside()
+                    .override(200, 250)
+                    .placeholder(R.drawable.ic_no_image)
                     .into(ivPosterFilmItemHome)
             }
 
