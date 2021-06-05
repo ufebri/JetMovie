@@ -16,10 +16,17 @@ Dependencies
  - Retrofit
  - Shimmer Loading 
  - Mockito
+ - Room Database
+ - Lifecycle Arch
+ [Check MAD Scorecard](https://madscorecard.withgoogle.com/scorecards/3512515570/)
 
 Screenshot
 ==========
 <img src="screenshots/v0.3.0.gif" height="400" alt="JetMovie v0.3.0"/> <img src="screenshots/Splashscreen.png" height="400" alt="Screenshot Splash Screen JetMovie"/> 
 <img src="screenshots/Homescreen.png" height="400" alt="Screenshot Splash Screen JetMovie"/> <img src="screenshots/Detailscreen.png" height="400" alt="Screenshot Splash Screen JetMovie"/>
+<img src="screenshots/watchlist.jpg" height="400" alt="Menu Watchlist"/> <img src="screenshots/no-connection.jpg" height="400" alt="No Connection View"/> 
+<img src="screenshots/no-watchlist.jpg" height="400" alt="No Data Watchlist"/>
 
-
+Architecture
+============
+<img src="screenshots/architecture-jetmovie.png" height="500" alt="Architecture JetMovie"/>
