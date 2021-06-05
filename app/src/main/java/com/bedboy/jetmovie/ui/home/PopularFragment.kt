@@ -60,7 +60,15 @@ class PopularFragment : Fragment() {
     private val trendingObserver = Observer<Resource<PagedList<DataMovieTVEntity>>> { result ->
         if (result != null) {
             when (result.status) {
-                Status.LOADING -> showLoading(true)
+                Status.LOADING -> {
+                    if (result.data?.size != 0) {
+                        showLoading(true)
+                        showNoConnection(false)
+                    } else {
+                        showLoading(false)
+                        showNoConnection(true)
+                    }
+                }
                 Status.SUCCESS -> {
                     if (result.data != null) {
                         trendingAdapter.submitList(result.data)
@@ -74,6 +82,21 @@ class PopularFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showNoConnection(state: Boolean) {
+        if (state)
+            binding?.apply {
+                itemNoConnection.tvNoConnectionHome.isVisible = true
+                itemNoConnection.ivNoConnection.isVisible = true
+                tvPopularHome.isGone = true
+                itemShimmer.containerShimmerHome.isGone = true
+            }
+        else
+            binding?.apply {
+                itemNoConnection.tvNoConnectionHome.isGone = true
+                itemNoConnection.ivNoConnection.isGone = true
+            }
     }
 
     private fun showTrending() {
