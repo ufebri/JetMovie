@@ -10,12 +10,12 @@ def apikeyProperties = new Properties()
 apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 
 android {
-    compileSdkVersion 30
+    compileSdk 34
     buildToolsVersion "30.0.3"
     defaultConfig {
         applicationId "com.bedboy.jetmovie"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdk 34
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -27,9 +27,20 @@ android {
 
     }
 
+    signingConfigs {
+        release {
+            storeFile file(apikeyProperties["MYAPP_RELEASE_KEYSTORE_FILE"])
+            storePassword apikeyProperties["MYAPP_RELEASE_KEYSTORE_PASSWORD"]
+            keyAlias apikeyProperties["MYAPP_RELEASE_KEY_ALIAS"]
+            keyPassword apikeyProperties["MYAPP_RELEASE_KEY_PASSWORD"]
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            debuggable false 
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -93,7 +104,7 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     //pagination
-    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+    implementation "androidx.paging:paging-runtime:$paging_version"
 }
 repositories {
     mavenCentral()

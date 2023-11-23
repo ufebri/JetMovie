@@ -66,7 +66,6 @@ class PopularFragment : Fragment() {
                         showNoConnection(false)
                     } else {
                         showLoading(false)
-                        showNoConnection(true)
                     }
                 }
                 Status.SUCCESS -> {
@@ -77,6 +76,7 @@ class PopularFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     showLoading(false)
+                    showNoConnection(true)
                     Toast.makeText(context, "Popular: Failed to get Data", Toast.LENGTH_SHORT)
                         .show()
                 }

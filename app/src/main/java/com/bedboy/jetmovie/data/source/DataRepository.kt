@@ -55,7 +55,7 @@ class DataRepository private constructor(
             }
 
             override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean =
-                data == null || data.isEmpty()
+                data.isNullOrEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<ResultsItem>>> =
                 remoteDataSource.getAllTrending()
@@ -97,7 +97,7 @@ class DataRepository private constructor(
 
 
             override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean =
-                data == null || data.isEmpty()
+                data.isNullOrEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<ResultsItem>>> =
                 remoteDataSource.getAllPopular()
@@ -135,7 +135,7 @@ class DataRepository private constructor(
                 localDataSource.getVideo(id)
 
             override fun shouldFetch(data: List<VideoEntity>?): Boolean =
-                data == null || data.isEmpty()
+                data.isNullOrEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<ResultsVideos>>> =
                 remoteDataSource.getDetailVideos(media_type, id)
@@ -162,7 +162,7 @@ class DataRepository private constructor(
                 localDataSource.getGenre()
 
             override fun shouldFetch(data: List<GenreEntity>?): Boolean =
-                data == null || data.isEmpty()
+                data.isNullOrEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<ResultsGenre>>> =
                 remoteDataSource.getAllGenre(media_type)
