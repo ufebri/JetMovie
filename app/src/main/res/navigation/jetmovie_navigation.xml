@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.bedboy.jetmovie.ui.home.PopularFragment"
+        android:name="id.daydream.jetmovie.ui.home.PopularFragment"
         android:label="@string/home"
         tools:layout="@layout/content_home_popular" />
 
     <fragment
         android:id="@+id/navigation_watchlist"
-        android:name="com.bedboy.jetmovie.ui.watchlist.WatchListFragment"
+        android:name="id.daydream.jetmovie.ui.watchlist.WatchListFragment"
         android:label="@string/watchlist"
         tools:layout="@layout/content_watchlist" />
 </navigation>
