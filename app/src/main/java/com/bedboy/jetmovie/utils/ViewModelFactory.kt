@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bedboy.jetmovie.data.source.DataRepository
 import com.bedboy.jetmovie.ui.detail.DetailViewModel
 import com.bedboy.jetmovie.ui.home.HomeViewModel
+import com.bedboy.jetmovie.ui.upcoming.UpcomingViewModel
 import com.bedboy.jetmovie.ui.watchlist.WatchListViewModel
 
 class ViewModelFactory private constructor(private val dataRepository: DataRepository) :
@@ -25,16 +26,23 @@ class ViewModelFactory private constructor(private val dataRepository: DataRepos
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        when {
+        return when {
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
-                return HomeViewModel(dataRepository) as T
+                HomeViewModel(dataRepository) as T
             }
+
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
-                return DetailViewModel(dataRepository) as T
+                DetailViewModel(dataRepository) as T
             }
+
             modelClass.isAssignableFrom(WatchListViewModel::class.java) -> {
-                return WatchListViewModel(dataRepository) as T
+                WatchListViewModel(dataRepository) as T
             }
+
+            modelClass.isAssignableFrom(UpcomingViewModel::class.java) -> {
+                UpcomingViewModel(dataRepository) as T
+            }
+
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)
         }
 

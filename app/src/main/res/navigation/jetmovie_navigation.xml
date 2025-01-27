@@ -16,4 +16,10 @@
         android:name="com.bedboy.jetmovie.ui.watchlist.WatchListFragment"
         android:label="@string/watchlist"
         tools:layout="@layout/content_watchlist" />
+
+    <fragment
+        android:id="@+id/navigation_upcoming"
+        android:name="com.bedboy.jetmovie.ui.upcoming.UpcomingFragment"
+        android:label="@string/upcoming"
+        tools:layout="@layout/content_home_upcoming" />
 </navigation>

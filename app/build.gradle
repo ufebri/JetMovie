@@ -97,6 +97,8 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHTTP_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifeCycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$archLifeCycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$archLifeCycle_version"
 
 
     //Offline - Room
