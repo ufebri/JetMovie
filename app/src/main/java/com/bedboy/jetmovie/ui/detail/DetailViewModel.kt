@@ -2,8 +2,8 @@ package com.bedboy.jetmovie.ui.detail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.switchMap
 import com.bedboy.jetmovie.data.source.DataRepository
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
@@ -21,12 +21,12 @@ class DetailViewModel(private val dataRepository: DataRepository) : ViewModel() 
         dataRepository.getVideoDetail(media_type, idData)
 
     var getDetailTV: LiveData<Resource<DataMovieTVEntity>> =
-        Transformations.switchMap(dataID) { mDataID ->
+        dataID.switchMap { mDataID ->
             dataRepository.getDetailTV(mDataID)
         }
 
     var getDetailMovie: LiveData<Resource<DataMovieTVEntity>> =
-        Transformations.switchMap(dataID) { mDataID ->
+        dataID.switchMap { mDataID ->
             dataRepository.getDetailMovie(mDataID)
         }
 

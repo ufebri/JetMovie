@@ -11,7 +11,7 @@ import com.bedboy.jetmovie.R
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.databinding.ItemWatchlistBinding
 import com.bedboy.jetmovie.ui.detail.DetailActivity
-import com.bedboy.jetmovie.utils.GlideApp
+import com.bumptech.glide.Glide
 
 class WatchListAdapter :
     PagedListAdapter<DataMovieTVEntity, WatchListAdapter.MoviesViewHolder>(DIFF_CALLBACK) {
@@ -57,7 +57,7 @@ class WatchListAdapter :
 
             //glide
             with(binding) {
-                GlideApp.with(itemView.context)
+                Glide.with(itemView.context)
                     .load(BuildConfig.IMGLINK + film.backDropPath)
                     .error(R.drawable.ic_broken_image)
                     .placeholder(R.drawable.ic_no_image)

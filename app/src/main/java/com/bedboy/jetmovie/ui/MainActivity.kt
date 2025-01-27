@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_watchlist
+                R.id.navigation_home, R.id.navigation_upcoming, R.id.navigation_watchlist
             )
         )
         setSupportActionBar(homeBinding.toolbar)

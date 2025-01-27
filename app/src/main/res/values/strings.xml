@@ -9,5 +9,6 @@
     <string name="home">Home</string>
     <string name="no_data_watchlist">Belum ada Watchlist</string>
     <string name="no_conection">Koneksi Kamu Bermasalah</string>
+    <string name="upcoming">Upcoming</string>
 
 </resources>
