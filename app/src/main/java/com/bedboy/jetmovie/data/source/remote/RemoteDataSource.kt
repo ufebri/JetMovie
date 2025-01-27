@@ -26,6 +26,27 @@ class RemoteDataSource {
             }
     }
 
+    fun getAllUpcoming(): LiveData<ApiResponse<List<ResultsItem>>> {
+        EspressoIdlingResource.increment()
+        val resultsItem = MutableLiveData<ApiResponse<List<ResultsItem>>>()
+        client.getAllUpComingMovie().enqueue(object : Callback<DataResponse> {
+            override fun onResponse(
+                call: Call<DataResponse>,
+                response: Response<DataResponse>
+            ) {
+                resultsItem.value =
+                    ApiResponse.success(response.body()?.results as List<ResultsItem>)
+                EspressoIdlingResource.decrement()
+            }
+
+            override fun onFailure(call: Call<DataResponse>, t: Throwable) {
+                Log.e(TAG, "onFailure: ${t.message.toString()}")
+                EspressoIdlingResource.decrement()
+            }
+
+        })
+        return resultsItem
+    }
 
     fun getAllTrending(): LiveData<ApiResponse<List<ResultsItem>>> {
         EspressoIdlingResource.increment()
@@ -71,12 +92,12 @@ class RemoteDataSource {
     }
 
     fun getDetailVideos(
-        media_type: String,
+        mediaType: String,
         dataID: String
     ): LiveData<ApiResponse<List<ResultsVideos>>> {
         val resultsVideos = MutableLiveData<ApiResponse<List<ResultsVideos>>>()
         EspressoIdlingResource.increment()
-        client.getDetailVideo(media_type, dataID).enqueue(object : Callback<GetDetailVideos> {
+        client.getDetailVideo(mediaType, dataID).enqueue(object : Callback<GetDetailVideos> {
             override fun onResponse(
                 call: Call<GetDetailVideos>,
                 response: Response<GetDetailVideos>
@@ -129,10 +150,10 @@ class RemoteDataSource {
         return resultDetailItem
     }
 
-    fun getAllGenre(media_type: String): LiveData<ApiResponse<List<ResultsGenre>>> {
+    fun getAllGenre(mediaType: String): LiveData<ApiResponse<List<ResultsGenre>>> {
         val resultsGenre = MutableLiveData<ApiResponse<List<ResultsGenre>>>()
         EspressoIdlingResource.increment()
-        client.getGenre(media_type).enqueue(object : Callback<DataGenre> {
+        client.getGenre(mediaType).enqueue(object : Callback<DataGenre> {
             override fun onResponse(call: Call<DataGenre>, response: Response<DataGenre>) {
                 resultsGenre.value =
                     ApiResponse.success(response.body()?.genres as List<ResultsGenre>)

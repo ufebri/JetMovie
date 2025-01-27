@@ -13,9 +13,9 @@ interface DataSource {
 
     fun getPopular(): LiveData<Resource<PagedList<DataMovieTVEntity>>>
 
-    fun getVideoDetail(media_type: String, id: String): LiveData<Resource<List<VideoEntity>>>
+    fun getVideoDetail(mediaType: String, id: String): LiveData<Resource<List<VideoEntity>>>
 
-    fun getGenre(media_type: String): LiveData<Resource<List<GenreEntity>>>
+    fun getGenre(mediaType: String): LiveData<Resource<List<GenreEntity>>>
 
     fun getWatchList(): LiveData<PagedList<DataMovieTVEntity>>
 
@@ -24,4 +24,6 @@ interface DataSource {
     fun getDetailTV(id: String): LiveData<Resource<DataMovieTVEntity>>
 
     fun getDetailMovie(id: String): LiveData<Resource<DataMovieTVEntity>>
+
+    fun getAllUpcoming(): LiveData<Resource<PagedList<DataMovieTVEntity>>>
 }

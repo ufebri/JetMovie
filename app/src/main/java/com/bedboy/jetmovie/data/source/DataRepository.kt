@@ -127,7 +127,7 @@ class DataRepository private constructor(
     }
 
     override fun getVideoDetail(
-        media_type: String,
+        mediaType: String,
         id: String
     ): LiveData<Resource<List<VideoEntity>>> {
         return object : NetworkBoundResource<List<VideoEntity>, List<ResultsVideos>>(appExecutors) {
@@ -138,7 +138,7 @@ class DataRepository private constructor(
                 data.isNullOrEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<ResultsVideos>>> =
-                remoteDataSource.getDetailVideos(media_type, id)
+                remoteDataSource.getDetailVideos(mediaType, id)
 
             override fun saveCallResult(data: List<ResultsVideos>) {
                 val listVideo = ArrayList<VideoEntity>()
@@ -156,7 +156,7 @@ class DataRepository private constructor(
         }.asLiveData()
     }
 
-    override fun getGenre(media_type: String): LiveData<Resource<List<GenreEntity>>> {
+    override fun getGenre(mediaType: String): LiveData<Resource<List<GenreEntity>>> {
         return object : NetworkBoundResource<List<GenreEntity>, List<ResultsGenre>>(appExecutors) {
             override fun loadFromDB(): LiveData<List<GenreEntity>> =
                 localDataSource.getGenre()
@@ -165,7 +165,7 @@ class DataRepository private constructor(
                 data.isNullOrEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<ResultsGenre>>> =
-                remoteDataSource.getAllGenre(media_type)
+                remoteDataSource.getAllGenre(mediaType)
 
             override fun saveCallResult(data: List<ResultsGenre>) {
                 val listGenre = ArrayList<GenreEntity>()
@@ -263,6 +263,47 @@ class DataRepository private constructor(
                     name = data.name
                 )
                 localDataSource.updateDetail(detailResult, false)
+            }
+        }.asLiveData()
+    }
+
+    override fun getAllUpcoming(): LiveData<Resource<PagedList<DataMovieTVEntity>>> {
+        return object :
+            NetworkBoundResource<PagedList<DataMovieTVEntity>, List<ResultsItem>>(appExecutors) {
+            override fun loadFromDB(): LiveData<PagedList<DataMovieTVEntity>> {
+                val config = PagedList.Config.Builder()
+                    .setEnablePlaceholders(false)
+                    .setInitialLoadSizeHint(10)
+                    .setPageSize(10)
+                    .build()
+                return LivePagedListBuilder(localDataSource.getTrending(), config).build()
+            }
+
+            override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean =
+                data.isNullOrEmpty()
+
+            override fun createCall(): LiveData<ApiResponse<List<ResultsItem>>> =
+                remoteDataSource.getAllUpcoming()
+
+            override fun saveCallResult(data: List<ResultsItem>) {
+                val listTrending = ArrayList<DataMovieTVEntity>()
+                for (response in data) {
+                    with(response) {
+                        val trending = DataMovieTVEntity(
+                            id = id,
+                            title = title,
+                            vote = voteAverage,
+                            genre = DataHelper.convertGenre(genreIds),
+                            name = name,
+                            media_type = mediaType,
+                            backDropPath = backdropPath,
+                            imagePath = posterPath,
+                            overview = overview
+                        )
+                        listTrending.add(trending)
+                    }
+                }
+                localDataSource.insertTrending(listTrending)
             }
         }.asLiveData()
     }

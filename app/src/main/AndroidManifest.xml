@@ -25,8 +25,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.detail.DetailActivity" />
-        <activity android:name=".ui.MainActivity" />
+        <activity android:exported="false" android:name=".ui.detail.DetailActivity" />
+        <activity android:exported="false" android:name=".ui.MainActivity" />
     </application>
 
 </manifest>
