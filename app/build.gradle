@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'com.google.devtools.ksp'
+    id 'jacoco'
 }
 
 def apikeyPropertiesFile = rootProject.file("apikey.properties")
@@ -11,7 +12,6 @@ apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 
 android {
     compileSdk 34
-    buildToolsVersion "30.0.3"
     defaultConfig {
         applicationId "com.bedboy.jetmovie"
         minSdkVersion 21
@@ -43,20 +43,49 @@ android {
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+        debug {
+            testCoverageEnabled = true
+        }
     }
 
     buildFeatures {
+        buildConfig true
         viewBinding true
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
+}
+
+jacoco {
+    toolVersion = "0.8.10"
+}
+
+tasks.register("jacocoTestReport", JacocoReport) {
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/javac/debug", excludes: ["**/R.class", "**/BuildConfig.*", "**/Manifest*.*"])
+    def kotlinDebugTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: ["**/R.class", "**/BuildConfig.*", "**/Manifest*.*"])
+
+
+    sourceDirectories.setFrom(files(
+            "${projectDir}/src/main/java",
+            "${projectDir}/src/main/kotlin"
+    ))
+    classDirectories.setFrom(files([debugTree, kotlinDebugTree]))
+    executionData.setFrom(files("${buildDir}/jacoco/testDebugUnitTest.exec"))
 }
 
 dependencies {
@@ -87,8 +116,8 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit-ktx:$jUnitTest_version"
     testImplementation "androidx.arch.core:core-testing:$androidCoreTest_version"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlin_version"
-    testImplementation "org.mockito:mockito-core:$mockito_version"
-    testImplementation "org.mockito:mockito-inline:$mockito_version"
+    testImplementation "org.mockito:mockito-core:5.4.0"
+    testImplementation "org.mockito:mockito-inline:5.2.0"
     implementation "androidx.test.espresso:espresso-idling-resource:$espresso_version"
 
     //network
