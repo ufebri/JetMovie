@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-parcelize'
-    id 'kotlin-kapt'
+    id 'com.google.devtools.ksp'
 }
 
 def apikeyPropertiesFile = rootProject.file("apikey.properties")
@@ -21,9 +21,9 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
-        buildConfigField("String", "APIKEY", apikeyProperties['APIKEY'])
-        buildConfigField("String", "BASEURL", apikeyProperties['BASEURL'])
-        buildConfigField("String", "IMGLINK", apikeyProperties['IMGLINK'])
+        buildConfigField("String", "APIKEY", "\"${apikeyProperties['APIKEY'] as String}\"")
+        buildConfigField("String", "BASEURL", "\"${apikeyProperties['BASEURL'] as String}\"")
+        buildConfigField("String", "IMGLINK", "\"${apikeyProperties['IMGLINK'] as String}\"")
 
     }
 
@@ -40,7 +40,7 @@ android {
         release {
             signingConfig signingConfigs.release
             minifyEnabled true
-            debuggable false 
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -72,7 +72,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayout_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
-    kapt "com.github.bumptech.glide:compiler:$glide_version"
+    ksp "com.github.bumptech.glide:compiler:$glide_version"
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
     implementation "com.facebook.shimmer:shimmer:$shimmer_version"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -102,8 +102,8 @@ dependencies {
 
 
     //Offline - Room
-    implementation "androidx.room:room-runtime:$roomRuntime_version"
-    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    ksp "androidx.room:room-compiler:$room_version"
 
     //pagination
     implementation "androidx.paging:paging-runtime:$paging_version"

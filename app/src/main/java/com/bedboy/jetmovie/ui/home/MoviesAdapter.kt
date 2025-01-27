@@ -12,7 +12,7 @@ import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.databinding.ItemHomeBinding
 import com.bedboy.jetmovie.ui.detail.DetailActivity
 import com.bedboy.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
-import com.bedboy.jetmovie.utils.GlideApp
+import com.bumptech.glide.Glide
 
 class MoviesAdapter :
     PagedListAdapter<DataMovieTVEntity, MoviesAdapter.MoviesViewHolder>(DIFF_CALLBACK) {
@@ -55,7 +55,7 @@ class MoviesAdapter :
 
             //glide
             with(binding) {
-                GlideApp.with(itemView.context)
+                Glide.with(itemView.context)
                     .load(BuildConfig.IMGLINK + film.imagePath)
                     .error(R.drawable.ic_broken_image)
                     .centerInside()

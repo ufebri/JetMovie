@@ -10,7 +10,6 @@ import kotlinx.parcelize.Parcelize
 @Entity
 data class GenreEntity(
     @PrimaryKey
-    @NonNull
     var id: Int,
     var name: String
 ) : Parcelable
