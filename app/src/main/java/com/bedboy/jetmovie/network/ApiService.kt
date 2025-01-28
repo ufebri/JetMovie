@@ -60,4 +60,11 @@ interface ApiService {
         @Query("api_key") apiKey: String = BuildConfig.APIKEY,
         @Query("page") page: String = "1"
     ): Call<DataResponse>
+
+    //Search Movie
+    @GET("search/movie")
+    fun getMovieByKeyword(
+        @Query("api_key") apiKey: String = BuildConfig.APIKEY,
+        @Query("query") keyword: String
+    ): Call<DataResponse>
 }
