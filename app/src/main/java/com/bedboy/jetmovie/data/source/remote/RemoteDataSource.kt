@@ -3,7 +3,12 @@ package com.bedboy.jetmovie.data.source.remote
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.bedboy.jetmovie.data.source.remote.response.*
+import com.bedboy.jetmovie.data.source.remote.response.DataGenre
+import com.bedboy.jetmovie.data.source.remote.response.DataResponse
+import com.bedboy.jetmovie.data.source.remote.response.GetDetailVideos
+import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
+import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
+import com.bedboy.jetmovie.data.source.remote.response.ResultsVideos
 import com.bedboy.jetmovie.network.ApiConfig
 import com.bedboy.jetmovie.utils.EspressoIdlingResource
 import retrofit2.Call
