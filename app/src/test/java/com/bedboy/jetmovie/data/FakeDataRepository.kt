@@ -287,4 +287,44 @@ class FakeDataRepository(
             }
         }.asLiveData()
     }
+
+    override fun getMovieByKeyword(keyword: String): LiveData<Resource<PagedList<DataMovieTVEntity>>> {
+        return object :
+            NetworkBoundResource<PagedList<DataMovieTVEntity>, List<ResultsItem>>(appExecutors) {
+            override fun loadFromDB(): LiveData<PagedList<DataMovieTVEntity>> {
+                val config = PagedList.Config.Builder()
+                    .setEnablePlaceholders(false)
+                    .setInitialLoadSizeHint(10)
+                    .setPageSize(10)
+                    .build()
+                return LivePagedListBuilder(localDataSource.getTrending(), config).build()
+            }
+
+            override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean = true
+
+            override fun createCall(): LiveData<ApiResponse<List<ResultsItem>>> =
+                remoteDataSource.getMovieByKeyword(keyword)
+
+            override fun saveCallResult(data: List<ResultsItem>) {
+                val listTrending = ArrayList<DataMovieTVEntity>()
+                for (response in data) {
+                    with(response) {
+                        val trending = DataMovieTVEntity(
+                            id = id,
+                            title = title,
+                            vote = voteAverage,
+                            genre = DataHelper.convertGenre(genreIds),
+                            name = name,
+                            media_type = mediaType,
+                            backDropPath = backdropPath,
+                            imagePath = posterPath,
+                            overview = overview
+                        )
+                        listTrending.add(trending)
+                    }
+                }
+                localDataSource.insertTrending(listTrending)
+            }
+        }.asLiveData()
+    }
 }

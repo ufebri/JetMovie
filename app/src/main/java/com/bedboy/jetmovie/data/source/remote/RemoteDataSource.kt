@@ -3,7 +3,12 @@ package com.bedboy.jetmovie.data.source.remote
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.bedboy.jetmovie.data.source.remote.response.*
+import com.bedboy.jetmovie.data.source.remote.response.DataGenre
+import com.bedboy.jetmovie.data.source.remote.response.DataResponse
+import com.bedboy.jetmovie.data.source.remote.response.GetDetailVideos
+import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
+import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
+import com.bedboy.jetmovie.data.source.remote.response.ResultsVideos
 import com.bedboy.jetmovie.network.ApiConfig
 import com.bedboy.jetmovie.utils.EspressoIdlingResource
 import retrofit2.Call
@@ -24,6 +29,28 @@ class RemoteDataSource {
             instance ?: synchronized(this) {
                 instance ?: RemoteDataSource()
             }
+    }
+
+    fun getMovieByKeyword(keyword: String): LiveData<ApiResponse<List<ResultsItem>>> {
+        EspressoIdlingResource.increment()
+        val resultsItem = MutableLiveData<ApiResponse<List<ResultsItem>>>()
+        client.getMovieByKeyword(keyword = keyword).enqueue(object : Callback<DataResponse> {
+            override fun onResponse(
+                call: Call<DataResponse>,
+                response: Response<DataResponse>
+            ) {
+                resultsItem.value =
+                    ApiResponse.success(response.body()?.results as List<ResultsItem>)
+                EspressoIdlingResource.decrement()
+            }
+
+            override fun onFailure(call: Call<DataResponse>, t: Throwable) {
+                Log.e(TAG, "onFailure: ${t.message.toString()}")
+                EspressoIdlingResource.decrement()
+            }
+
+        })
+        return resultsItem
     }
 
     fun getAllUpcoming(): LiveData<ApiResponse<List<ResultsItem>>> {

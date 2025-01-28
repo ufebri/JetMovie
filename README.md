@@ -1,4 +1,4 @@
-![Codecov](https://codecov.io/gh/ufebri/Harmonia/branch/master/graph/badge.svg)
+![Codecov](https://codecov.io/gh/ufebri/JetMovie/branch/master/graph/badge.svg)
 
 Introduction
 ============

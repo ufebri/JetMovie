@@ -14,5 +14,7 @@ class HomeViewModel(private val dataRepository: DataRepository) : ViewModel() {
     fun popular(): LiveData<Resource<PagedList<DataMovieTVEntity>>> = dataRepository.getPopular()
     fun genre(mediaType: String): LiveData<Resource<List<GenreEntity>>> =
         dataRepository.getGenre(mediaType)
+    fun getMovieByKeyword(keyword: String): LiveData<Resource<PagedList<DataMovieTVEntity>>> =
+        dataRepository.getMovieByKeyword(keyword)
 
 }
