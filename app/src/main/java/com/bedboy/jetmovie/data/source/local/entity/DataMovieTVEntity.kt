@@ -41,6 +41,9 @@ data class DataMovieTVEntity(
     @ColumnInfo(name = "isFavorite")
     var isFavorite: Boolean = false,
 
+    @ColumnInfo(name = "dataFrom")
+    var dataFrom: String? = "",
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "rowid")
     var rowid: Int = 0

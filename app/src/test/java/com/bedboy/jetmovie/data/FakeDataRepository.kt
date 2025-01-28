@@ -33,7 +33,10 @@ class FakeDataRepository(
                     .setInitialLoadSizeHint(10)
                     .setPageSize(10)
                     .build()
-                return LivePagedListBuilder(localDataSource.getTrending(), config).build()
+                return LivePagedListBuilder(
+                    localDataSource.getAllMovie(DataHelper.DataFrom.TRENDING.value),
+                    config
+                ).build()
             }
 
             override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean =
@@ -256,7 +259,7 @@ class FakeDataRepository(
                     .setInitialLoadSizeHint(10)
                     .setPageSize(10)
                     .build()
-                return LivePagedListBuilder(localDataSource.getTrending(), config).build()
+                return LivePagedListBuilder(localDataSource.getAllMovie(DataHelper.DataFrom.UPCOMING.value), config).build()
             }
 
             override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean =
@@ -297,7 +300,7 @@ class FakeDataRepository(
                     .setInitialLoadSizeHint(10)
                     .setPageSize(10)
                     .build()
-                return LivePagedListBuilder(localDataSource.getTrending(), config).build()
+                return LivePagedListBuilder(localDataSource.getMovieByKeyword(keyword), config).build()
             }
 
             override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean = true

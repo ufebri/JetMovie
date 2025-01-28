@@ -21,8 +21,9 @@ class LocalDataSource(private val mJetMovieDao: JetMovieDao) {
     }
 
 
-    //Trending Operations
-    fun getTrending(): DataSource.Factory<Int, DataMovieTVEntity> = mJetMovieDao.getTrending()
+    fun getAllMovie(dataFrom: String): DataSource.Factory<Int, DataMovieTVEntity> = mJetMovieDao.getAllMovie(dataFrom)
+
+    fun getMovieByKeyword(keyword: String) = mJetMovieDao.getMovieByKeyword(keyword)
 
     fun insertTrending(trending: List<DataMovieTVEntity>) = mJetMovieDao.insertTrending(trending)
 

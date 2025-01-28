@@ -12,6 +12,7 @@ import com.bedboy.jetmovie.util.LiveDataTestUtil
 import com.bedboy.jetmovie.util.PagedListUtil
 import com.bedboy.jetmovie.utils.AppExecutors
 import com.bedboy.jetmovie.utils.DataDummy
+import com.bedboy.jetmovie.utils.DataHelper
 import com.bedboy.jetmovie.vo.Resource
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
@@ -50,12 +51,12 @@ class JetMovieRepositoryTest {
     fun getTrending() {
         val dataSourceFactory =
             mock(DataSource.Factory::class.java) as DataSource.Factory<Int, DataMovieTVEntity>
-        `when`(local.getTrending()).thenReturn(dataSourceFactory)
+        `when`(local.getAllMovie(DataHelper.DataFrom.TRENDING.value)).thenReturn(dataSourceFactory)
         repository.getTrending()
 
         val trendingEntities =
             Resource.success(PagedListUtil.mockPagedList(DataDummy.generateData()))
-        verify(local).getTrending()
+        verify(local).getAllMovie(DataHelper.DataFrom.TRENDING.value)
         Assert.assertNotNull(trendingEntities.data)
         assertEquals(dataResponseHome.size.toLong(), trendingEntities.data?.size?.toLong())
     }

@@ -15,8 +15,8 @@ import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
 interface JetMovieDao {
 
     //Trending Operations
-    @Query("SELECT  rowid,* FROM dataMovieTVEntities")
-    fun getTrending(): DataSource.Factory<Int, DataMovieTVEntity>
+    @Query("SELECT  rowid,* FROM dataMovieTVEntities WHERE dataFrom = :dataFrom")
+    fun getAllMovie(dataFrom: String): DataSource.Factory<Int, DataMovieTVEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTrending(trending: List<DataMovieTVEntity>)
@@ -53,4 +53,6 @@ interface JetMovieDao {
     @Query("SELECT rowid,* FROM dataMovieTVEntities WHERE isFavorite = 1")
     fun getWatchList(): DataSource.Factory<Int, DataMovieTVEntity>
 
+    @Query("SELECT rowid,* FROM dataMovieTVEntities WHERE dataMovieTVEntities MATCH :keyword")
+    fun getMovieByKeyword(keyword: String): DataSource.Factory<Int, DataMovieTVEntity>
 }

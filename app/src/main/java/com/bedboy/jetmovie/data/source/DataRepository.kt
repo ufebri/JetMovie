@@ -51,7 +51,10 @@ class DataRepository private constructor(
                     .setInitialLoadSizeHint(10)
                     .setPageSize(10)
                     .build()
-                return LivePagedListBuilder(localDataSource.getTrending(), config).build()
+                return LivePagedListBuilder(
+                    localDataSource.getAllMovie(DataHelper.DataFrom.TRENDING.value),
+                    config
+                ).build()
             }
 
             override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean =
@@ -73,7 +76,8 @@ class DataRepository private constructor(
                             media_type = mediaType,
                             backDropPath = backdropPath,
                             imagePath = posterPath,
-                            overview = overview
+                            overview = overview,
+                            dataFrom = DataHelper.DataFrom.TRENDING.value
                         )
                         listTrending.add(trending)
                     }
@@ -115,7 +119,8 @@ class DataRepository private constructor(
                             backDropPath = backdropPath,
                             vote = voteAverage,
                             overview = overview,
-                            genre = DataHelper.convertGenre(genreIds)
+                            genre = DataHelper.convertGenre(genreIds),
+                            dataFrom = DataHelper.DataFrom.TRENDING.value
                         )
                         listPopular.add(popular)
                     }
@@ -226,7 +231,8 @@ class DataRepository private constructor(
                     backDropPath = data.backdropPath,
                     imagePath = data.posterPath,
                     title = null,
-                    media_type = data.mediaType
+                    media_type = data.mediaType,
+                    dataFrom = "detailTV"
                 )
                 localDataSource.updateDetail(detailResult, false)
             }
@@ -260,7 +266,8 @@ class DataRepository private constructor(
                     backDropPath = data.backdropPath,
                     imagePath = data.posterPath,
                     media_type = data.mediaType,
-                    name = data.name
+                    name = data.name,
+                    dataFrom = "detailMovie"
                 )
                 localDataSource.updateDetail(detailResult, false)
             }
@@ -276,7 +283,10 @@ class DataRepository private constructor(
                     .setInitialLoadSizeHint(10)
                     .setPageSize(10)
                     .build()
-                return LivePagedListBuilder(localDataSource.getTrending(), config).build()
+                return LivePagedListBuilder(
+                    localDataSource.getAllMovie(DataHelper.DataFrom.UPCOMING.value),
+                    config
+                ).build()
             }
 
             override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean =
@@ -298,7 +308,8 @@ class DataRepository private constructor(
                             media_type = mediaType,
                             backDropPath = backdropPath,
                             imagePath = posterPath,
-                            overview = overview
+                            overview = overview,
+                            dataFrom = DataHelper.DataFrom.UPCOMING.value
                         )
                         listTrending.add(trending)
                     }
@@ -317,7 +328,10 @@ class DataRepository private constructor(
                     .setInitialLoadSizeHint(10)
                     .setPageSize(10)
                     .build()
-                return LivePagedListBuilder(localDataSource.getTrending(), config).build()
+                return LivePagedListBuilder(
+                    localDataSource.getMovieByKeyword(keyword),
+                    config
+                ).build()
             }
 
             override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean = true
@@ -338,7 +352,8 @@ class DataRepository private constructor(
                             media_type = mediaType,
                             backDropPath = backdropPath,
                             imagePath = posterPath,
-                            overview = overview
+                            overview = overview,
+                            dataFrom = DataHelper.DataFrom.SEARCH.value
                         )
                         listTrending.add(trending)
                     }
