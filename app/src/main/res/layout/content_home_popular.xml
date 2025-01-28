@@ -10,9 +10,29 @@
         android:id="@+id/homeActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:descendantFocusability="blocksDescendants"
         tools:context=".ui.MainActivity">
+
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/sb_home"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:hint="@string/search"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.search.SearchView
+            android:id="@+id/sv_home"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"
+            app:layout_anchor="@id/sb_home"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_resultTrending"

@@ -1,6 +1,7 @@
 package com.bedboy.jetmovie.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,32 +55,69 @@ class PopularFragment : Fragment() {
             viewModel.popular().observe(viewLifecycleOwner, popularObserver)
             showTrending()
             showPopular()
+
+            binding?.apply {
+                svHome.setupWithSearchBar(sbHome)
+                svHome.editText.setOnEditorActionListener { _, _, _ ->
+                    sbHome.setText(svHome.text)
+                    svHome.hide()
+                    viewModel.getMovieByKeyword(svHome.text.toString())
+                        .observe(viewLifecycleOwner, getMovieByKeywordObserver)
+                    false
+                }
+            }
         }
     }
 
-    private val trendingObserver = Observer<Resource<PagedList<DataMovieTVEntity>>> { result ->
-        if (result != null) {
+    private val getMovieByKeywordObserver =
+        Observer<Resource<PagedList<DataMovieTVEntity>>> { result ->
             when (result.status) {
                 Status.LOADING -> {
-                    if (result.data?.size != 0) {
+                    if (result.data != null) {
                         showLoading(true)
                         showNoConnection(false)
                     } else {
                         showLoading(false)
                     }
                 }
+
                 Status.SUCCESS -> {
-                    if (result.data != null) {
-                        trendingAdapter.submitList(result.data)
-                        showLoading(false)
-                    }
+                    showLoading(false)
+                    popularAdapter.submitList(result.data)
                 }
+
                 Status.ERROR -> {
                     showLoading(false)
                     showNoConnection(true)
                     Toast.makeText(context, "Popular: Failed to get Data", Toast.LENGTH_SHORT)
                         .show()
                 }
+            }
+        }
+
+    private val trendingObserver = Observer<Resource<PagedList<DataMovieTVEntity>>> { result ->
+        when (result.status) {
+            Status.LOADING -> {
+                if (result.data?.size != 0) {
+                    showLoading(true)
+                    showNoConnection(false)
+                } else {
+                    showLoading(false)
+                }
+            }
+
+            Status.SUCCESS -> {
+                if (result.data != null) {
+                    trendingAdapter.submitList(result.data)
+                    showLoading(false)
+                }
+            }
+
+            Status.ERROR -> {
+                showLoading(false)
+                showNoConnection(true)
+                Toast.makeText(context, "Popular: Failed to get Data", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
@@ -112,18 +150,17 @@ class PopularFragment : Fragment() {
     }
 
     private val popularObserver = Observer<Resource<PagedList<DataMovieTVEntity>>> { result ->
-        if (result != null) {
-            when (result.status) {
-                Status.LOADING -> showLoading(true)
-                Status.SUCCESS -> {
-                    showLoading(false)
-                    popularAdapter.submitList(result.data)
-                }
-                Status.ERROR -> {
-                    showLoading(false)
-                    Toast.makeText(context, "Trending: Failed to get Data", Toast.LENGTH_SHORT)
-                        .show()
-                }
+        when (result.status) {
+            Status.LOADING -> showLoading(true)
+            Status.SUCCESS -> {
+                showLoading(false)
+                popularAdapter.submitList(result.data)
+            }
+
+            Status.ERROR -> {
+                showLoading(false)
+                Toast.makeText(context, "Trending: Failed to get Data", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }

@@ -26,4 +26,6 @@ interface DataSource {
     fun getDetailMovie(id: String): LiveData<Resource<DataMovieTVEntity>>
 
     fun getAllUpcoming(): LiveData<Resource<PagedList<DataMovieTVEntity>>>
+
+    fun getMovieByKeyword(keyword: String): LiveData<Resource<PagedList<DataMovieTVEntity>>>
 }
