@@ -1,16 +1,16 @@
 package com.bedboy.jetmovie.data.source.local.entity
 
 import android.os.Parcelable
-import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Fts4
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
+@Fts4
 @Entity(tableName = "dataMovieTVEntities")
 data class DataMovieTVEntity(
-    @PrimaryKey
     @ColumnInfo(name = "id")
     var id: String,
 
@@ -39,5 +39,12 @@ data class DataMovieTVEntity(
     var overview: String?,
 
     @ColumnInfo(name = "isFavorite")
-    var isFavorite: Boolean = false
+    var isFavorite: Boolean = false,
+
+    @ColumnInfo(name = "dataFrom")
+    var dataFrom: String? = "",
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "rowid")
+    var rowid: Int = 0
 ) : Parcelable
