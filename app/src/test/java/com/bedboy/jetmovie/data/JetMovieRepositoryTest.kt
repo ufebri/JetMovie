@@ -19,8 +19,8 @@ import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 
 class JetMovieRepositoryTest {
 

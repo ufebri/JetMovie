@@ -2,7 +2,11 @@ package com.bedboy.jetmovie.data.source.local.room
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
