@@ -16,4 +16,11 @@ object DataHelper {
         return filteredGenre.joinToString { it.name }
 
     }
+
+    enum class DataFrom(val value: String) {
+        TRENDING("trending"),
+        UPCOMING("upcoming"),
+        SEARCH("search"),
+        POPULAR("popular");
+    }
 }

@@ -16,7 +16,7 @@ interface ApiService {
     @GET("trending/all/day")
     fun getTrending(
         @Query("api_key") apiKey: String = BuildConfig.APIKEY,
-        @Query("page") page: String = "1"
+        @Query("page") page: String = "2"
     ): Call<DataResponse>
 
     //Get Page 2 for Popular Section
