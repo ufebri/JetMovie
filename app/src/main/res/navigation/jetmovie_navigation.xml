@@ -22,4 +22,10 @@
         android:name="com.bedboy.jetmovie.ui.upcoming.UpcomingFragment"
         android:label="@string/upcoming"
         tools:layout="@layout/content_home_upcoming" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.bedboy.jetmovie.ui.profile.ProfileFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/content_profile" />
 </navigation>

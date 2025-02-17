@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0288D1</color> <!-- Biru lebih gelap -->
+    <color name="colorPrimaryDark">#01579B</color> <!-- Biru lebih pekat -->
+    <color name="colorAccent">#3949AB</color> <!-- Biru keunguan lebih gelap -->
+    <color name="colorTitle">#E0E0E0</color> <!-- Warna terang untuk teks di dark mode -->
+    <color name="colorBackground">#121212</color> <!-- Hitam keabu-abuan untuk dark theme -->
+    <color name="rating_color">#4CAF50</color> <!-- Hijau lebih gelap agar kontras di background gelap -->
+    <color name="shimmer_grey">#424242</color> <!-- Abu-abu lebih gelap agar sesuai dark mode -->
+</resources>

@@ -6,6 +6,7 @@ import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
 import com.bedboy.jetmovie.vo.Resource
+import kotlinx.coroutines.flow.Flow
 
 interface DataSource {
 
@@ -28,4 +29,8 @@ interface DataSource {
     fun getAllUpcoming(): LiveData<Resource<PagedList<DataMovieTVEntity>>>
 
     fun getMovieByKeyword(keyword: String): LiveData<Resource<PagedList<DataMovieTVEntity>>>
+
+    fun getThemeSetting(): Flow<Boolean>
+
+    suspend fun saveThemeSetting(isDarkModeActive: Boolean)
 }

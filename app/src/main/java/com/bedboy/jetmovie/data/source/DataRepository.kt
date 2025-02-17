@@ -8,6 +8,7 @@ import com.bedboy.jetmovie.data.source.local.LocalDataSource
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
+import com.bedboy.jetmovie.data.source.preferences.SettingPreferences
 import com.bedboy.jetmovie.data.source.remote.ApiResponse
 import com.bedboy.jetmovie.data.source.remote.RemoteDataSource
 import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
@@ -16,11 +17,13 @@ import com.bedboy.jetmovie.data.source.remote.response.ResultsVideos
 import com.bedboy.jetmovie.utils.AppExecutors
 import com.bedboy.jetmovie.utils.DataHelper
 import com.bedboy.jetmovie.vo.Resource
+import kotlinx.coroutines.flow.Flow
 
 class DataRepository private constructor(
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors,
-    private val remoteDataSource: RemoteDataSource
+    private val remoteDataSource: RemoteDataSource,
+    private val settingPreferences: SettingPreferences
 ) :
     DataSource {
 
@@ -31,13 +34,15 @@ class DataRepository private constructor(
         fun getInstance(
             remoteData: RemoteDataSource,
             localDataSource: LocalDataSource,
-            appExecutors: AppExecutors
+            appExecutors: AppExecutors,
+            settingPreferences: SettingPreferences
         ): DataRepository =
             instance ?: synchronized(this) {
                 instance ?: DataRepository(
                     localDataSource,
                     appExecutors,
-                    remoteData
+                    remoteData,
+                    settingPreferences
                 )
             }
     }
@@ -362,4 +367,9 @@ class DataRepository private constructor(
             }
         }.asLiveData()
     }
+
+    override fun getThemeSetting(): Flow<Boolean> = settingPreferences.getThemeSetting()
+
+    override suspend fun saveThemeSetting(isDarkModeActive: Boolean) =
+        settingPreferences.saveThemeSetting(isDarkModeActive)
 }
