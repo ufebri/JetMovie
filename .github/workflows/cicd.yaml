@@ -35,7 +35,7 @@ jobs:
 
       # Step 4: Upload environment files as artifact
       - name: Upload environment files
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: env-files
           path: |
@@ -54,7 +54,7 @@ jobs:
 
       # Step 2: Download environment files
       - name: Download environment files
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: env-files
 
@@ -100,7 +100,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Download environment files
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: env-files
 

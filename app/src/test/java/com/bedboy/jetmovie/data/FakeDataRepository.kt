@@ -3,24 +3,34 @@ package com.bedboy.jetmovie.data
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.bedboy.jetmovie.data.source.DataSource
 import com.bedboy.jetmovie.data.source.local.LocalDataSource
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
+import com.bedboy.jetmovie.data.source.preferences.SettingPreferences
 import com.bedboy.jetmovie.data.source.remote.ApiResponse
 import com.bedboy.jetmovie.data.source.remote.RemoteDataSource
 import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
 import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
 import com.bedboy.jetmovie.data.source.remote.response.ResultsVideos
+import com.bedboy.jetmovie.data.source.scheduler.AppWorkers
 import com.bedboy.jetmovie.utils.AppExecutors
 import com.bedboy.jetmovie.utils.DataHelper
 import com.bedboy.jetmovie.vo.Resource
+import kotlinx.coroutines.flow.Flow
+import java.util.concurrent.TimeUnit
 
 class FakeDataRepository(
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors,
-    private val remoteDataSource: RemoteDataSource
+    private val remoteDataSource: RemoteDataSource,
+    private val settingPreferences: SettingPreferences,
+    private val workManager: WorkManager
 ) :
     DataSource {
 
@@ -54,7 +64,6 @@ class FakeDataRepository(
                             title = title,
                             vote = voteAverage,
                             genre = DataHelper.convertGenre(genreIds),
-                            name = name,
                             media_type = mediaType,
                             backDropPath = backdropPath,
                             imagePath = posterPath,
@@ -95,7 +104,6 @@ class FakeDataRepository(
                             id = id,
                             imagePath = posterPath,
                             media_type = mediaType,
-                            name = name,
                             title = title,
                             backDropPath = backdropPath,
                             vote = voteAverage,
@@ -188,7 +196,7 @@ class FakeDataRepository(
                 localDataSource.getDetail(id)
 
             override fun shouldFetch(data: DataMovieTVEntity?): Boolean =
-                data != null && data.overview == "" && data.name == ""
+                data != null && data.overview == ""
 
             override fun createCall(): LiveData<ApiResponse<ResultsItem>> =
                 remoteDataSource.getDetailTV(id)
@@ -203,7 +211,6 @@ class FakeDataRepository(
                     id = data.id,
                     vote = data.voteAverage,
                     genre = listGenre.joinToString(),
-                    name = data.name,
                     overview = data.overview,
                     isFavorite = false,
                     backDropPath = data.backdropPath,
@@ -242,8 +249,7 @@ class FakeDataRepository(
                     isFavorite = false,
                     backDropPath = data.backdropPath,
                     imagePath = data.posterPath,
-                    media_type = data.mediaType,
-                    name = data.name
+                    media_type = data.mediaType
                 )
                 localDataSource.updateDetail(detailResult, false)
             }
@@ -259,7 +265,10 @@ class FakeDataRepository(
                     .setInitialLoadSizeHint(10)
                     .setPageSize(10)
                     .build()
-                return LivePagedListBuilder(localDataSource.getAllMovie(DataHelper.DataFrom.UPCOMING.value), config).build()
+                return LivePagedListBuilder(
+                    localDataSource.getAllMovie(DataHelper.DataFrom.UPCOMING.value),
+                    config
+                ).build()
             }
 
             override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean =
@@ -277,7 +286,6 @@ class FakeDataRepository(
                             title = title,
                             vote = voteAverage,
                             genre = DataHelper.convertGenre(genreIds),
-                            name = name,
                             media_type = mediaType,
                             backDropPath = backdropPath,
                             imagePath = posterPath,
@@ -300,7 +308,10 @@ class FakeDataRepository(
                     .setInitialLoadSizeHint(10)
                     .setPageSize(10)
                     .build()
-                return LivePagedListBuilder(localDataSource.getMovieByKeyword(keyword), config).build()
+                return LivePagedListBuilder(
+                    localDataSource.getMovieByKeyword(keyword),
+                    config
+                ).build()
             }
 
             override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean = true
@@ -317,7 +328,6 @@ class FakeDataRepository(
                             title = title,
                             vote = voteAverage,
                             genre = DataHelper.convertGenre(genreIds),
-                            name = name,
                             media_type = mediaType,
                             backDropPath = backdropPath,
                             imagePath = posterPath,
@@ -329,5 +339,29 @@ class FakeDataRepository(
                 localDataSource.insertTrending(listTrending)
             }
         }.asLiveData()
+    }
+
+    override fun getThemeSetting(): Flow<Boolean> = settingPreferences.getThemeSetting()
+
+    override suspend fun saveThemeSetting(isDarkModeActive: Boolean) =
+        settingPreferences.saveThemeSetting(isDarkModeActive)
+
+    override fun scheduleReminder(title: String, message: String, triggerTimeMillis: Long) {
+        val workRequest = OneTimeWorkRequestBuilder<AppWorkers>()
+            .setInputData(
+                workDataOf(
+                    "title" to title,
+                    "message" to message,
+                    "channel_id" to "default_channel"
+                )
+            )
+            .setInitialDelay(triggerTimeMillis - System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+            .build()
+
+        workManager.enqueueUniqueWork(
+            "Reminder_$title",
+            ExistingWorkPolicy.REPLACE,
+            workRequest
+        )
     }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bedboy.jetmovie.data.source.DataRepository
 import com.bedboy.jetmovie.ui.detail.DetailViewModel
 import com.bedboy.jetmovie.ui.home.HomeViewModel
+import com.bedboy.jetmovie.ui.profile.ProfileViewModel
 import com.bedboy.jetmovie.ui.upcoming.UpcomingViewModel
 import com.bedboy.jetmovie.ui.watchlist.WatchListViewModel
 
@@ -41,6 +42,10 @@ class ViewModelFactory private constructor(private val dataRepository: DataRepos
 
             modelClass.isAssignableFrom(UpcomingViewModel::class.java) -> {
                 UpcomingViewModel(dataRepository) as T
+            }
+
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
+                ProfileViewModel(dataRepository) as T
             }
 
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)

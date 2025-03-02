@@ -11,5 +11,9 @@
     <string name="no_conection">Koneksi Kamu Bermasalah</string>
     <string name="upcoming">Upcoming</string>
     <string name="search">Search</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="profile">Profile</string>
+    <string name="remind_me">Remind Me</string>
+    <string name="reminder_watchlist">Reminder WatchList</string>
 
 </resources>

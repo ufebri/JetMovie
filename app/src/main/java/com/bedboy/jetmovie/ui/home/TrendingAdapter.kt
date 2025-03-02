@@ -62,7 +62,7 @@ class TrendingAdapter :
                     .placeholder(R.drawable.ic_no_image)
                     .into(ivSlideHome)
 
-                tvTitleFeatured.text = trending.name ?: trending.title
+                tvTitleFeatured.text = trending.title
                 tvRatingFeatured.text = trending.vote.toString()
                 tvGenreFeatured.text = trending.genre?.split(",")?.first()
                 rbRatingFeatured.rating = trending.vote!!.toFloat()
