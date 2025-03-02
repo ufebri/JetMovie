@@ -10,7 +10,7 @@ import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
 
 @Database(
     entities = [DataMovieTVEntity::class, GenreEntity::class, VideoEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 
@@ -27,7 +27,7 @@ abstract class JetMovieDatabase : RoomDatabase() {
                 INSTANCE ?: Room.databaseBuilder(
                     context.applicationContext,
                     JetMovieDatabase::class.java, "JetMovie.db"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
             }
     }
 }

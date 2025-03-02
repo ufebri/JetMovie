@@ -3,10 +3,12 @@ package com.bedboy.jetmovie.data
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
+import androidx.work.WorkManager
 import com.bedboy.jetmovie.data.source.local.LocalDataSource
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
+import com.bedboy.jetmovie.data.source.preferences.SettingPreferences
 import com.bedboy.jetmovie.data.source.remote.RemoteDataSource
 import com.bedboy.jetmovie.util.LiveDataTestUtil
 import com.bedboy.jetmovie.util.PagedListUtil
@@ -31,8 +33,10 @@ class JetMovieRepositoryTest {
     private val remote = mock(RemoteDataSource::class.java)
     private val local = mock(LocalDataSource::class.java)
     private val appExecutors = mock(AppExecutors::class.java)
+    private val preferences = mock(SettingPreferences::class.java)
+    private val workManager = mock(WorkManager::class.java)
 
-    private val repository = FakeDataRepository(local, appExecutors, remote)
+    private val repository = FakeDataRepository(local, appExecutors, remote, preferences, workManager)
 
     private val dataResponseHome = DataDummy.generateRemoteData()
     private val dataResponseGenre = DataDummy.generateRemoteGenre()

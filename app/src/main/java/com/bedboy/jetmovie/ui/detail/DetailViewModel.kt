@@ -37,4 +37,7 @@ class DetailViewModel(private val dataRepository: DataRepository) : ViewModel() 
             dataRepository.setWatchList(dataResource.data, newState)
         }
     }
+
+    fun addToRemind(title: String, message: String, triggerTimeMillis: Long) =
+        dataRepository.scheduleReminder(title, message, triggerTimeMillis)
 }
