@@ -73,8 +73,8 @@ class DetailActivity : AppCompatActivity() {
         return true
     }
 
-    private fun populateDetailContent(media_type: String) {
-        if (media_type == "tv") {
+    private fun populateDetailContent(mediaType: String) {
+        if (mediaType == "tv") {
             viewModel.getDetailTV.observe(this, { result ->
                 when (result.status) {
                     Status.LOADING -> showLoading(true)
@@ -111,7 +111,7 @@ class DetailActivity : AppCompatActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun showDetail(
-        media_type: String,
+        mediaType: String,
         data: DataMovieTVEntity
     ) {
         detailMovieBinding.apply {
@@ -119,7 +119,8 @@ class DetailActivity : AppCompatActivity() {
             tvTitleFilmDetail.text = data.title
             tvRatingFilmDetail.text = data.vote.toString()
             tvDescriptionFilmDetail.text = data.overview
-            btnRemind.setOnClickListener {
+
+            activityDetailBinding.btnRemind.setOnClickListener {
                 viewModel.addToRemind(
                     tvTitleFilmDetail.text.toString(),
                     tvDescriptionFilmDetail.text.toString(),
@@ -127,7 +128,7 @@ class DetailActivity : AppCompatActivity() {
                 )
             }
 
-            viewModel.getVideos(media_type, data.id)
+            viewModel.getVideos(mediaType, data.id)
                 .observe(this@DetailActivity, { result ->
                     wvYoutube.apply {
                         settings.javaScriptEnabled = true
