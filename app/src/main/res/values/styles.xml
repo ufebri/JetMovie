@@ -23,6 +23,10 @@
         <item name="android:background">@color/colorPrimary</item>
     </style>
 
+    <style name="AppTheme.Description" parent="AppTheme">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
     <style name="WindowAnimationStyle">
         <item name="android:windowEnterAnimation">@android:anim/linear_interpolator</item>
     </style>

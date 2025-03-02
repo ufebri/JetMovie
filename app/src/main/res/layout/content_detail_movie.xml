@@ -75,33 +75,14 @@
 
     <TextView
         android:id="@+id/tv_descriptionFilm_detail"
+        style="@style/AppTheme.Description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_large"
-        android:alpha="0.5"
-        android:fontFamily="sans-serif-condensed-light"
         android:padding="6dp"
-        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_ratingFilm_detail"
         tools:text="@tools:sample/lorem/random" />
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="2dp"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <Button
-            android:id="@+id/btn_remind"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_medium"
-            android:background="@drawable/bg_rating_detail"
-            android:text="@string/remind_me"
-            android:textAllCaps="false" />
-
-    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

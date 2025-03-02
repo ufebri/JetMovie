@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"
-            app:titleTextColor="@color/cardview_dark_background" />
+            app:titleTextColor="@color/colorTitle" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -40,8 +40,26 @@
 
         <include
             android:id="@+id/contentDetailMovie"
-            layout="@layout/content_detail_movie" />
+            layout="@layout/content_detail_movie"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.core.widget.NestedScrollView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:cardElevation="2dp">
+
+        <Button
+            android:id="@+id/btn_remind"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:background="@drawable/bg_rating_detail"
+            android:text="@string/remind_me"
+            android:textAllCaps="false" />
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
