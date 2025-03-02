@@ -58,8 +58,6 @@ class MoviesAdapter :
                 Glide.with(itemView.context)
                     .load(BuildConfig.IMGLINK + film.imagePath)
                     .error(R.drawable.ic_broken_image)
-                    .centerInside()
-                    .override(200, 250)
                     .placeholder(R.drawable.ic_no_image)
                     .into(ivPosterFilmItemHome)
             }
