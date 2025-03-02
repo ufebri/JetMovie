@@ -49,7 +49,7 @@ class DetailActivity : AppCompatActivity() {
         val bundle = intent.getParcelableExtra<DataMovieTVEntity>(DATA_RESULT)
         if (bundle != null) {
             val dataID = bundle.id
-            dataTitle = bundle.title ?: bundle.name
+            dataTitle = bundle.title
             mMediaType = bundle.media_type.toString()
             viewModel.selectedData(dataID)
             populateDetailContent(mMediaType)
@@ -116,7 +116,7 @@ class DetailActivity : AppCompatActivity() {
     ) {
         detailMovieBinding.apply {
             tvCategoryFilmDetail.text = data.genre?.replace(",", " | ")
-            tvTitleFilmDetail.text = data.name ?: data.title
+            tvTitleFilmDetail.text = data.title
             tvRatingFilmDetail.text = data.vote.toString()
             tvDescriptionFilmDetail.text = data.overview
             btnRemind.setOnClickListener {

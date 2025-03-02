@@ -64,7 +64,6 @@ class FakeDataRepository(
                             title = title,
                             vote = voteAverage,
                             genre = DataHelper.convertGenre(genreIds),
-                            name = name,
                             media_type = mediaType,
                             backDropPath = backdropPath,
                             imagePath = posterPath,
@@ -105,7 +104,6 @@ class FakeDataRepository(
                             id = id,
                             imagePath = posterPath,
                             media_type = mediaType,
-                            name = name,
                             title = title,
                             backDropPath = backdropPath,
                             vote = voteAverage,
@@ -198,7 +196,7 @@ class FakeDataRepository(
                 localDataSource.getDetail(id)
 
             override fun shouldFetch(data: DataMovieTVEntity?): Boolean =
-                data != null && data.overview == "" && data.name == ""
+                data != null && data.overview == ""
 
             override fun createCall(): LiveData<ApiResponse<ResultsItem>> =
                 remoteDataSource.getDetailTV(id)
@@ -213,7 +211,6 @@ class FakeDataRepository(
                     id = data.id,
                     vote = data.voteAverage,
                     genre = listGenre.joinToString(),
-                    name = data.name,
                     overview = data.overview,
                     isFavorite = false,
                     backDropPath = data.backdropPath,
@@ -252,8 +249,7 @@ class FakeDataRepository(
                     isFavorite = false,
                     backDropPath = data.backdropPath,
                     imagePath = data.posterPath,
-                    media_type = data.mediaType,
-                    name = data.name
+                    media_type = data.mediaType
                 )
                 localDataSource.updateDetail(detailResult, false)
             }
@@ -290,7 +286,6 @@ class FakeDataRepository(
                             title = title,
                             vote = voteAverage,
                             genre = DataHelper.convertGenre(genreIds),
-                            name = name,
                             media_type = mediaType,
                             backDropPath = backdropPath,
                             imagePath = posterPath,
@@ -333,7 +328,6 @@ class FakeDataRepository(
                             title = title,
                             vote = voteAverage,
                             genre = DataHelper.convertGenre(genreIds),
-                            name = name,
                             media_type = mediaType,
                             backDropPath = backdropPath,
                             imagePath = posterPath,

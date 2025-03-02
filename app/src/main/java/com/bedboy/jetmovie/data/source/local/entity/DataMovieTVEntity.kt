@@ -26,9 +26,6 @@ data class DataMovieTVEntity(
     @ColumnInfo(name = "genre")
     var genre: String?,
 
-    @ColumnInfo(name = "name")
-    var name: String?,
-
     @ColumnInfo(name = "media_type")
     var media_type: String?,
 

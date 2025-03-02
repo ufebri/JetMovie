@@ -14,10 +14,9 @@ object DataMapper {
         listResponse.map {
             val mData = DataMovieTVEntity(
                 id = it.id,
-                title = it.title,
+                title = it.title ?: it.name, //title for movie, name for tv
                 vote = it.voteAverage,
                 genre = DataHelper.convertGenre(it.genreIds),
-                name = it.name,
                 media_type = it.mediaType,
                 backDropPath = it.backdropPath,
                 imagePath = it.posterPath,

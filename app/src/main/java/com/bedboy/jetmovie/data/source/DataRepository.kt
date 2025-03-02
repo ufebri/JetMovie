@@ -194,7 +194,7 @@ class DataRepository private constructor(
                 localDataSource.getDetail(id)
 
             override fun shouldFetch(data: DataMovieTVEntity?): Boolean =
-                data != null && data.overview == "" && data.name == ""
+                data != null && data.overview == ""
 
             override fun createCall(): LiveData<ApiResponse<ResultsItem>> =
                 remoteDataSource.getDetailTV(id)
@@ -209,12 +209,11 @@ class DataRepository private constructor(
                     id = data.id,
                     vote = data.voteAverage,
                     genre = listGenre.joinToString(),
-                    name = data.name,
                     overview = data.overview,
                     isFavorite = false,
                     backDropPath = data.backdropPath,
                     imagePath = data.posterPath,
-                    title = null,
+                    title = data.title ?: data.name,
                     media_type = data.mediaType,
                     dataFrom = "detailTV",
                     releaseData = data.firstAirDate?.toMillisAt10AM()
@@ -243,7 +242,7 @@ class DataRepository private constructor(
 
                 val detailResult = DataMovieTVEntity(
                     id = data.id,
-                    title = data.title,
+                    title = data.title ?: data.name,
                     vote = data.voteAverage,
                     genre = listGenre.joinToString(),
                     overview = data.overview,
@@ -251,7 +250,6 @@ class DataRepository private constructor(
                     backDropPath = data.backdropPath,
                     imagePath = data.posterPath,
                     media_type = data.mediaType,
-                    name = data.name,
                     dataFrom = "detailMovie",
                     releaseData = data.releaseDate?.toMillisAt10AM()
                 )
@@ -282,7 +280,8 @@ class DataRepository private constructor(
                 remoteDataSource.getAllUpcoming()
 
             override fun saveCallResult(data: List<ResultsItem>) {
-                val listTrending = DataMapper.toListEntities(data, DataHelper.DataFrom.UPCOMING.value)
+                val listTrending =
+                    DataMapper.toListEntities(data, DataHelper.DataFrom.UPCOMING.value)
                 localDataSource.insertTrending(listTrending)
             }
         }.asLiveData()
