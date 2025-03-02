@@ -82,6 +82,7 @@ class DetailActivity : AppCompatActivity() {
                         showLoading(false)
                         showDetail("tv", result.data)
                     }
+
                     Status.ERROR -> {
                         showLoading(false)
                         Toast.makeText(this, "DetailTV: Failed Load Detail", Toast.LENGTH_SHORT)
@@ -97,6 +98,7 @@ class DetailActivity : AppCompatActivity() {
                         showLoading(false)
                         showDetail("movie", result.data)
                     }
+
                     Status.ERROR -> {
                         showLoading(false)
                         Toast.makeText(this, "DetailMovie: Failed Load Detail", Toast.LENGTH_SHORT)
@@ -117,6 +119,13 @@ class DetailActivity : AppCompatActivity() {
             tvTitleFilmDetail.text = data.name ?: data.title
             tvRatingFilmDetail.text = data.vote.toString()
             tvDescriptionFilmDetail.text = data.overview
+            btnRemind.setOnClickListener {
+                viewModel.addToRemind(
+                    tvTitleFilmDetail.text.toString(),
+                    tvDescriptionFilmDetail.text.toString(),
+                    data.releaseData ?: 0
+                )
+            }
 
             viewModel.getVideos(media_type, data.id)
                 .observe(this@DetailActivity, { result ->
@@ -167,6 +176,7 @@ class DetailActivity : AppCompatActivity() {
                             showLoading(false)
                             setFavoriteState(result.data.isFavorite)
                         }
+
                         Status.ERROR -> {
                             showLoading(false)
                             Toast.makeText(this, "DetailTV: Failed Load Detail", Toast.LENGTH_SHORT)
@@ -184,6 +194,7 @@ class DetailActivity : AppCompatActivity() {
                             showLoading(false)
                             setFavoriteState(result.data.isFavorite)
                         }
+
                         Status.ERROR -> {
                             showLoading(false)
                             Toast.makeText(
@@ -206,6 +217,7 @@ class DetailActivity : AppCompatActivity() {
                 onShareClick()
                 return true
             }
+
             R.id.action_watchlist -> {
                 viewModel.addToWatchList()
                 return true

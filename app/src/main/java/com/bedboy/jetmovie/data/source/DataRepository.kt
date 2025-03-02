@@ -3,6 +3,10 @@ package com.bedboy.jetmovie.data.source
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.bedboy.jetmovie.data.NetworkBoundResource
 import com.bedboy.jetmovie.data.source.local.LocalDataSource
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
@@ -14,16 +18,21 @@ import com.bedboy.jetmovie.data.source.remote.RemoteDataSource
 import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
 import com.bedboy.jetmovie.data.source.remote.response.ResultsItem
 import com.bedboy.jetmovie.data.source.remote.response.ResultsVideos
+import com.bedboy.jetmovie.data.source.scheduler.AppWorkers
 import com.bedboy.jetmovie.utils.AppExecutors
 import com.bedboy.jetmovie.utils.DataHelper
+import com.bedboy.jetmovie.utils.DataHelper.toMillisAt10AM
+import com.bedboy.jetmovie.utils.DataMapper
 import com.bedboy.jetmovie.vo.Resource
 import kotlinx.coroutines.flow.Flow
+import java.util.concurrent.TimeUnit
 
 class DataRepository private constructor(
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors,
     private val remoteDataSource: RemoteDataSource,
-    private val settingPreferences: SettingPreferences
+    private val settingPreferences: SettingPreferences,
+    private val workManager: WorkManager
 ) :
     DataSource {
 
@@ -35,14 +44,16 @@ class DataRepository private constructor(
             remoteData: RemoteDataSource,
             localDataSource: LocalDataSource,
             appExecutors: AppExecutors,
-            settingPreferences: SettingPreferences
+            settingPreferences: SettingPreferences,
+            workManager: WorkManager
         ): DataRepository =
             instance ?: synchronized(this) {
                 instance ?: DataRepository(
                     localDataSource,
                     appExecutors,
                     remoteData,
-                    settingPreferences
+                    settingPreferences,
+                    workManager
                 )
             }
     }
@@ -69,24 +80,8 @@ class DataRepository private constructor(
                 remoteDataSource.getAllTrending()
 
             override fun saveCallResult(data: List<ResultsItem>) {
-                val listTrending = ArrayList<DataMovieTVEntity>()
-                for (response in data) {
-                    with(response) {
-                        val trending = DataMovieTVEntity(
-                            id = id,
-                            title = title,
-                            vote = voteAverage,
-                            genre = DataHelper.convertGenre(genreIds),
-                            name = name,
-                            media_type = mediaType,
-                            backDropPath = backdropPath,
-                            imagePath = posterPath,
-                            overview = overview,
-                            dataFrom = DataHelper.DataFrom.TRENDING.value
-                        )
-                        listTrending.add(trending)
-                    }
-                }
+                val listTrending =
+                    DataMapper.toListEntities(data, DataHelper.DataFrom.TRENDING.value)
                 localDataSource.insertTrending(listTrending)
             }
         }.asLiveData()
@@ -112,24 +107,8 @@ class DataRepository private constructor(
                 remoteDataSource.getAllPopular()
 
             override fun saveCallResult(data: List<ResultsItem>) {
-                val listPopular = ArrayList<DataMovieTVEntity>()
-                for (response in data) {
-                    with(response) {
-                        val popular = DataMovieTVEntity(
-                            id = id,
-                            imagePath = posterPath,
-                            media_type = mediaType,
-                            name = name,
-                            title = title,
-                            backDropPath = backdropPath,
-                            vote = voteAverage,
-                            overview = overview,
-                            genre = DataHelper.convertGenre(genreIds),
-                            dataFrom = DataHelper.DataFrom.TRENDING.value
-                        )
-                        listPopular.add(popular)
-                    }
-                }
+                val listPopular =
+                    DataMapper.toListEntities(data, DataHelper.DataFrom.TRENDING.value)
                 localDataSource.insertPopular(listPopular)
             }
         }.asLiveData()
@@ -237,7 +216,8 @@ class DataRepository private constructor(
                     imagePath = data.posterPath,
                     title = null,
                     media_type = data.mediaType,
-                    dataFrom = "detailTV"
+                    dataFrom = "detailTV",
+                    releaseData = data.firstAirDate?.toMillisAt10AM()
                 )
                 localDataSource.updateDetail(detailResult, false)
             }
@@ -272,7 +252,8 @@ class DataRepository private constructor(
                     imagePath = data.posterPath,
                     media_type = data.mediaType,
                     name = data.name,
-                    dataFrom = "detailMovie"
+                    dataFrom = "detailMovie",
+                    releaseData = data.releaseDate?.toMillisAt10AM()
                 )
                 localDataSource.updateDetail(detailResult, false)
             }
@@ -301,24 +282,7 @@ class DataRepository private constructor(
                 remoteDataSource.getAllUpcoming()
 
             override fun saveCallResult(data: List<ResultsItem>) {
-                val listTrending = ArrayList<DataMovieTVEntity>()
-                for (response in data) {
-                    with(response) {
-                        val trending = DataMovieTVEntity(
-                            id = id,
-                            title = title,
-                            vote = voteAverage,
-                            genre = DataHelper.convertGenre(genreIds),
-                            name = name,
-                            media_type = mediaType,
-                            backDropPath = backdropPath,
-                            imagePath = posterPath,
-                            overview = overview,
-                            dataFrom = DataHelper.DataFrom.UPCOMING.value
-                        )
-                        listTrending.add(trending)
-                    }
-                }
+                val listTrending = DataMapper.toListEntities(data, DataHelper.DataFrom.UPCOMING.value)
                 localDataSource.insertTrending(listTrending)
             }
         }.asLiveData()
@@ -345,24 +309,7 @@ class DataRepository private constructor(
                 remoteDataSource.getMovieByKeyword(keyword)
 
             override fun saveCallResult(data: List<ResultsItem>) {
-                val listTrending = ArrayList<DataMovieTVEntity>()
-                for (response in data) {
-                    with(response) {
-                        val trending = DataMovieTVEntity(
-                            id = id,
-                            title = title,
-                            vote = voteAverage,
-                            genre = DataHelper.convertGenre(genreIds),
-                            name = name,
-                            media_type = mediaType,
-                            backDropPath = backdropPath,
-                            imagePath = posterPath,
-                            overview = overview,
-                            dataFrom = DataHelper.DataFrom.SEARCH.value
-                        )
-                        listTrending.add(trending)
-                    }
-                }
+                val listTrending = DataMapper.toListEntities(data, DataHelper.DataFrom.SEARCH.value)
                 localDataSource.insertTrending(listTrending)
             }
         }.asLiveData()
@@ -372,4 +319,23 @@ class DataRepository private constructor(
 
     override suspend fun saveThemeSetting(isDarkModeActive: Boolean) =
         settingPreferences.saveThemeSetting(isDarkModeActive)
+
+    override fun scheduleReminder(title: String, message: String, triggerTimeMillis: Long) {
+        val workRequest = OneTimeWorkRequestBuilder<AppWorkers>()
+            .setInputData(
+                workDataOf(
+                    "title" to title,
+                    "message" to message,
+                    "channel_id" to "default_channel"
+                )
+            )
+            .setInitialDelay(triggerTimeMillis - System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+            .build()
+
+        workManager.enqueueUniqueWork(
+            "Reminder_$title",
+            ExistingWorkPolicy.REPLACE,
+            workRequest
+        )
+    }
 }

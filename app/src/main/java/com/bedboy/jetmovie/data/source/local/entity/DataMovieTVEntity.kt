@@ -46,5 +46,8 @@ data class DataMovieTVEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "rowid")
-    var rowid: Int = 0
+    var rowid: Int = 0,
+
+    @ColumnInfo(name = "release_data")
+    var releaseData: Long? = null,
 ) : Parcelable

@@ -58,7 +58,13 @@ data class ResultsItem(
     val overview: String,
 
     @field:SerializedName("genres")
-    val genres: List<ResultsGenre>?
+    val genres: List<ResultsGenre>?,
+
+    @field:SerializedName("release_date")
+    val releaseDate: String? = null,
+
+    @field:SerializedName("first_air_date")
+    val firstAirDate: String? = null
 
 ) : Parcelable
 
