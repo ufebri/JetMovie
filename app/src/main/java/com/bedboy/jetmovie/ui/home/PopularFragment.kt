@@ -168,8 +168,7 @@ class PopularFragment : Fragment() {
         binding?.let {
             with(it.rvResultsMovie) {
                 layoutManager =
-                    GridLayoutManager(context, 2)
-                setHasFixedSize(true)
+                    GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
                 adapter = popularAdapter
             }
 
