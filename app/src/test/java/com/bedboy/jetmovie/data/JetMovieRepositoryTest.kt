@@ -36,7 +36,7 @@ class JetMovieRepositoryTest {
     private val preferences = mock(SettingPreferences::class.java)
     private val workManager = mock(WorkManager::class.java)
 
-    private val repository = FakeDataRepository(local, appExecutors, remote, preferences, workManager)
+    private val repository = FakeDataRepository(local, appExecutors, remote, workManager)
 
     private val dataResponseHome = DataDummy.generateRemoteData()
     private val dataResponseGenre = DataDummy.generateRemoteGenre()

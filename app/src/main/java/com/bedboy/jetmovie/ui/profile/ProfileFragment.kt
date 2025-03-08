@@ -1,8 +1,10 @@
 package com.bedboy.jetmovie.ui.profile
 
 import android.Manifest
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +13,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bedboy.jetmovie.R
 import com.bedboy.jetmovie.databinding.ContentProfileBinding
+import com.bedboy.jetmovie.utils.DialogHelper
 import com.bedboy.jetmovie.utils.PermissionManager
 import com.bedboy.jetmovie.utils.ViewModelFactory
 
@@ -92,9 +96,25 @@ class ProfileFragment : Fragment() {
     }
 
     private fun handlePermissionResult(isGranted: Boolean) {
-        isGranted.let {
-            viewModel.setReminder(it)
-            binding?.switchReminder?.isChecked = it
+        if (isGranted) {
+            viewModel.setReminder(true)
+        } else {
+            DialogHelper.showDialog(
+                context = requireActivity(),
+                title = getString(R.string.title_dialog_permission),
+                message = getString(R.string.message_permission_notification),
+                positiveText = getString(R.string.text_open_setting),
+                negativeText = getString(R.string.text_cancel),
+                onConfirm = {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        requireActivity().startActivity(
+                            Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                                putExtra(Settings.EXTRA_APP_PACKAGE, requireActivity().packageName)
+                            })
+                    }
+                }
+            )
+            binding?.switchReminder?.isChecked = false
         }
     }
 
