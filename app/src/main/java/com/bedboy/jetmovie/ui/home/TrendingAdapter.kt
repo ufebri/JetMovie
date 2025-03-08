@@ -68,7 +68,7 @@ class TrendingAdapter :
                 val mVote: Double = (trending.vote ?: 0.0) / 10.0 * 5.0
 
                 tvTitleFeatured.text = trending.title
-                tvRatingFeatured.text = String.format(Locale.getDefault(), "%.1f", mVote.toFloat())
+                tvRatingFeatured.text = String.format(Locale.getDefault(), "%.1f", trending.vote)
                 tvGenreFeatured.text = trending.genre?.split(",")?.first()
                 rbRatingFeatured.rating =
                     String.format(Locale.getDefault(), "%.1f", mVote).toFloat()
