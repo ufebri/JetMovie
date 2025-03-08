@@ -123,6 +123,9 @@ jobs:
       - name: Run tests and generate Jacoco report
         run: ./gradlew clean test jacocoTestReport
 
+      - name: Check if coverage report exists
+        run: ls -lh app/build/reports/jacoco/jacocoTestReport/
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:

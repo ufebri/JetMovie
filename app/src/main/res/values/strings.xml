@@ -16,4 +16,7 @@
     <string name="remind_me">Remind Me</string>
     <string name="reminder_watchlist">Reminder WatchList</string>
 
+    <!--  Datastore Key  -->
+    <string name="datastore_night_mode_settings">theme_setting</string>
+    <string name="datastore_reminder_settings">reminder_setting</string>
 </resources>

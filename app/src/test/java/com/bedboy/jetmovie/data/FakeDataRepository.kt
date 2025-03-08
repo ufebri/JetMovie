@@ -341,10 +341,10 @@ class FakeDataRepository(
         }.asLiveData()
     }
 
-    override fun getThemeSetting(): Flow<Boolean> = settingPreferences.getThemeSetting()
+    override fun getFlagSetting(): Flow<Boolean> = settingPreferences.getFlagSetting()
 
-    override suspend fun saveThemeSetting(isDarkModeActive: Boolean) =
-        settingPreferences.saveThemeSetting(isDarkModeActive)
+    override suspend fun saveFlagSetting(isDarkModeActive: Boolean) =
+        settingPreferences.saveFlagSetting(isDarkModeActive)
 
     override fun scheduleReminder(title: String, message: String, triggerTimeMillis: Long) {
         val workRequest = OneTimeWorkRequestBuilder<AppWorkers>()
