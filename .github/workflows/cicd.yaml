@@ -134,4 +134,3 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
           fail_ci_if_error: true
-          verbose: true
