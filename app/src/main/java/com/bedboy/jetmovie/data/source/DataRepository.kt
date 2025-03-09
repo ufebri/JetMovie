@@ -12,7 +12,6 @@ import com.bedboy.jetmovie.data.source.local.LocalDataSource
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
-import com.bedboy.jetmovie.data.source.preferences.SettingPreferences
 import com.bedboy.jetmovie.data.source.remote.ApiResponse
 import com.bedboy.jetmovie.data.source.remote.RemoteDataSource
 import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
@@ -24,14 +23,12 @@ import com.bedboy.jetmovie.utils.DataHelper
 import com.bedboy.jetmovie.utils.DataHelper.toMillisAt10AM
 import com.bedboy.jetmovie.utils.DataMapper
 import com.bedboy.jetmovie.vo.Resource
-import kotlinx.coroutines.flow.Flow
 import java.util.concurrent.TimeUnit
 
 class DataRepository private constructor(
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors,
     private val remoteDataSource: RemoteDataSource,
-    private val settingPreferences: SettingPreferences,
     private val workManager: WorkManager
 ) :
     DataSource {
@@ -44,7 +41,6 @@ class DataRepository private constructor(
             remoteData: RemoteDataSource,
             localDataSource: LocalDataSource,
             appExecutors: AppExecutors,
-            settingPreferences: SettingPreferences,
             workManager: WorkManager
         ): DataRepository =
             instance ?: synchronized(this) {
@@ -52,7 +48,6 @@ class DataRepository private constructor(
                     localDataSource,
                     appExecutors,
                     remoteData,
-                    settingPreferences,
                     workManager
                 )
             }
@@ -313,11 +308,6 @@ class DataRepository private constructor(
             }
         }.asLiveData()
     }
-
-    override fun getThemeSetting(): Flow<Boolean> = settingPreferences.getThemeSetting()
-
-    override suspend fun saveThemeSetting(isDarkModeActive: Boolean) =
-        settingPreferences.saveThemeSetting(isDarkModeActive)
 
     override fun scheduleReminder(title: String, message: String, triggerTimeMillis: Long) {
         val workRequest = OneTimeWorkRequestBuilder<AppWorkers>()

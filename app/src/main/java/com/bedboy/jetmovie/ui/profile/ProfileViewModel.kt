@@ -1,17 +1,18 @@
 package com.bedboy.jetmovie.ui.profile
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.bedboy.jetmovie.data.source.DataRepository
+import com.bedboy.jetmovie.data.repository.SettingsRepository
 import kotlinx.coroutines.launch
 
-class ProfileViewModel(private val dataRepository: DataRepository) : ViewModel() {
+class ProfileViewModel(private val repository: SettingsRepository) : ViewModel() {
 
-    val themeSetting: LiveData<Boolean> = dataRepository.getThemeSetting().asLiveData()
+    val isDarkThemeActive = repository.isDarkTheme().asLiveData()
 
-    fun saveThemeSetting(isDarkMode: Boolean) {
-        viewModelScope.launch { dataRepository.saveThemeSetting(isDarkMode) }
-    }
+    fun setDarkTheme(isActive: Boolean) = viewModelScope.launch { repository.setDarkTheme(isActive) }
+
+    val isReminderActive = repository.isReminderActive().asLiveData()
+
+    fun setReminder(isActive: Boolean) = viewModelScope.launch { repository.setReminderStatus(isActive) }
 }

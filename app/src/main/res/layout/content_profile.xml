@@ -4,6 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_medium"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/text_settings"
+        android:textColor="@color/colorTitle"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toTopOf="@id/switch_theme" />
+
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switch_theme"
         android:layout_width="match_parent"

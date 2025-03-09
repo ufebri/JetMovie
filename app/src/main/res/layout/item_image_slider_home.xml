@@ -58,7 +58,7 @@
         android:progressBackgroundTint="@android:color/white"
         android:progressTint="@android:color/holo_orange_light"
         android:secondaryProgressTint="@android:color/holo_red_light"
-        android:stepSize="1"
+        android:stepSize="0.5"
         app:layout_constraintBottom_toTopOf="@id/ll_slide_home"
         app:layout_constraintStart_toStartOf="parent"
         tools:rating="2.5" />

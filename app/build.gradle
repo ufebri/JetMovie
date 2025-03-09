@@ -65,16 +65,31 @@ jacoco {
     toolVersion = "0.8.10"
 }
 
+tasks.withType(Test).configureEach {
+    finalizedBy jacocoTestReport
+}
+
 tasks.register("jacocoTestReport", JacocoReport) {
     dependsOn("testDebugUnitTest")
 
     reports {
         xml.required.set(true)
-        xml.outputLocation.set(file("$buildDir/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"))
-        html.required.set(false)
+       // xml.outputLocation.set(file("$buildDir/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"))
+        html.required.set(true)
     }
 
-    executionData.setFrom(files("${buildDir}/jacoco/testDebugUnitTest.exec"))
+    classDirectories.setFrom(
+            fileTree("$buildDir/intermediates/javac/debug/classes") {
+                exclude(
+                        "**/R.class",
+                        "**/BuildConfig.class",
+                        "**/databinding/**",
+                        "**/android/databinding/**"
+                )
+            }
+    )
+    sourceDirectories.setFrom(files(["src/main/java"]))
+    executionData.setFrom(files(["build/jacoco/testDebugUnitTest.exec"]))
 
     doFirst {
         println("Execution data: ${executionData.files}")
@@ -102,6 +117,8 @@ dependencies {
     implementation "com.facebook.shimmer:shimmer:$shimmer_version"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation 'androidx.palette:palette-ktx:1.0.0'
+
 
     //WorkManager
     implementation "androidx.work:work-runtime:2.9.0"
