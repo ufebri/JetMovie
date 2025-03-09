@@ -30,9 +30,5 @@ interface DataSource {
 
     fun getMovieByKeyword(keyword: String): LiveData<Resource<PagedList<DataMovieTVEntity>>>
 
-    fun getThemeSetting(): Flow<Boolean>
-
-    suspend fun saveThemeSetting(isDarkModeActive: Boolean)
-
     fun scheduleReminder(title: String, message: String, triggerTimeMillis: Long)
 }

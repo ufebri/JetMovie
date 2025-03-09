@@ -14,6 +14,7 @@ import com.bedboy.jetmovie.ui.detail.DetailActivity
 import com.bedboy.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
 import com.bedboy.jetmovie.ui.home.TrendingAdapter.TrendingViewHolder
 import com.bumptech.glide.Glide
+import java.util.Locale
 
 class TrendingAdapter :
     PagedListAdapter<DataMovieTVEntity, TrendingViewHolder>(DIFF_CALLBACK) {
@@ -56,16 +57,21 @@ class TrendingAdapter :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(trending: DataMovieTVEntity) {
             with(binding) {
+
                 Glide.with(itemView.context)
                     .load(BuildConfig.IMGLINK.plus(trending.backDropPath))
                     .error(R.drawable.ic_broken_image)
                     .placeholder(R.drawable.ic_no_image)
                     .into(ivSlideHome)
 
+                //Convert trending to double with  2 digit only
+                val mVote: Double = (trending.vote ?: 0.0) / 10.0 * 5.0
+
                 tvTitleFeatured.text = trending.title
-                tvRatingFeatured.text = trending.vote.toString()
+                tvRatingFeatured.text = String.format(Locale.getDefault(), "%.1f", trending.vote)
                 tvGenreFeatured.text = trending.genre?.split(",")?.first()
-                rbRatingFeatured.rating = trending.vote!!.toFloat()
+                rbRatingFeatured.rating =
+                    String.format(Locale.getDefault(), "%.1f", mVote).toFloat()
 
                 itemView.setOnClickListener {
                     itemView.context.startActivity(

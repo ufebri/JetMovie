@@ -12,7 +12,6 @@ import com.bedboy.jetmovie.data.source.local.LocalDataSource
 import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.data.source.local.entity.GenreEntity
 import com.bedboy.jetmovie.data.source.local.entity.VideoEntity
-import com.bedboy.jetmovie.data.source.preferences.SettingPreferences
 import com.bedboy.jetmovie.data.source.remote.ApiResponse
 import com.bedboy.jetmovie.data.source.remote.RemoteDataSource
 import com.bedboy.jetmovie.data.source.remote.response.ResultsGenre
@@ -22,14 +21,12 @@ import com.bedboy.jetmovie.data.source.scheduler.AppWorkers
 import com.bedboy.jetmovie.utils.AppExecutors
 import com.bedboy.jetmovie.utils.DataHelper
 import com.bedboy.jetmovie.vo.Resource
-import kotlinx.coroutines.flow.Flow
 import java.util.concurrent.TimeUnit
 
 class FakeDataRepository(
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors,
     private val remoteDataSource: RemoteDataSource,
-    private val settingPreferences: SettingPreferences,
     private val workManager: WorkManager
 ) :
     DataSource {
@@ -340,11 +337,6 @@ class FakeDataRepository(
             }
         }.asLiveData()
     }
-
-    override fun getThemeSetting(): Flow<Boolean> = settingPreferences.getThemeSetting()
-
-    override suspend fun saveThemeSetting(isDarkModeActive: Boolean) =
-        settingPreferences.saveThemeSetting(isDarkModeActive)
 
     override fun scheduleReminder(title: String, message: String, triggerTimeMillis: Long) {
         val workRequest = OneTimeWorkRequestBuilder<AppWorkers>()

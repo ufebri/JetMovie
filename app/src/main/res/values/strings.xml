@@ -16,4 +16,9 @@
     <string name="remind_me">Remind Me</string>
     <string name="reminder_watchlist">Reminder WatchList</string>
 
+    <string name="text_settings">Settings</string>
+    <string name="title_dialog_permission">Izin Diperlukan</string>
+    <string name="message_permission_notification">Anda perlu mengaktifkan izin notifikasi di Pengaturan untuk menggunakan fitur ini.</string>
+    <string name="text_open_setting">Buka Pengaturan</string>
+    <string name="text_cancel">Batal</string>
 </resources>
