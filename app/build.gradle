@@ -77,6 +77,7 @@ tasks.register("jacocoTestReport", JacocoReport) {
         xml.required = true  // Coveralls membutuhkan format XML
         html.required = true
         csv.required = false
+        xml.outputLocation.set(file("$buildDir/reports/jacoco/test/jacocoTestReport.xml"))
     }
 
     def fileFilter = [
@@ -89,13 +90,6 @@ tasks.register("jacocoTestReport", JacocoReport) {
     sourceDirectories.setFrom files("src/main/java", "src/main/kotlin")
     classDirectories.setFrom files([javaClasses, kotlinClasses])
     executionData.setFrom fileTree(dir: buildDir, includes: ["jacoco/testDebugUnitTest.exec"])
-
-    doFirst {
-        println("Execution data: ${executionData.files}")
-        println("Source directories: ${sourceDirectories.files}")
-        println("Class directories: ${classDirectories.files}")
-        println("Output XML: ${buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
-    }
 }
 
 dependencies {
