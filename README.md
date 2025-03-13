@@ -1,4 +1,4 @@
-![Codecov](https://codecov.io/gh/ufebri/JetMovie/branch/master/graph/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/ufebri/JetMovie/badge.svg?branch=master)](https://coveralls.io/github/ufebri/JetMovie?branch=master)
 
 Introduction
 ============

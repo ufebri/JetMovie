@@ -20,6 +20,7 @@ import com.bedboy.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.bedboy.jetmovie.databinding.ActivityDetailBinding
 import com.bedboy.jetmovie.databinding.ContentDetailMovieBinding
 import com.bedboy.jetmovie.utils.ViewModelFactory
+import com.bedboy.jetmovie.utils.getParcelableExtraCompat
 import com.bedboy.jetmovie.vo.Status
 
 class DetailActivity : AppCompatActivity() {
@@ -56,7 +57,7 @@ class DetailActivity : AppCompatActivity() {
 
         showLoading(true)
 
-        val bundle = intent.getParcelableExtra<DataMovieTVEntity>(DATA_RESULT)
+        val bundle = intent.getParcelableExtraCompat<DataMovieTVEntity>(DATA_RESULT)
         if (bundle != null) {
             val dataID = bundle.id
             dataTitle = bundle.title
@@ -79,7 +80,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
+        onBackPressedDispatcher.onBackPressed()
         return true
     }
 

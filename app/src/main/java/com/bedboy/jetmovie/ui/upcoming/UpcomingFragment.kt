@@ -47,17 +47,13 @@ class UpcomingFragment : Fragment() {
     }
 
     private val upcomingObserver = Observer<Resource<PagedList<DataMovieTVEntity>>> { result ->
-        if (result != null) {
-            when (result.status) {
-                Status.LOADING -> showLoading(result.data?.size != 0)
-                Status.SUCCESS -> showRecyclerView(result.data)
-                Status.ERROR -> {
-                    showLoading(false)
-                    showNoData()
-                }
+        when (result.status) {
+            Status.LOADING -> showLoading(result.data?.size != 0)
+            Status.SUCCESS -> showRecyclerView(result.data)
+            Status.ERROR -> {
+                showLoading(false)
+                showNoData()
             }
-        } else {
-            showNoData()
         }
     }
 
