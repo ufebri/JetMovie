@@ -1,4 +1,5 @@
-[![Coverage Status](https://coveralls.io/repos/github/ufebri/JetMovie/badge.svg?branch=master)](https://coveralls.io/github/ufebri/JetMovie?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/ufebri/JetMovie/badge.svg?branch=master)](https://coveralls.io/github/ufebri/JetMovie?branch=master) [![Join Firebase Testing](https://img.shields.io/badge/Firebase-Join%20Testing-orange?logo=firebase)](https://appdistribution.firebase.dev/i/32b60951b14a8547)
+
 
 Introduction
 ============
@@ -11,7 +12,7 @@ build with Kotlin and implementing Clean Architecture.
 
 Documentation
 =============
-Read more of Documentation setup : [JetMovie Wiki](../../wiki/)
+Read more of Documentation setup : [JetMovie Wiki](https://github.com/ufebri/JetMovie/wiki)
 
 Dependencies
 ------------
@@ -23,7 +24,6 @@ Dependencies
  - Mockito
  - Room Database
  - Lifecycle Arch
- [Check MAD Scorecard](https://madscorecard.withgoogle.com/scorecards/3512515570/)
 
 Screenshot
 ==========
