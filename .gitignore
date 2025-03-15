@@ -15,6 +15,7 @@
 # APIKEY
 apikey.properties
 .idea/
+app/google-services.json
 
 # Java class files
 *.class
