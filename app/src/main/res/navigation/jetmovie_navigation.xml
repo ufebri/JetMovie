@@ -7,25 +7,25 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.bedboy.jetmovie.ui.home.PopularFragment"
+        android:name="com.raylabs.jetmovie.ui.home.PopularFragment"
         android:label="@string/home"
         tools:layout="@layout/content_home_popular" />
 
     <fragment
         android:id="@+id/navigation_watchlist"
-        android:name="com.bedboy.jetmovie.ui.watchlist.WatchListFragment"
+        android:name="com.raylabs.jetmovie.ui.watchlist.WatchListFragment"
         android:label="@string/watchlist"
         tools:layout="@layout/content_watchlist" />
 
     <fragment
         android:id="@+id/navigation_upcoming"
-        android:name="com.bedboy.jetmovie.ui.upcoming.UpcomingFragment"
+        android:name="com.raylabs.jetmovie.ui.upcoming.UpcomingFragment"
         android:label="@string/upcoming"
         tools:layout="@layout/content_home_upcoming" />
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.bedboy.jetmovie.ui.profile.ProfileFragment"
+        android:name="com.raylabs.jetmovie.ui.profile.ProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/content_profile" />
 </navigation>
