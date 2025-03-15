@@ -5,25 +5,28 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.raylabs.jetmovie.R
 import com.raylabs.jetmovie.databinding.ContentProfileBinding
 import com.raylabs.jetmovie.utils.DialogHelper
 import com.raylabs.jetmovie.utils.PermissionManager
 import com.raylabs.jetmovie.utils.ViewModelFactory
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(R.layout.content_profile) {
 
     private var contentProfileBinding: ContentProfileBinding? = null
-    private val binding get() = contentProfileBinding
-    private lateinit var viewModel: ProfileViewModel
+    private val binding get() = contentProfileBinding!!
+    private val viewModel: ProfileViewModel by viewModels {
+        ViewModelFactory.getInstance(requireContext())
+    }
+    private val themeViewModel: ThemeViewModel by viewModels {
+        ViewModelFactory.getInstance(requireContext())
+    }
     private lateinit var permissionManager: PermissionManager
 
     private val requestPermissionLauncher =
@@ -31,28 +34,17 @@ class ProfileFragment : Fragment() {
             handlePermissionResult(isGranted)
         }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        contentProfileBinding = ContentProfileBinding.inflate(inflater, container, false)
-        return binding?.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        contentProfileBinding = ContentProfileBinding.bind(view)
 
         if (activity != null) {
-            val factory = ViewModelFactory.getInstance(requireActivity())
-            viewModel = ViewModelProvider(this, factory)[ProfileViewModel::class.java]
-
             permissionManager = PermissionManager(requireActivity())
 
             //Dark Mode Config
-            binding?.apply {
+            binding.apply {
                 //Check First
-                viewModel.isDarkThemeActive.observe(viewLifecycleOwner) { isDarkModeActive: Boolean ->
+                themeViewModel.isDarkThemeActive.observe(viewLifecycleOwner) { isDarkModeActive: Boolean ->
                     if (isDarkModeActive) {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                         switchTheme.isChecked = true
@@ -64,7 +56,7 @@ class ProfileFragment : Fragment() {
 
                 //Change Listener of Switch Theme
                 switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-                    viewModel.setDarkTheme(isChecked)
+                    themeViewModel.setDarkTheme(isChecked)
                 }
 
                 viewModel.isReminderActive.observe(viewLifecycleOwner) { isReminderActive: Boolean ->
@@ -88,7 +80,7 @@ class ProfileFragment : Fragment() {
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             } else {
                 // Jika Android < 13, tidak perlu meminta izin notifikasi
-                binding?.switchReminder?.isChecked = true
+                binding.switchReminder.isChecked = true
             }
         } else {
             viewModel.setReminder(true)
@@ -114,7 +106,7 @@ class ProfileFragment : Fragment() {
                     }
                 }
             )
-            binding?.switchReminder?.isChecked = false
+            binding.switchReminder.isChecked = false
         }
     }
 

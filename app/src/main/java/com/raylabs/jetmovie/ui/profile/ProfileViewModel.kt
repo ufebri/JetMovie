@@ -8,10 +8,6 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel(private val repository: SettingsRepository) : ViewModel() {
 
-    val isDarkThemeActive = repository.isDarkTheme().asLiveData()
-
-    fun setDarkTheme(isActive: Boolean) = viewModelScope.launch { repository.setDarkTheme(isActive) }
-
     val isReminderActive = repository.isReminderActive().asLiveData()
 
     fun setReminder(isActive: Boolean) = viewModelScope.launch { repository.setReminderStatus(isActive) }

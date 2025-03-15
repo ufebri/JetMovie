@@ -8,6 +8,7 @@ import com.raylabs.jetmovie.data.source.DataRepository
 import com.raylabs.jetmovie.ui.detail.DetailViewModel
 import com.raylabs.jetmovie.ui.home.HomeViewModel
 import com.raylabs.jetmovie.ui.profile.ProfileViewModel
+import com.raylabs.jetmovie.ui.profile.ThemeViewModel
 import com.raylabs.jetmovie.ui.upcoming.UpcomingViewModel
 import com.raylabs.jetmovie.ui.watchlist.WatchListViewModel
 
@@ -53,6 +54,10 @@ class ViewModelFactory private constructor(
 
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 ProfileViewModel(settingsRepository) as T
+            }
+
+            modelClass.isAssignableFrom(ThemeViewModel::class.java) -> {
+                ThemeViewModel(settingsRepository) as T
             }
 
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)
