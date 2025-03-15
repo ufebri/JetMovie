@@ -9,6 +9,10 @@ build with Kotlin and implementing Clean Architecture.
  - Create file *apikey.properties* in your root project
  - Initialize the secret key into your gradle file
 
+Documentation
+=============
+Read more of Documentation setup : [JetMovie Wiki](../../wiki/)
+
 Dependencies
 ------------
  - Material Design

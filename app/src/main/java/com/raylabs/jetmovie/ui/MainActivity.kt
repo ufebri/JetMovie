@@ -1,11 +1,14 @@
 package com.raylabs.jetmovie.ui
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -14,16 +17,31 @@ import androidx.navigation.ui.setupWithNavController
 import com.raylabs.jetmovie.R
 import com.raylabs.jetmovie.databinding.ActivityMainBinding
 import com.raylabs.jetmovie.ui.home.HomeViewModel
+import com.raylabs.jetmovie.ui.profile.ThemeViewModel
 import com.raylabs.jetmovie.utils.ViewModelFactory
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var homeBinding: ActivityMainBinding
-    private lateinit var viewModel: HomeViewModel
-
+    private val viewModel: HomeViewModel by viewModels { ViewModelFactory.getInstance(this) }
+    private val themeViewModel: ThemeViewModel by viewModels { ViewModelFactory.getInstance(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Check Dark Theme
+        lifecycleScope.launch {
+            themeViewModel.isDarkThemeActive.observe(this@MainActivity, { isDarkThemeActive ->
+                AppCompatDelegate.setDefaultNightMode(
+                    if (isDarkThemeActive) {
+                        AppCompatDelegate.MODE_NIGHT_YES
+                    } else {
+                        AppCompatDelegate.MODE_NIGHT_NO
+                    }
+                )
+            })
+        }
+
         homeBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(homeBinding.root)
 
@@ -33,9 +51,6 @@ class MainActivity : AppCompatActivity() {
             view.setPadding(0, systemBars.top, 0, systemBars.bottom)
             insets
         }
-
-        val factory = ViewModelFactory.getInstance(this)
-        viewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
         viewModel.genre("tv").observe(this, {})
         viewModel.genre("movie").observe(this, {})
