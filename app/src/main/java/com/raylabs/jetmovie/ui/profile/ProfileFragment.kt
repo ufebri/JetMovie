@@ -15,18 +15,15 @@ import com.raylabs.jetmovie.R
 import com.raylabs.jetmovie.databinding.ContentProfileBinding
 import com.raylabs.jetmovie.utils.DialogHelper
 import com.raylabs.jetmovie.utils.PermissionManager
-import com.raylabs.jetmovie.utils.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment(R.layout.content_profile) {
 
     private var contentProfileBinding: ContentProfileBinding? = null
     private val binding get() = contentProfileBinding!!
-    private val viewModel: ProfileViewModel by viewModels {
-        ViewModelFactory.getInstance(requireContext())
-    }
-    private val themeViewModel: ThemeViewModel by viewModels {
-        ViewModelFactory.getInstance(requireContext())
-    }
+    private val viewModel: ProfileViewModel by viewModels()
+    private val themeViewModel: ThemeViewModel by viewModels()
     private lateinit var permissionManager: PermissionManager
 
     private val requestPermissionLauncher =

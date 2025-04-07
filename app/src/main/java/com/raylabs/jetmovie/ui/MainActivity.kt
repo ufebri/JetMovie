@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -16,16 +15,17 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.raylabs.jetmovie.R
 import com.raylabs.jetmovie.databinding.ActivityMainBinding
-import com.raylabs.jetmovie.ui.home.HomeViewModel
 import com.raylabs.jetmovie.ui.profile.ThemeViewModel
-import com.raylabs.jetmovie.utils.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var homeBinding: ActivityMainBinding
-    private val viewModel: HomeViewModel by viewModels { ViewModelFactory.getInstance(this) }
-    private val themeViewModel: ThemeViewModel by viewModels { ViewModelFactory.getInstance(this) }
+
+    //private val viewModel: HomeViewModel by viewModels()
+    private val themeViewModel: ThemeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +52,8 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        viewModel.genre("tv").observe(this, {})
-        viewModel.genre("movie").observe(this, {})
+//        viewModel.genre("tv").observe(this, {})
+//        viewModel.genre("movie").observe(this, {})
         initToolbar() // Setup Toolbar
     }
 

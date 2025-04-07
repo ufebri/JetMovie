@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.raylabs.jetmovie.BuildConfig
 import com.raylabs.jetmovie.R
-import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
+import com.raylabs.jetmovie.core.data.source.local.entity.DataMovieTVEntity
 import com.raylabs.jetmovie.databinding.ItemWatchlistBinding
 import com.raylabs.jetmovie.ui.detail.DetailActivity
 import com.bumptech.glide.Glide
@@ -65,12 +65,7 @@ class WatchListAdapter :
             }
 
             //OnClick
-            itemView.setOnClickListener {
-                itemView.context.startActivity(
-                    Intent(itemView.context, DetailActivity::class.java)
-                        .putExtra(DetailActivity.DATA_RESULT, film)
-                )
-            }
+            itemView.setOnClickListener {}
         }
 
     }

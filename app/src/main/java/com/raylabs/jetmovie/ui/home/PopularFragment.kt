@@ -1,38 +1,33 @@
 package com.raylabs.jetmovie.ui.home
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.paging.PagedList
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
-import com.raylabs.jetmovie.R
-import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.raylabs.jetmovie.databinding.ContentHomePopularBinding
-import com.raylabs.jetmovie.utils.ViewModelFactory
-import com.raylabs.jetmovie.vo.Resource
-import com.raylabs.jetmovie.vo.Status
+import com.raylabs.jetmovie.ui.adapter.LoadingStateAdapter
+import com.raylabs.jetmovie.ui.detail.DetailActivity
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class PopularFragment : Fragment() {
 
     private var _popularBinding: ContentHomePopularBinding? = null
     private val binding get() = _popularBinding
-    private lateinit var popularAdapter: MoviesAdapter
-    private lateinit var trendingAdapter: TrendingAdapter
-    private lateinit var viewModel: HomeViewModel
+    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _popularBinding = ContentHomePopularBinding.inflate(inflater, container, false)
         return binding?.root
@@ -42,160 +37,90 @@ class PopularFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (activity != null) {
+            // showLoading(true)
 
-            val factory = ViewModelFactory.getInstance(requireActivity())
-            viewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
+            val mAdapter = MoviesAdapter { idItem -> goToDetail(idItem) }
+            binding?.rvResultsMovie?.layoutManager = GridLayoutManager(context, 2)
+            binding?.rvResultsMovie?.adapter = mAdapter.withLoadStateFooter(
+                footer = LoadingStateAdapter { mAdapter.retry() }
+            )
 
-            popularAdapter = MoviesAdapter()
-            trendingAdapter = TrendingAdapter()
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.popular.collectLatest { result ->
+                    mAdapter.submitData(result)
+                }
+            }
 
-            showLoading(true)
-            viewModel.trending().observe(viewLifecycleOwner, trendingObserver)
-            viewModel.popular().observe(viewLifecycleOwner, popularObserver)
-            showTrending()
-            showPopular()
+//            binding?.let {
+//                with(it.rvResultTrending) {
+//                    val trendingAdapter = TrendingAdapter { idItem -> goToDetail(idItem) }
+//                    layoutManager =
+//                        LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+//                    val snapHelper = LinearSnapHelper()
+//                    snapHelper.attachToRecyclerView(this)
+//                    adapter = trendingAdapter.withLoadStateHeaderAndFooter(
+//                        footer = LoadingStateAdapter { trendingAdapter.retry() },
+//                        header = LoadingStateAdapter { trendingAdapter.retry() }
+//                    )
+//
+//                    lifecycleScope.launch {
+//                        viewModel.trending.collectLatest {
+//                            trendingAdapter.submitData(it)
+//                        }
+//                    }
+//                }
+//
+//                it.svHome.setupWithSearchBar(it.sbHome)
+//                it.svHome.editText.setOnEditorActionListener { _, _, _ ->
+//                    it.sbHome.setText(it.svHome.text)
+//                    it.svHome.hide()
+//                    false
+//                }
+//            }
 
             binding?.apply {
-                svHome.setupWithSearchBar(sbHome)
-                svHome.editText.setOnEditorActionListener { _, _, _ ->
-                    sbHome.setText(svHome.text)
-                    svHome.hide()
-                    viewModel.getMovieByKeyword(svHome.text.toString())
-                        .observe(viewLifecycleOwner, getMovieByKeywordObserver)
-                    false
-                }
-            }
-        }
-    }
-
-    private val getMovieByKeywordObserver =
-        Observer<Resource<PagedList<DataMovieTVEntity>>> { result ->
-            when (result.status) {
-                Status.LOADING -> {
-                    if (result.data != null) {
-                        showLoading(true)
-                        showNoConnection(false)
-                    } else {
-                        showLoading(false)
-                    }
-                }
-
-                Status.SUCCESS -> {
-                    showLoading(false)
-                    popularAdapter.submitList(result.data)
-                }
-
-                Status.ERROR -> {
-                    showLoading(false)
-                    showNoConnection(true)
-                    Toast.makeText(context, "Popular: Failed to get Data", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
-        }
-
-    private val trendingObserver = Observer<Resource<PagedList<DataMovieTVEntity>>> { result ->
-        when (result.status) {
-            Status.LOADING -> {
-                if (result.data?.size != 0) {
-                    showLoading(true)
-                    showNoConnection(false)
-                } else {
-                    showLoading(false)
-                }
-            }
-
-            Status.SUCCESS -> {
-                if (result.data != null) {
-                    trendingAdapter.submitList(result.data)
-                    showLoading(false)
-                }
-            }
-
-            Status.ERROR -> {
-                showLoading(false)
-                showNoConnection(true)
-                Toast.makeText(context, "Popular: Failed to get Data", Toast.LENGTH_SHORT)
-                    .show()
+                //rvResultTrending.isVisible = true
+                rvResultsMovie.isVisible = true
+                // tvPopularHome.isVisible = true
+                showNoConnection(false)
             }
         }
     }
 
     private fun showNoConnection(state: Boolean) {
-        if (state)
-            binding?.apply {
+        binding?.apply {
+            if (state) {
                 itemNoConnection.tvNoConnectionHome.isVisible = true
                 itemNoConnection.ivNoConnection.isVisible = true
-                tvPopularHome.isGone = true
+                //tvPopularHome.isGone = true
                 itemShimmer.containerShimmerHome.isGone = true
-            }
-        else
-            binding?.apply {
+            } else {
                 itemNoConnection.tvNoConnectionHome.isGone = true
                 itemNoConnection.ivNoConnection.isGone = true
             }
-    }
-
-    private fun showTrending() {
-        binding?.let {
-            with(it.rvResultTrending) {
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                setHasFixedSize(true)
-                val snapHelper = LinearSnapHelper()
-                snapHelper.attachToRecyclerView(it.rvResultTrending)
-                adapter = trendingAdapter
-            }
         }
     }
 
-    private val popularObserver = Observer<Resource<PagedList<DataMovieTVEntity>>> { result ->
-        when (result.status) {
-            Status.LOADING -> showLoading(true)
-            Status.SUCCESS -> {
-                showLoading(false)
-                popularAdapter.submitList(result.data)
-            }
-
-            Status.ERROR -> {
-                showLoading(false)
-                Toast.makeText(context, "Trending: Failed to get Data", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
-    }
-
-    private fun showPopular() {
-        binding?.let {
-            with(it.rvResultsMovie) {
-                layoutManager =
-                    GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
-                adapter = popularAdapter
-            }
-
-            it.tvPopularHome.text =
-                getString(R.string.popular)
-        }
-    }
+    private fun goToDetail(id: Int) =
+        startActivity(Intent(requireActivity(), DetailActivity::class.java).putExtra("id", id))
 
     private fun showLoading(state: Boolean) {
-        if (state) {
-            binding?.apply {
+        binding?.apply {
+            if (state) {
                 rvResultsMovie.isGone = true
-                tvPopularHome.isGone = true
-                rvResultTrending.isGone = true
+                //tvPopularHome.isGone = true
+                //rvResultTrending.isGone = true
 
                 shimmerHome.isVisible = true
                 shimmerHome.startShimmer()
-            }
-        } else {
-            binding?.apply {
+            } else {
                 shimmerHome.stopShimmer()
                 shimmerHome.hideShimmer()
                 shimmerHome.isGone = true
 
-                rvResultTrending.isVisible = true
+                //rvResultTrending.isVisible = true
                 rvResultsMovie.isVisible = true
-                tvPopularHome.isVisible = true
+                //tvPopularHome.isVisible = true
             }
         }
     }

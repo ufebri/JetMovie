@@ -1,13 +1,14 @@
 package com.raylabs.jetmovie.ui.upcoming
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.paging.PagedList
-import com.raylabs.jetmovie.data.source.DataRepository
-import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
-import com.raylabs.jetmovie.vo.Resource
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
+import com.raylabs.jetmovie.core.domain.usecase.movietv.MovieTVUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class UpcomingViewModel(private val dataRepository: DataRepository) : ViewModel() {
+@HiltViewModel
+class UpcomingViewModel @Inject constructor(useCase: MovieTVUseCase) : ViewModel() {
 
-    fun getAllUpcoming(): LiveData<Resource<PagedList<DataMovieTVEntity>>> = dataRepository.getAllUpcoming()
+    val upcoming = useCase.getUpComingMovieTV().cachedIn(viewModelScope)
 }

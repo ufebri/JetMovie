@@ -9,18 +9,17 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_upcoming"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:clipToPadding="false"
         android:paddingBottom="50dp"
         android:scrollbarStyle="outsideOverlay"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_watchlist"
-        tools:visibility="gone" />
+        tools:listitem="@layout/item_watchlist" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_upcomingNoData"
@@ -31,8 +30,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_no_data"
@@ -45,13 +43,13 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_upcomingNoData"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toBottomOf="@id/iv_upcomingNoData" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_watchList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         tools:visibility="gone">
 
         <include layout="@layout/shimmer_placeholder_watchlist" />

@@ -1,34 +1,31 @@
 package com.raylabs.jetmovie.ui.home
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.raylabs.jetmovie.BuildConfig
 import com.raylabs.jetmovie.R
-import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
+import com.raylabs.jetmovie.core.domain.model.MoviesTV
 import com.raylabs.jetmovie.databinding.ItemHomeBinding
-import com.raylabs.jetmovie.ui.detail.DetailActivity
-import com.raylabs.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
-import com.bumptech.glide.Glide
 
-class MoviesAdapter :
-    PagedListAdapter<DataMovieTVEntity, MoviesAdapter.MoviesViewHolder>(DIFF_CALLBACK) {
+class MoviesAdapter(private val onClick: (Int) -> Unit) :
+    PagingDataAdapter<MoviesTV, MoviesAdapter.MoviesViewHolder>(DIFF_CALLBACK) {
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataMovieTVEntity>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MoviesTV>() {
             override fun areItemsTheSame(
-                oldItem: DataMovieTVEntity,
-                newItem: DataMovieTVEntity
+                oldItem: MoviesTV,
+                newItem: MoviesTV
             ): Boolean {
                 return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
-                oldItem: DataMovieTVEntity,
-                newItem: DataMovieTVEntity
+                oldItem: MoviesTV,
+                newItem: MoviesTV
             ): Boolean {
                 return oldItem == newItem
             }
@@ -45,30 +42,24 @@ class MoviesAdapter :
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         val popular = getItem(position)
         if (popular != null) {
-            holder.bind(popular)
+            holder.bind(popular, onClick)
         }
     }
 
     class MoviesViewHolder(private val binding: ItemHomeBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(film: DataMovieTVEntity) {
+        fun bind(film: MoviesTV, onClick: (Int) -> Unit) {
 
             //glide
             with(binding) {
                 Glide.with(itemView.context)
-                    .load(BuildConfig.IMGLINK + film.imagePath)
+                    .load(BuildConfig.IMGLINK + film.posterPath)
                     .error(R.drawable.ic_broken_image)
                     .placeholder(R.drawable.ic_no_image)
                     .into(ivPosterFilmItemHome)
             }
-
             //OnClick
-            itemView.setOnClickListener {
-                itemView.context.startActivity(
-                    Intent(itemView.context, DetailActivity::class.java)
-                        .putExtra(DATA_RESULT, film)
-                )
-            }
+            itemView.setOnClickListener { onClick(film.id) }
         }
 
     }

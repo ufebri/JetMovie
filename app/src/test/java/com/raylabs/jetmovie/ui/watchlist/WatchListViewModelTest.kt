@@ -4,9 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
-import com.raylabs.jetmovie.data.source.DataRepository
-import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
-import com.raylabs.jetmovie.utils.DataDummy
+import com.raylabs.jetmovie.core.data.source.local.entity.DataMovieTVEntity
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import org.junit.Assert.assertEquals

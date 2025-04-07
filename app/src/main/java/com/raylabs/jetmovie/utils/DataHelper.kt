@@ -1,6 +1,6 @@
 package com.raylabs.jetmovie.utils
 
-import com.raylabs.jetmovie.data.source.local.entity.GenreEntity
+import com.raylabs.jetmovie.core.data.source.local.entity.GenreEntity
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale

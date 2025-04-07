@@ -3,10 +3,8 @@ package com.raylabs.jetmovie.ui.detail
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.raylabs.jetmovie.data.source.DataRepository
-import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
-import com.raylabs.jetmovie.data.source.local.entity.VideoEntity
-import com.raylabs.jetmovie.utils.DataDummy
+import com.raylabs.jetmovie.core.data.source.local.entity.DataMovieTVEntity
+import com.raylabs.jetmovie.core.data.source.local.entity.VideoEntity
 import com.raylabs.jetmovie.vo.Resource
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions

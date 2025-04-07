@@ -7,24 +7,23 @@ import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.paging.PagedList
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.raylabs.jetmovie.databinding.ContentHomeUpcomingBinding
+import com.raylabs.jetmovie.ui.adapter.LoadingStateAdapter
 import com.raylabs.jetmovie.ui.home.TrendingAdapter
-import com.raylabs.jetmovie.utils.ViewModelFactory
-import com.raylabs.jetmovie.vo.Resource
-import com.raylabs.jetmovie.vo.Status
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class UpcomingFragment : Fragment() {
 
     private var upComingBinding: ContentHomeUpcomingBinding? = null
     private val binding get() = upComingBinding
-    private lateinit var viewModel: UpcomingViewModel
-
+    private val viewModel: UpcomingViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,21 +38,31 @@ class UpcomingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (activity != null) {
-            val factory = ViewModelFactory.getInstance(requireActivity())
-            viewModel = ViewModelProvider(this, factory)[UpcomingViewModel::class.java]
+            showLoading(true)
+            val mAdapter = TrendingAdapter {}
 
-            viewModel.getAllUpcoming().observe(viewLifecycleOwner, upcomingObserver)
-        }
-    }
+            binding?.rvUpcoming?.apply {
+                layoutManager = LinearLayoutManager(context)
+                setHasFixedSize(true)
+                addItemDecoration(
+                    DividerItemDecoration(
+                        context,
+                        LinearLayoutManager.VERTICAL
+                    )
+                )
 
-    private val upcomingObserver = Observer<Resource<PagedList<DataMovieTVEntity>>> { result ->
-        when (result.status) {
-            Status.LOADING -> showLoading(result.data?.size != 0)
-            Status.SUCCESS -> showRecyclerView(result.data)
-            Status.ERROR -> {
-                showLoading(false)
-                showNoData()
+                adapter = mAdapter.withLoadStateFooter(footer = LoadingStateAdapter {
+                    mAdapter.retry()
+                })
             }
+
+            lifecycleScope.launch {
+                viewModel.upcoming.collectLatest { result ->
+                    mAdapter.submitData(result)
+                }
+            }
+
+            showLoading(false)
         }
     }
 
@@ -64,51 +73,23 @@ class UpcomingFragment : Fragment() {
         }
     }
 
-    private fun showRecyclerView(data: PagedList<DataMovieTVEntity>?) {
-        binding?.let {
-            with(it.rvUpcoming) {
-                layoutManager = LinearLayoutManager(
-                    context,
-                    LinearLayoutManager.VERTICAL,
-                    false
-                )
-                setHasFixedSize(true)
-                addItemDecoration(
-                    DividerItemDecoration(
-                        context,
-                        LinearLayoutManager.VERTICAL
-                    )
-                )
-                val mAdapter = TrendingAdapter()
-                adapter = mAdapter
-                mAdapter.submitList(data)
-                showLoading(false)
-            }
-        }
-    }
-
     private fun showLoading(state: Boolean) {
-        if (state) {
-            binding?.let {
-                with(it.shimmerWatchList) {
-                    isVisible = true
-                    isShimmerVisible
-                    startShimmer()
-                }
-            }
-        } else {
-            binding?.let {
-                with(it) {
-                    shimmerWatchList.stopShimmer()
-                    shimmerWatchList.isGone = true
-                    rvUpcoming.isVisible = true
-                }
+        binding?.apply {
+            if (state) {
+                shimmerWatchList.isVisible = true
+                shimmerWatchList.isShimmerVisible
+                shimmerWatchList.startShimmer()
+            } else {
+                shimmerWatchList.stopShimmer()
+                shimmerWatchList.isGone = true
+                rvUpcoming.isVisible = true
             }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        upComingBinding?.shimmerWatchList?.stopShimmer()
         upComingBinding = null
     }
 }

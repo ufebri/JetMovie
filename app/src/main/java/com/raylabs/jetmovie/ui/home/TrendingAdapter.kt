@@ -1,36 +1,32 @@
 package com.raylabs.jetmovie.ui.home
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.raylabs.jetmovie.BuildConfig
 import com.raylabs.jetmovie.R
-import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
+import com.raylabs.jetmovie.core.domain.model.MoviesTV
 import com.raylabs.jetmovie.databinding.ItemImageSliderHomeBinding
-import com.raylabs.jetmovie.ui.detail.DetailActivity
-import com.raylabs.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
 import com.raylabs.jetmovie.ui.home.TrendingAdapter.TrendingViewHolder
-import com.bumptech.glide.Glide
-import java.util.Locale
 
-class TrendingAdapter :
-    PagedListAdapter<DataMovieTVEntity, TrendingViewHolder>(DIFF_CALLBACK) {
+class TrendingAdapter(private val onClick: (Int) -> Unit) :
+    PagingDataAdapter<MoviesTV, TrendingViewHolder>(DIFF_CALLBACK) {
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataMovieTVEntity>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MoviesTV>() {
             override fun areItemsTheSame(
-                oldItem: DataMovieTVEntity,
-                newItem: DataMovieTVEntity
+                oldItem: MoviesTV,
+                newItem: MoviesTV
             ): Boolean {
                 return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
-                oldItem: DataMovieTVEntity,
-                newItem: DataMovieTVEntity
+                oldItem: MoviesTV,
+                newItem: MoviesTV
             ): Boolean {
                 return oldItem == newItem
             }
@@ -49,36 +45,27 @@ class TrendingAdapter :
     override fun onBindViewHolder(holder: TrendingViewHolder, position: Int) {
         val trending = getItem(position)
         if (trending != null) {
-            holder.bind(trending)
+            holder.bind(trending, onClick)
         }
     }
 
     inner class TrendingViewHolder(private val binding: ItemImageSliderHomeBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(trending: DataMovieTVEntity) {
+        fun bind(trending: MoviesTV, onClick: (Int) -> Unit) {
             with(binding) {
 
                 Glide.with(itemView.context)
-                    .load(BuildConfig.IMGLINK.plus(trending.backDropPath))
+                    .load(BuildConfig.IMGLINK.plus(trending.backdropPath))
                     .error(R.drawable.ic_broken_image)
                     .placeholder(R.drawable.ic_no_image)
                     .into(ivSlideHome)
 
-                //Convert trending to double with  2 digit only
-                val mVote: Double = (trending.vote ?: 0.0) / 10.0 * 5.0
-
                 tvTitleFeatured.text = trending.title
-                tvRatingFeatured.text = String.format(Locale.getDefault(), "%.1f", trending.vote)
-                tvGenreFeatured.text = trending.genre?.split(",")?.first()
-                rbRatingFeatured.rating =
-                    String.format(Locale.getDefault(), "%.1f", mVote).toFloat()
+                tvRatingFeatured.text = trending.rating
+                tvGenreFeatured.text = trending.genre.split(",").first()
+                rbRatingFeatured.rating = trending.ratingBar
 
-                itemView.setOnClickListener {
-                    itemView.context.startActivity(
-                        Intent(itemView.context, DetailActivity::class.java)
-                            .putExtra(DATA_RESULT, trending)
-                    )
-                }
+                itemView.setOnClickListener { onClick(trending.id) }
             }
         }
     }

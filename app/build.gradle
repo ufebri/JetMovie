@@ -2,12 +2,13 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-parcelize'
-    id 'com.google.devtools.ksp'
+    id 'com.google.devtools.ksp' version '1.9.0-1.0.12'
     id 'jacoco'
     id 'org.jetbrains.kotlin.android'
     id 'com.github.kt3k.coveralls' version '2.12.0'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'com.google.dagger.hilt.android' version '2.50'
 }
 
 def apikeyPropertiesFile = rootProject.file("apikey.properties")
@@ -18,6 +19,7 @@ android {
     compileSdk 34
     defaultConfig {
         applicationId "com.raylabs.jetmovie"
+        namespace "com.raylabs.jetmovie"
         minSdkVersion 21
         targetSdk 34
         versionCode 1
@@ -28,7 +30,8 @@ android {
         buildConfigField("String", "APIKEY", "\"${apikeyProperties['APIKEY'] as String}\"")
         buildConfigField("String", "BASEURL", "\"${apikeyProperties['BASEURL'] as String}\"")
         buildConfigField("String", "IMGLINK", "\"${apikeyProperties['IMGLINK'] as String}\"")
-
+        buildConfigField("String", "DB_NAME", "\"${apikeyProperties['DB_NAME'] as String}\"")
+        buildConfigField("String", "DB_PASS", "\"${apikeyProperties['DB_PASS'] as String}\"")
     }
 
     signingConfigs {
@@ -55,13 +58,18 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
+        freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
     }
+}
+
+hilt {
+    enableAggregatingTask = false
 }
 
 jacoco {
@@ -99,19 +107,19 @@ dependencies {
 
     //kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "androidx.core:core-ktx:$core_version"
+    implementation "androidx.core:core-ktx:1.13.1"
 
 
     //UI
-    implementation "androidx.appcompat:appcompat:$appCompat_version"
-    implementation "androidx.constraintlayout:constraintlayout:$constraintLayout_version"
-    implementation "com.google.android.material:material:$material_version"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation "com.google.android.material:material:1.12.0"
     implementation "com.github.bumptech.glide:glide:$glide_version"
     ksp "com.github.bumptech.glide:compiler:$glide_version"
-    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+    implementation "androidx.recyclerview:recyclerview:1.3.2"
     implementation "com.facebook.shimmer:shimmer:$shimmer_version"
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
     implementation 'androidx.palette:palette-ktx:1.0.0'
 
 
@@ -119,7 +127,7 @@ dependencies {
     implementation "androidx.work:work-runtime:2.9.0"
 
     //firebase
-    implementation platform('com.google.firebase:firebase-bom:28.4.1')
+    implementation platform('com.google.firebase:firebase-bom:32.0.0')
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
@@ -137,28 +145,36 @@ dependencies {
     implementation "androidx.test.espresso:espresso-idling-resource:$espresso_version"
 
     //network
-    implementation "androidx.activity:activity-ktx:$activityKTX_version"
+    implementation "androidx.activity:activity-ktx:1.4.0"
+    implementation "androidx.fragment:fragment-ktx:1.6.2"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHTTP_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifeCycle_version"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$archLifeCycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$archLifeCycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
 
 
     //Offline - Room
-    implementation "androidx.room:room-runtime:$room_version"
-    ksp "androidx.room:room-compiler:$room_version"
+    ksp "androidx.room:room-compiler:2.5.2"
+    implementation "androidx.room:room-ktx:2.5.2"
+    implementation 'net.zetetic:android-database-sqlcipher:4.5.4'
+    implementation 'androidx.sqlite:sqlite-ktx:2.4.0'
+    implementation "androidx.room:room-paging:2.4.0-rc01"
 
     //offline - datastore
     implementation "androidx.datastore:datastore-preferences:1.1.2"
 
     //Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1"
 
     //pagination
-    implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation "androidx.paging:paging-runtime-ktx:3.1.0"
+    //Hilt
+    implementation 'com.google.dagger:hilt-android:2.50'
+    ksp 'com.google.dagger:hilt-compiler:2.50'
+    implementation 'com.squareup:javapoet:1.13.0'
 }
 repositories {
     mavenCentral()

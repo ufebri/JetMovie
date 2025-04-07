@@ -1,6 +1,6 @@
 package com.raylabs.jetmovie.data.repository
 
-import com.raylabs.jetmovie.data.source.preferences.SettingPreferences
+import com.raylabs.jetmovie.core.data.datastore.SettingPreferences
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
