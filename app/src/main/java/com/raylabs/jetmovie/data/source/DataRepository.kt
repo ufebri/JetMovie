@@ -72,7 +72,7 @@ class DataRepository private constructor(
                 data.isNullOrEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<ResultsItem>>> =
-                remoteDataSource.getAllTrending()
+                remoteDataSource.getAllTrending("2")
 
             override fun saveCallResult(data: List<ResultsItem>) {
                 val listTrending =
@@ -99,7 +99,7 @@ class DataRepository private constructor(
                 data.isNullOrEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<ResultsItem>>> =
-                remoteDataSource.getAllPopular()
+                remoteDataSource.getAllTrending("1")
 
             override fun saveCallResult(data: List<ResultsItem>) {
                 val listPopular =
@@ -211,7 +211,7 @@ class DataRepository private constructor(
                     title = data.title ?: data.name,
                     media_type = data.mediaType,
                     dataFrom = "detailTV",
-                    releaseData = data.firstAirDate?.toMillisAt10AM()
+                    releaseData = data.firstAirDate
                 )
                 localDataSource.updateDetail(detailResult, false)
             }
@@ -246,7 +246,7 @@ class DataRepository private constructor(
                     imagePath = data.posterPath,
                     media_type = data.mediaType,
                     dataFrom = "detailMovie",
-                    releaseData = data.releaseDate?.toMillisAt10AM()
+                    releaseData = data.releaseDate
                 )
                 localDataSource.updateDetail(detailResult, false)
             }
@@ -268,8 +268,7 @@ class DataRepository private constructor(
                 ).build()
             }
 
-            override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean =
-                data.isNullOrEmpty()
+            override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean = true
 
             override fun createCall(): LiveData<ApiResponse<List<ResultsItem>>> =
                 remoteDataSource.getAllUpcoming()

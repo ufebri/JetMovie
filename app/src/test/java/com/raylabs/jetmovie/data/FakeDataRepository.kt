@@ -50,7 +50,7 @@ class FakeDataRepository(
                 data == null || data.isEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<ResultsItem>>> =
-                remoteDataSource.getAllTrending()
+                remoteDataSource.getAllTrending("2")
 
             override fun saveCallResult(data: List<ResultsItem>) {
                 val listTrending = ArrayList<DataMovieTVEntity>()
@@ -91,7 +91,7 @@ class FakeDataRepository(
                 data == null || data.isEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<ResultsItem>>> =
-                remoteDataSource.getAllPopular()
+                remoteDataSource.getAllTrending("1")
 
             override fun saveCallResult(data: List<ResultsItem>) {
                 val listPopular = ArrayList<DataMovieTVEntity>()

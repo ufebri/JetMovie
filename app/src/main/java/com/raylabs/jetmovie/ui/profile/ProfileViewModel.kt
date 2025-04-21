@@ -10,5 +10,11 @@ class ProfileViewModel(private val repository: SettingsRepository) : ViewModel()
 
     val isReminderActive = repository.isReminderActive().asLiveData()
 
-    fun setReminder(isActive: Boolean) = viewModelScope.launch { repository.setReminderStatus(isActive) }
+    fun setReminder(isActive: Boolean) =
+        viewModelScope.launch { repository.setReminderStatus(isActive) }
+
+    val isDiscoverActive = repository.isDiscoverActive().asLiveData()
+
+    fun setDiscover(isActive: Boolean) =
+        viewModelScope.launch { repository.setDiscoverActive(isActive) }
 }

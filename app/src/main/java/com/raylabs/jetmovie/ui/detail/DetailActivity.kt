@@ -19,6 +19,7 @@ import com.raylabs.jetmovie.R
 import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.raylabs.jetmovie.databinding.ActivityDetailBinding
 import com.raylabs.jetmovie.databinding.ContentDetailMovieBinding
+import com.raylabs.jetmovie.utils.DataHelper.toMillisAt10AM
 import com.raylabs.jetmovie.utils.ViewModelFactory
 import com.raylabs.jetmovie.utils.getParcelableExtraCompat
 import com.raylabs.jetmovie.vo.Status
@@ -135,7 +136,7 @@ class DetailActivity : AppCompatActivity() {
                 viewModel.addToRemind(
                     tvTitleFilmDetail.text.toString(),
                     tvDescriptionFilmDetail.text.toString(),
-                    data.releaseData ?: 0
+                    data.releaseData?.toMillisAt10AM() ?: 0
                 )
             }
 

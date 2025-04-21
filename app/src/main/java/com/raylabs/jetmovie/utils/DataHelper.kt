@@ -32,8 +32,8 @@ object DataHelper {
         val date = dateFormat.parse(this) ?: return 0L
         val calendar = Calendar.getInstance().apply {
             time = date
-            set(Calendar.HOUR_OF_DAY, 10)
-            set(Calendar.MINUTE, 0)
+            set(Calendar.HOUR_OF_DAY, 21)
+            set(Calendar.MINUTE, 15)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
         }

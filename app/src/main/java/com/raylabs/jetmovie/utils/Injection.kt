@@ -3,6 +3,7 @@ package com.raylabs.jetmovie.utils
 import android.content.Context
 import androidx.work.WorkManager
 import com.raylabs.jetmovie.data.repository.SettingsRepository
+import com.raylabs.jetmovie.data.repository.scheduler.SchedulerRepository
 import com.raylabs.jetmovie.data.source.DataRepository
 import com.raylabs.jetmovie.data.source.local.LocalDataSource
 import com.raylabs.jetmovie.data.source.local.room.JetMovieDatabase
@@ -26,8 +27,14 @@ object Injection {
         )
     }
 
-    fun provideSettingRepository(context: Context) : SettingsRepository {
+    fun provideSettingRepository(context: Context): SettingsRepository {
         val settingPreferences = SettingPreferences.getInstance(context.dataStore)
         return SettingsRepository.getInstance(settingPreferences)
+    }
+
+    fun provideSchedulerRepository(context: Context): SchedulerRepository {
+        val remoteDataSource = RemoteDataSource.getInstance()
+        val workManager = WorkManager.getInstance(context)
+        return SchedulerRepository.getInstance(remoteDataSource, workManager)
     }
 }

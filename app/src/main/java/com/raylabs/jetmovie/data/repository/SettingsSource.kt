@@ -11,4 +11,8 @@ interface SettingsSource {
     fun isReminderActive(): Flow<Boolean>
 
     suspend fun setReminderStatus(isActive: Boolean)
+
+    fun isDiscoverActive(): Flow<Boolean>
+
+    suspend fun setDiscoverActive(isActive: Boolean)
 }

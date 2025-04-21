@@ -13,6 +13,7 @@ class SettingsRepository private constructor(
 
         private const val REMINDER_KEY = "reminder_setting"
         private const val THEME_KEY = "theme_setting"
+        private const val DISCOVER_KEY = "discover_setting"
 
         fun getInstance(
             settingPreferences: SettingPreferences
@@ -31,6 +32,11 @@ class SettingsRepository private constructor(
 
     override suspend fun setReminderStatus(isActive: Boolean) =
         preferences.saveFlagSetting(isActive, REMINDER_KEY)
+
+    override fun isDiscoverActive(): Flow<Boolean> = preferences.getFlagSetting(DISCOVER_KEY)
+
+    override suspend fun setDiscoverActive(isActive: Boolean) =
+        preferences.saveFlagSetting(isActive, DISCOVER_KEY)
 
 
 }
