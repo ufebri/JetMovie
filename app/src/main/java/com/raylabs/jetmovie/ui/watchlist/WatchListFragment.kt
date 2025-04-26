@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.raylabs.jetmovie.R
 import com.raylabs.jetmovie.databinding.ContentWatchlistBinding
 import com.raylabs.jetmovie.utils.ViewModelFactory
-import com.google.android.material.snackbar.Snackbar
 
 class WatchListFragment : Fragment() {
 

@@ -33,8 +33,9 @@ object Injection {
     }
 
     fun provideSchedulerRepository(context: Context): SchedulerRepository {
-        val remoteDataSource = RemoteDataSource.getInstance()
         val workManager = WorkManager.getInstance(context)
-        return SchedulerRepository.getInstance(remoteDataSource, workManager)
+        return SchedulerRepository.getInstance(workManager)
     }
+
+    val remoteDataSource = RemoteDataSource.getInstance()
 }

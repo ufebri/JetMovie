@@ -7,6 +7,7 @@ import androidx.lifecycle.switchMap
 import com.raylabs.jetmovie.data.source.DataRepository
 import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.raylabs.jetmovie.data.source.local.entity.VideoEntity
+import com.raylabs.jetmovie.domain.model.NotificationData
 import com.raylabs.jetmovie.vo.Resource
 
 class DetailViewModel(private val dataRepository: DataRepository) : ViewModel() {
@@ -38,6 +39,6 @@ class DetailViewModel(private val dataRepository: DataRepository) : ViewModel() 
         }
     }
 
-    fun addToRemind(title: String, message: String, triggerTimeMillis: Long) =
-        dataRepository.scheduleReminder(title, message, triggerTimeMillis)
+    fun addToRemind(notificationData: NotificationData, triggerTimeMillis: Long) =
+        dataRepository.scheduleReminder(notificationData, triggerTimeMillis)
 }

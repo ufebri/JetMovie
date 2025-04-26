@@ -17,7 +17,8 @@ import com.raylabs.jetmovie.data.source.remote.RemoteDataSource
 import com.raylabs.jetmovie.data.source.remote.response.ResultsGenre
 import com.raylabs.jetmovie.data.source.remote.response.ResultsItem
 import com.raylabs.jetmovie.data.source.remote.response.ResultsVideos
-import com.raylabs.jetmovie.data.source.scheduler.AppWorkers
+import com.raylabs.jetmovie.data.scheduler.ScheduleWorkers
+import com.raylabs.jetmovie.domain.model.NotificationData
 import com.raylabs.jetmovie.utils.AppExecutors
 import com.raylabs.jetmovie.utils.DataHelper
 import com.raylabs.jetmovie.vo.Resource
@@ -338,20 +339,23 @@ class FakeDataRepository(
         }.asLiveData()
     }
 
-    override fun scheduleReminder(title: String, message: String, triggerTimeMillis: Long) {
-        val workRequest = OneTimeWorkRequestBuilder<AppWorkers>()
+    override fun scheduleReminder(notificationData: NotificationData, triggerTimeMillis: Long) {
+        val workRequest = OneTimeWorkRequestBuilder<ScheduleWorkers>()
             .setInputData(
                 workDataOf(
-                    "title" to title,
-                    "message" to message,
-                    "channel_id" to "default_channel"
+                    "title" to notificationData.title,
+                    "message" to notificationData.description,
+                    "channel_id" to notificationData.channelID,
+                    "id" to notificationData.id,
+                    "posterPath" to notificationData.posterPath,
+                    "backDropPath" to notificationData.backDropPath
                 )
             )
             .setInitialDelay(triggerTimeMillis - System.currentTimeMillis(), TimeUnit.MILLISECONDS)
             .build()
 
         workManager.enqueueUniqueWork(
-            "Reminder_$title",
+            "reminder_".plus(notificationData.title),
             ExistingWorkPolicy.REPLACE,
             workRequest
         )
