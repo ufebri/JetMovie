@@ -32,8 +32,8 @@ class DetailViewModelTest {
 
     private val idMovie = DataDummy.generateData()[0].id
     private val idTVShow = DataDummy.generateData()[13].id
-    private val mediaTypeMovie = DataDummy.generateData()[0].media_type
-    private val mediaTypeTVShow = DataDummy.generateData()[13].media_type
+    private val mediaTypeMovie = DataDummy.generateData()[0].mediaType
+    private val mediaTypeTVShow = DataDummy.generateData()[13].mediaType
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()

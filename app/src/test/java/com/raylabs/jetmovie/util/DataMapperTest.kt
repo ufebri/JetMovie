@@ -3,7 +3,6 @@ package com.raylabs.jetmovie.util
 import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.raylabs.jetmovie.data.source.remote.response.ResultsItem
 import com.raylabs.jetmovie.utils.DataHelper
-import com.raylabs.jetmovie.utils.DataHelper.toMillisAt10AM
 import com.raylabs.jetmovie.utils.DataMapper
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -60,7 +59,7 @@ class DataMapperTest {
             title = mockResultsItem.title ?: mockResultsItem.name,
             vote = mockResultsItem.voteAverage,
             genre = DataHelper.convertGenre(mockResultsItem.genreIds),
-            media_type = mockResultsItem.mediaType,
+            mediaType = mockResultsItem.mediaType,
             backDropPath = mockResultsItem.backdropPath,
             imagePath = mockResultsItem.posterPath,
             overview = mockResultsItem.overview,
@@ -83,7 +82,7 @@ class DataMapperTest {
             title = mockResultsItemTV.title ?: mockResultsItemTV.name,
             vote = mockResultsItemTV.voteAverage,
             genre = DataHelper.convertGenre(mockResultsItemTV.genreIds),
-            media_type = mockResultsItemTV.mediaType,
+            mediaType = mockResultsItemTV.mediaType,
             backDropPath = mockResultsItemTV.backdropPath,
             imagePath = mockResultsItemTV.posterPath,
             overview = mockResultsItemTV.overview,

@@ -14,15 +14,15 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.raylabs.jetmovie.R
-import com.raylabs.jetmovie.databinding.ActivityMainBinding
+import com.raylabs.jetmovie.databinding.ActivityDashboardBinding
 import com.raylabs.jetmovie.ui.home.HomeViewModel
 import com.raylabs.jetmovie.ui.profile.ThemeViewModel
 import com.raylabs.jetmovie.utils.ViewModelFactory
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class DashboardActivity : AppCompatActivity() {
 
-    private lateinit var homeBinding: ActivityMainBinding
+    private lateinit var homeBinding: ActivityDashboardBinding
     private val viewModel: HomeViewModel by viewModels { ViewModelFactory.getInstance(this) }
     private val themeViewModel: ThemeViewModel by viewModels { ViewModelFactory.getInstance(this) }
 
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //Check Dark Theme
         lifecycleScope.launch {
-            themeViewModel.isDarkThemeActive.observe(this@MainActivity, { isDarkThemeActive ->
+            themeViewModel.isDarkThemeActive.observe(this@DashboardActivity) { isDarkThemeActive ->
                 AppCompatDelegate.setDefaultNightMode(
                     if (isDarkThemeActive) {
                         AppCompatDelegate.MODE_NIGHT_YES
@@ -38,10 +38,10 @@ class MainActivity : AppCompatActivity() {
                         AppCompatDelegate.MODE_NIGHT_NO
                     }
                 )
-            })
+            }
         }
 
-        homeBinding = ActivityMainBinding.inflate(layoutInflater)
+        homeBinding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(homeBinding.root)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -51,8 +51,8 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        viewModel.genre("tv").observe(this, {})
-        viewModel.genre("movie").observe(this, {})
+        viewModel.genre("tv").observe(this) {}
+        viewModel.genre("movie").observe(this) {}
         initToolbar() // Setup Toolbar
     }
 

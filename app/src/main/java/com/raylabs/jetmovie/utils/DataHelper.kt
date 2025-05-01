@@ -18,7 +18,6 @@ object DataHelper {
                 filteredGenre.add(genre)
         }
         return filteredGenre.joinToString { it.name }
-
     }
 
     enum class DataFrom(val value: String) {
@@ -40,7 +39,7 @@ object DataHelper {
                 set(Calendar.MILLISECOND, 0)
             }
             calendar.timeInMillis
-        } catch (e: ParseException) {
+        } catch (_: ParseException) {
             // Return 0L if the date is invalid or parsing fails
             0L
         }
