@@ -16,7 +16,7 @@ class SettingPreferences private constructor(private val dataStore: DataStore<Pr
     fun getFlagSetting(key: String): Flow<Boolean> {
         return dataStore.data.map { preferences ->
             val dataKey = booleanPreferencesKey(key)
-            preferences[dataKey] ?: false
+            preferences[dataKey] == true
         }
     }
 

@@ -17,7 +17,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name="com.raylabs.jetmovie.SplashActivity"
+            android:name="com.raylabs.jetmovie.MainActivity"
             android:exported="true"
             android:noHistory="true">
             <intent-filter>
@@ -30,7 +30,7 @@
             android:name="com.raylabs.jetmovie.ui.detail.DetailActivity"
             android:exported="false" />
         <activity
-            android:name="com.raylabs.jetmovie.ui.MainActivity"
+            android:name="com.raylabs.jetmovie.ui.DashboardActivity"
             android:exported="false" />
     </application>
 

@@ -3,9 +3,11 @@ package com.raylabs.jetmovie.ui.home
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.raylabs.jetmovie.BuildConfig
 import com.raylabs.jetmovie.R
 import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
@@ -13,7 +15,6 @@ import com.raylabs.jetmovie.databinding.ItemImageSliderHomeBinding
 import com.raylabs.jetmovie.ui.detail.DetailActivity
 import com.raylabs.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
 import com.raylabs.jetmovie.ui.home.TrendingAdapter.TrendingViewHolder
-import com.bumptech.glide.Glide
 import java.util.Locale
 
 class TrendingAdapter :
@@ -72,6 +73,13 @@ class TrendingAdapter :
                 tvGenreFeatured.text = trending.genre?.split(",")?.first()
                 rbRatingFeatured.rating =
                     String.format(Locale.getDefault(), "%.1f", mVote).toFloat()
+
+                //Only show for upcoming type
+                tvReleasedDate.apply {
+                    isGone = !trending.dataFrom.equals("upcoming")
+                    text = trending.releaseData.toString()
+                }
+
 
                 itemView.setOnClickListener {
                     itemView.context.startActivity(

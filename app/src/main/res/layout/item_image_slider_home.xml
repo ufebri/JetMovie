@@ -48,6 +48,20 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:text="Action" />
 
+    <TextView
+        android:id="@+id/tv_released_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_medium"
+        android:background="@drawable/bg_rating_home"
+        android:fontFamily="monospace"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_genreFeatured"
+        app:layout_constraintStart_toEndOf="@id/tv_genreFeatured"
+        app:layout_constraintTop_toTopOf="@id/tv_genreFeatured"
+        tools:text="Release date: 12 May 2025" />
+
     <androidx.appcompat.widget.AppCompatRatingBar
         android:id="@+id/rb_ratingFeatured"
         style="?android:attr/ratingBarStyleSmall"

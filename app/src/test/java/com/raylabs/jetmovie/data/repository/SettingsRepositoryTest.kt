@@ -62,4 +62,25 @@ class SettingsRepositoryTest {
         // Verifikasi bahwa metode saveFlagSetting dipanggil dengan benar
         verify(mockPreferences).saveFlagSetting(true, "reminder_setting")
     }
+
+    @Test
+    fun `test isDiscoverActive returns correct value`() = runBlocking {
+        // Simulasi DataStore mengembalikan false untuk dicover
+        `when`(mockPreferences.getFlagSetting("discover_setting")).thenReturn(flowOf(false))
+
+        val result = repository.isDiscoverActive()
+
+        // Verifikasi bahwa nilai yang dikembalikan adalah false
+        result.collect {
+            assertEquals(false, it)
+        }
+    }
+
+    @Test
+    fun `test setDiscoverActive saves correct value`() = runBlocking {
+        repository.setDiscoverActive(true)
+
+        // Verifikasi bahwa metode saveFlagSetting dipanggil dengan benar
+        verify(mockPreferences).saveFlagSetting(true, "discover_setting")
+    }
 }

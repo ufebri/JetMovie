@@ -2,7 +2,6 @@ package com.raylabs.jetmovie.utils
 
 import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.raylabs.jetmovie.data.source.remote.response.ResultsItem
-import com.raylabs.jetmovie.utils.DataHelper.toMillisAt10AM
 
 object DataMapper {
 
@@ -17,12 +16,12 @@ object DataMapper {
                 title = it.title ?: it.name, //title for movie, name for tv
                 vote = it.voteAverage,
                 genre = DataHelper.convertGenre(it.genreIds),
-                media_type = it.mediaType,
+                mediaType = if (it.title.isNullOrEmpty()) "tv" else "movie",
                 backDropPath = it.backdropPath,
                 imagePath = it.posterPath,
                 overview = it.overview,
                 dataFrom = sourceData,
-                releaseData = it.releaseDate?.toMillisAt10AM() ?: it.firstAirDate?.toMillisAt10AM()
+                releaseData = it.releaseDate ?: it.firstAirDate
             )
             entitiesList.add(mData)
         }

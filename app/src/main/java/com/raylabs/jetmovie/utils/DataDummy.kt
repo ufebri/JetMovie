@@ -16,7 +16,7 @@ object DataDummy {
      * - generateRemote for Remote
      */
 
-    private const val imgLink: String = BuildConfig.IMGLINK
+    private const val IMAGE_LINK: String = BuildConfig.IMGLINK
 
     fun generateVideo(): List<VideoEntity> =
         arrayListOf(
@@ -49,7 +49,7 @@ object DataDummy {
         detailData.add(
             DataMovieTVEntity(
                 "1",
-                "$imgLink/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg",
+                "$IMAGE_LINK/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg",
                 "A Star is Born",
                 7.6,
                 "Drama",
@@ -62,7 +62,7 @@ object DataDummy {
         detailData.add(
             DataMovieTVEntity(
                 "2",
-                "$imgLink/xRWht48C2V8XNfzvPehyClOvDni.jpg",
+                "$IMAGE_LINK/xRWht48C2V8XNfzvPehyClOvDni.jpg",
                 "Alita - The Battle Angel",
                 7.2,
                 "Drama",
@@ -75,7 +75,7 @@ object DataDummy {
         detailData.add(
             DataMovieTVEntity(
                 "3",
-                "$imgLink/xLPffWMhMj1l50ND3KchMjYoKmE.jpg",
+                "$IMAGE_LINK/xLPffWMhMj1l50ND3KchMjYoKmE.jpg",
                 "Aquaman",
                 6.9,
                 "Drama",
@@ -88,7 +88,7 @@ object DataDummy {
         detailData.add(
             DataMovieTVEntity(
                 "4",
-                "$imgLink/lHu1wtNaczFPGFDTrjCSzeLPTKN.jpg",
+                "$IMAGE_LINK/lHu1wtNaczFPGFDTrjCSzeLPTKN.jpg",
                 "Bohemian Rhapsody",
                 8.0,
                 "Drama",
@@ -101,7 +101,7 @@ object DataDummy {
         detailData.add(
             DataMovieTVEntity(
                 "5",
-                "$imgLink/hXgmWPd1SuujRZ4QnKLzrj79PAw.jpg",
+                "$IMAGE_LINK/hXgmWPd1SuujRZ4QnKLzrj79PAw.jpg",
                 "Cold Pursuit",
                 5.7,
                 "Drama",
@@ -114,7 +114,7 @@ object DataDummy {
         detailData.add(
             DataMovieTVEntity(
                 "6",
-                "$imgLink/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg",
+                "$IMAGE_LINK/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg",
                 "A Star is Born",
                 7.6,
                 "Drama",
@@ -127,7 +127,7 @@ object DataDummy {
         detailData.add(
             DataMovieTVEntity(
                 "7",
-                "$imgLink/xRWht48C2V8XNfzvPehyClOvDni.jpg",
+                "$IMAGE_LINK/xRWht48C2V8XNfzvPehyClOvDni.jpg",
                 "Alita - The Battle Angel",
                 7.2,
                 "Drama",
@@ -140,7 +140,7 @@ object DataDummy {
         detailData.add(
             DataMovieTVEntity(
                 "8",
-                "$imgLink/xLPffWMhMj1l50ND3KchMjYoKmE.jpg",
+                "$IMAGE_LINK/xLPffWMhMj1l50ND3KchMjYoKmE.jpg",
                 "Aquaman",
                 6.9,
                 "Drama",
@@ -153,7 +153,7 @@ object DataDummy {
         detailData.add(
             DataMovieTVEntity(
                 "9",
-                "$imgLink/lHu1wtNaczFPGFDTrjCSzeLPTKN.jpg",
+                "$IMAGE_LINK/lHu1wtNaczFPGFDTrjCSzeLPTKN.jpg",
                 "Bohemian Rhapsody",
                 8.0,
                 "Drama",
@@ -166,7 +166,7 @@ object DataDummy {
         detailData.add(
             DataMovieTVEntity(
                 "10",
-                "$imgLink/hXgmWPd1SuujRZ4QnKLzrj79PAw.jpg",
+                "$IMAGE_LINK/hXgmWPd1SuujRZ4QnKLzrj79PAw.jpg",
                 "Cold Pursuit",
                 5.7,
                 "Drama",
@@ -198,7 +198,7 @@ object DataDummy {
                 "Drama",
                 "Lupin",
                 "tv",
-                "$imgLink/dVHeJXUzHJJGadB2wvpuAn6fsdN.jpg",
+                "$IMAGE_LINK/dVHeJXUzHJJGadB2wvpuAn6fsdN.jpg",
             )
         )
 
@@ -211,7 +211,7 @@ object DataDummy {
                 "Drama",
                 "The Big Bang Theory",
                 "tv",
-                "$imgLink/7RySzFeK3LPVMXcPtqfZnl6u4p1.jpg",
+                "$IMAGE_LINK/7RySzFeK3LPVMXcPtqfZnl6u4p1.jpg",
             )
         )
         detailData.add(
@@ -223,7 +223,7 @@ object DataDummy {
                 "Drama",
                 "How I Met Your Mother",
                 "tv",
-                "$imgLink/5BMwFwNzSidVYArn561acqtktxv.jpg",
+                "$IMAGE_LINK/5BMwFwNzSidVYArn561acqtktxv.jpg",
             )
         )
         detailData.add(
@@ -235,7 +235,7 @@ object DataDummy {
                 "Drama",
                 "The End of the F***ing World",
                 "tv",
-                "$imgLink/qBw99h23veY7bTccAzV4bRCg86n.jpg",
+                "$IMAGE_LINK/qBw99h23veY7bTccAzV4bRCg86n.jpg",
             )
         )
         detailData.add(
@@ -247,7 +247,7 @@ object DataDummy {
                 "Drama",
                 "Game Of Thrones",
                 "tv",
-                "$imgLink/suopoADq0k8YZr4dQXcU6pToj6s.jpg",
+                "$IMAGE_LINK/suopoADq0k8YZr4dQXcU6pToj6s.jpg",
             )
         )
 
@@ -260,7 +260,7 @@ object DataDummy {
                 "Drama",
                 "Lupin",
                 "tv",
-                "$imgLink/dVHeJXUzHJJGadB2wvpuAn6fsdN.jpg",
+                "$IMAGE_LINK/dVHeJXUzHJJGadB2wvpuAn6fsdN.jpg",
             )
         )
 
@@ -273,7 +273,7 @@ object DataDummy {
                 "Drama",
                 "The Big Bang Theory",
                 "tv",
-                "$imgLink/7RySzFeK3LPVMXcPtqfZnl6u4p1.jpg",
+                "$IMAGE_LINK/7RySzFeK3LPVMXcPtqfZnl6u4p1.jpg",
             )
         )
         detailData.add(
@@ -285,7 +285,7 @@ object DataDummy {
                 "Drama",
                 "How I Met Your Mother",
                 "tv",
-                "$imgLink/5BMwFwNzSidVYArn561acqtktxv.jpg",
+                "$IMAGE_LINK/5BMwFwNzSidVYArn561acqtktxv.jpg",
             )
         )
         detailData.add(
@@ -297,7 +297,7 @@ object DataDummy {
                 "Drama",
                 "The End of the F***ing World",
                 "tv",
-                "$imgLink/qBw99h23veY7bTccAzV4bRCg86n.jpg",
+                "$IMAGE_LINK/qBw99h23veY7bTccAzV4bRCg86n.jpg",
             )
         )
 
@@ -307,7 +307,7 @@ object DataDummy {
     fun generateDetailDataMovie(): DataMovieTVEntity {
         return DataMovieTVEntity(
             "1",
-            "$imgLink/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg",
+            "$IMAGE_LINK/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg",
             "A Star is Born",
             7.6,
             "Drama",
@@ -327,7 +327,7 @@ object DataDummy {
             "Drama",
             "How I Met Your Mother",
             "tv",
-            "$imgLink/5BMwFwNzSidVYArn561acqtktxv.jpg",
+            "$IMAGE_LINK/5BMwFwNzSidVYArn561acqtktxv.jpg",
             false
         )
     }
@@ -348,7 +348,7 @@ object DataDummy {
         detailData.add(
             ResultsItem(
                 "602269",
-                "$imgLink/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg",
+                "$IMAGE_LINK/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg",
                 "A Star is Born",
                 7.6,
                 listOf(28),
@@ -363,7 +363,7 @@ object DataDummy {
         detailData.add(
             ResultsItem(
                 "1",
-                "$imgLink/xRWht48C2V8XNfzvPehyClOvDni.jpg",
+                "$IMAGE_LINK/xRWht48C2V8XNfzvPehyClOvDni.jpg",
                 "Alita - The Battle Angel",
                 7.2,
                 listOf(12),
@@ -378,7 +378,7 @@ object DataDummy {
         detailData.add(
             ResultsItem(
                 "3",
-                "$imgLink/xLPffWMhMj1l50ND3KchMjYoKmE.jpg",
+                "$IMAGE_LINK/xLPffWMhMj1l50ND3KchMjYoKmE.jpg",
                 "Aquaman",
                 6.9,
                 listOf(16),
@@ -393,7 +393,7 @@ object DataDummy {
         detailData.add(
             ResultsItem(
                 "4",
-                "$imgLink/lHu1wtNaczFPGFDTrjCSzeLPTKN.jpg",
+                "$IMAGE_LINK/lHu1wtNaczFPGFDTrjCSzeLPTKN.jpg",
                 "Bohemian Rhapsody",
                 8.0,
                 listOf(28, 12),
@@ -408,7 +408,7 @@ object DataDummy {
         detailData.add(
             ResultsItem(
                 "5",
-                "$imgLink/hXgmWPd1SuujRZ4QnKLzrj79PAw.jpg",
+                "$IMAGE_LINK/hXgmWPd1SuujRZ4QnKLzrj79PAw.jpg",
                 "Cold Pursuit",
                 5.7,
                 listOf(28, 16),
@@ -423,7 +423,7 @@ object DataDummy {
         detailData.add(
             ResultsItem(
                 "6",
-                "$imgLink/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg",
+                "$IMAGE_LINK/wrFpXMNBRj2PBiN4Z5kix51XaIZ.jpg",
                 "A Star is Born",
                 7.6,
                 listOf(12, 16),
@@ -438,7 +438,7 @@ object DataDummy {
         detailData.add(
             ResultsItem(
                 "7",
-                "$imgLink/xRWht48C2V8XNfzvPehyClOvDni.jpg",
+                "$IMAGE_LINK/xRWht48C2V8XNfzvPehyClOvDni.jpg",
                 "Alita - The Battle Angel",
                 7.2,
                 listOf(28, 12, 16),
@@ -453,7 +453,7 @@ object DataDummy {
         detailData.add(
             ResultsItem(
                 "8",
-                "$imgLink/xLPffWMhMj1l50ND3KchMjYoKmE.jpg",
+                "$IMAGE_LINK/xLPffWMhMj1l50ND3KchMjYoKmE.jpg",
                 "Aquaman",
                 6.9,
                 listOf(28, 12, 16),
@@ -468,7 +468,7 @@ object DataDummy {
         detailData.add(
             ResultsItem(
                 "9",
-                "$imgLink/lHu1wtNaczFPGFDTrjCSzeLPTKN.jpg",
+                "$IMAGE_LINK/lHu1wtNaczFPGFDTrjCSzeLPTKN.jpg",
                 "Bohemian Rhapsody",
                 8.0,
                 listOf(28, 12, 16),
@@ -483,7 +483,7 @@ object DataDummy {
         detailData.add(
             ResultsItem(
                 "10",
-                "$imgLink/hXgmWPd1SuujRZ4QnKLzrj79PAw.jpg",
+                "$IMAGE_LINK/hXgmWPd1SuujRZ4QnKLzrj79PAw.jpg",
                 "Cold Pursuit",
                 5.7,
                 listOf(28, 12, 16),
@@ -504,7 +504,7 @@ object DataDummy {
                 listOf(10759, 16, 35),
                 "Game Of Thrones",
                 "tv",
-                "$imgLink/suopoADq0k8YZr4dQXcU6pToj6s.jpg",
+                "$IMAGE_LINK/suopoADq0k8YZr4dQXcU6pToj6s.jpg",
                 "Seven noble families fight for control of the mythical land of Westeros. Friction between the houses leads to full-scale war. All while a very ancient evil awakens in the farthest north. Amidst the war, a neglected military order of misfits, the Night's Watch, is all that stands between the realms of men and icy horrors beyond.",
                 null
             )
@@ -519,7 +519,7 @@ object DataDummy {
                 listOf(10759, 16, 35),
                 "Lupin",
                 "tv",
-                "$imgLink/dVHeJXUzHJJGadB2wvpuAn6fsdN.jpg",
+                "$IMAGE_LINK/dVHeJXUzHJJGadB2wvpuAn6fsdN.jpg",
                 "Inspired by the adventures of Arsène Lupin, gentleman thief Assane Diop sets out to avenge his father for an injustice inflicted by a wealthy family.",
                 null
             )
@@ -534,7 +534,7 @@ object DataDummy {
                 listOf(10759, 16, 35),
                 "The Big Bang Theory",
                 "tv",
-                "$imgLink/7RySzFeK3LPVMXcPtqfZnl6u4p1.jpg",
+                "$IMAGE_LINK/7RySzFeK3LPVMXcPtqfZnl6u4p1.jpg",
                 "The sitcom is centered on five characters living in Pasadena, California: roommates Leonard Hofstadter and Sheldon Cooper; Penny, a waitress and aspiring actress who lives across the hall; and Leonard and Sheldon's equally geeky and socially awkward friends and co-workers, mechanical engineer Howard Wolowitz and astrophysicist Raj Koothrappali. The geekiness and intellect of the four guys is contrasted for comic effect with Penny's social skills and common sense.",
                 null
             )
@@ -548,7 +548,7 @@ object DataDummy {
                 listOf(10759, 16, 35),
                 "How I Met Your Mother",
                 "tv",
-                "$imgLink/5BMwFwNzSidVYArn561acqtktxv.jpg",
+                "$IMAGE_LINK/5BMwFwNzSidVYArn561acqtktxv.jpg",
                 "A father recounts to his children - through a series of flashbacks - the journey he and his four best friends took leading up to him meeting their mother.",
                 null
             )
@@ -562,7 +562,7 @@ object DataDummy {
                 listOf(10759, 16, 35),
                 "The End of the F***ing World",
                 "tv",
-                "$imgLink/qBw99h23veY7bTccAzV4bRCg86n.jpg",
+                "$IMAGE_LINK/qBw99h23veY7bTccAzV4bRCg86n.jpg",
                 "James is 17 and is pretty sure he is a psychopath. Alyssa, also 17, is the cool and moody new girl at school. The pair make a connection and she persuades him to embark on a darkly comedic road trip in search of her real father.",
                 null
             )
@@ -576,7 +576,7 @@ object DataDummy {
                 listOf(10759, 16, 35),
                 "Game Of Thrones",
                 "tv",
-                "$imgLink/suopoADq0k8YZr4dQXcU6pToj6s.jpg",
+                "$IMAGE_LINK/suopoADq0k8YZr4dQXcU6pToj6s.jpg",
                 "Seven noble families fight for control of the mythical land of Westeros. Friction between the houses leads to full-scale war. All while a very ancient evil awakens in the farthest north. Amidst the war, a neglected military order of misfits, the Night's Watch, is all that stands between the realms of men and icy horrors beyond.",
                 null
             )
@@ -591,7 +591,7 @@ object DataDummy {
                 listOf(10759, 16, 35),
                 "Lupin",
                 "tv",
-                "$imgLink/dVHeJXUzHJJGadB2wvpuAn6fsdN.jpg",
+                "$IMAGE_LINK/dVHeJXUzHJJGadB2wvpuAn6fsdN.jpg",
                 "Inspired by the adventures of Arsène Lupin, gentleman thief Assane Diop sets out to avenge his father for an injustice inflicted by a wealthy family.",
                 null
             )
@@ -606,7 +606,7 @@ object DataDummy {
                 listOf(10759, 16, 35),
                 "The Big Bang Theory",
                 "tv",
-                "$imgLink/7RySzFeK3LPVMXcPtqfZnl6u4p1.jpg",
+                "$IMAGE_LINK/7RySzFeK3LPVMXcPtqfZnl6u4p1.jpg",
                 "The sitcom is centered on five characters living in Pasadena, California: roommates Leonard Hofstadter and Sheldon Cooper; Penny, a waitress and aspiring actress who lives across the hall; and Leonard and Sheldon's equally geeky and socially awkward friends and co-workers, mechanical engineer Howard Wolowitz and astrophysicist Raj Koothrappali. The geekiness and intellect of the four guys is contrasted for comic effect with Penny's social skills and common sense.",
                 null
             )
@@ -620,7 +620,7 @@ object DataDummy {
                 listOf(10759, 16, 35),
                 "How I Met Your Mother",
                 "tv",
-                "$imgLink/5BMwFwNzSidVYArn561acqtktxv.jpg",
+                "$IMAGE_LINK/5BMwFwNzSidVYArn561acqtktxv.jpg",
                 "A father recounts to his children - through a series of flashbacks - the journey he and his four best friends took leading up to him meeting their mother.",
                 null
             )
@@ -634,7 +634,7 @@ object DataDummy {
                 listOf(10759, 16, 35),
                 "The End of the F***ing World",
                 "tv",
-                "$imgLink/qBw99h23veY7bTccAzV4bRCg86n.jpg",
+                "$IMAGE_LINK/qBw99h23veY7bTccAzV4bRCg86n.jpg",
                 "James is 17 and is pretty sure he is a psychopath. Alyssa, also 17, is the cool and moody new girl at school. The pair make a connection and she persuades him to embark on a darkly comedic road trip in search of her real father.",
                 null
             )

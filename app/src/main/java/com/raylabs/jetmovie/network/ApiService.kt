@@ -19,12 +19,11 @@ interface ApiService {
         @Query("page") page: String = "2"
     ): Call<DataResponse>
 
-    //Get Page 2 for Popular Section
     @GET("trending/all/day")
-    fun getPopular(
+    suspend fun fetchTrending(
         @Query("api_key") apiKey: String = BuildConfig.APIKEY,
-        @Query("page") page: String = "1"
-    ): Call<DataResponse>
+        @Query("page") page: String
+    ): DataResponse
 
     //Get Detail Videos
     @GET("{media_type}/{id}/videos")

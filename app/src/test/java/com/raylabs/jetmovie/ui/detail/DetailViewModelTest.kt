@@ -3,13 +3,14 @@ package com.raylabs.jetmovie.ui.detail
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.raylabs.jetmovie.data.source.DataRepository
 import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.raylabs.jetmovie.data.source.local.entity.VideoEntity
+import com.raylabs.jetmovie.domain.model.NotificationData
 import com.raylabs.jetmovie.utils.DataDummy
 import com.raylabs.jetmovie.vo.Resource
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -31,8 +32,8 @@ class DetailViewModelTest {
 
     private val idMovie = DataDummy.generateData()[0].id
     private val idTVShow = DataDummy.generateData()[13].id
-    private val mediaTypeMovie = DataDummy.generateData()[0].media_type
-    private val mediaTypeTVShow = DataDummy.generateData()[13].media_type
+    private val mediaTypeMovie = DataDummy.generateData()[0].mediaType
+    private val mediaTypeTVShow = DataDummy.generateData()[13].mediaType
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -139,5 +140,19 @@ class DetailViewModelTest {
         viewModel.addToWatchList()
         verify(dataRepository).setWatchList(tv.value?.data as DataMovieTVEntity, true)
         verifyNoMoreInteractions(observerDetail)
+    }
+
+    @Test
+    fun addToRemind() {
+        val mNotificationData = NotificationData(
+            id = "x",
+            title = "test",
+            "test",
+            posterPath = "test.jpg",
+            backDropPath = "test.jpg",
+            channelID = "test"
+        )
+        viewModel.addToRemind(mNotificationData, 0)
+        verify(dataRepository).scheduleReminder(notificationData = mNotificationData, 0)
     }
 }

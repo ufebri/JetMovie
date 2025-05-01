@@ -11,6 +11,9 @@ import com.raylabs.jetmovie.data.source.remote.response.ResultsItem
 import com.raylabs.jetmovie.data.source.remote.response.ResultsVideos
 import com.raylabs.jetmovie.network.ApiConfig
 import com.raylabs.jetmovie.utils.EspressoIdlingResource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -75,10 +78,10 @@ class RemoteDataSource {
         return resultsItem
     }
 
-    fun getAllTrending(): LiveData<ApiResponse<List<ResultsItem>>> {
+    fun getAllTrending(page: String): LiveData<ApiResponse<List<ResultsItem>>> {
         EspressoIdlingResource.increment()
         val resultsItem = MutableLiveData<ApiResponse<List<ResultsItem>>>()
-        client.getTrending().enqueue(object : Callback<DataResponse> {
+        client.getTrending(page = page).enqueue(object : Callback<DataResponse> {
             override fun onResponse(
                 call: Call<DataResponse>,
                 response: Response<DataResponse>
@@ -97,25 +100,12 @@ class RemoteDataSource {
         return resultsItem
     }
 
-    fun getAllPopular(): LiveData<ApiResponse<List<ResultsItem>>> {
-        EspressoIdlingResource.increment()
-        val resultsItem = MutableLiveData<ApiResponse<List<ResultsItem>>>()
-        client.getPopular().enqueue(object : Callback<DataResponse> {
-            override fun onResponse(
-                call: Call<DataResponse>,
-                response: Response<DataResponse>
-            ) {
-                resultsItem.value =
-                    ApiResponse.success(response.body()?.results as List<ResultsItem>)
-                EspressoIdlingResource.decrement()
-            }
-
-            override fun onFailure(call: Call<DataResponse>, t: Throwable) {
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
-                EspressoIdlingResource.decrement()
-            }
-        })
-        return resultsItem
+    fun fetchMovies(page: String): Flow<DataResponse> = flow {
+        val response = client.fetchTrending(page = page)
+        emit(response)
+    }.catch { e ->
+        Log.e(TAG, "fetchMovies: ", e.cause)
+        emit(DataResponse(0, 0, emptyList(), 0))
     }
 
     fun getDetailVideos(

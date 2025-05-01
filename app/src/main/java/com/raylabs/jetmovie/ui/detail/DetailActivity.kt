@@ -19,6 +19,8 @@ import com.raylabs.jetmovie.R
 import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.raylabs.jetmovie.databinding.ActivityDetailBinding
 import com.raylabs.jetmovie.databinding.ContentDetailMovieBinding
+import com.raylabs.jetmovie.domain.model.NotificationData
+import com.raylabs.jetmovie.utils.DataHelper.toMillisAt10AM
 import com.raylabs.jetmovie.utils.ViewModelFactory
 import com.raylabs.jetmovie.utils.getParcelableExtraCompat
 import com.raylabs.jetmovie.vo.Status
@@ -61,7 +63,7 @@ class DetailActivity : AppCompatActivity() {
         if (bundle != null) {
             val dataID = bundle.id
             dataTitle = bundle.title
-            mMediaType = bundle.media_type.toString()
+            mMediaType = bundle.mediaType.toString()
             viewModel.selectedData(dataID)
             populateDetailContent(mMediaType)
         }
@@ -86,7 +88,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun populateDetailContent(mediaType: String) {
         if (mediaType == "tv") {
-            viewModel.getDetailTV.observe(this, { result ->
+            viewModel.getDetailTV.observe(this) { result ->
                 when (result.status) {
                     Status.LOADING -> showLoading(true)
                     Status.SUCCESS -> if (result.data != null) {
@@ -100,9 +102,9 @@ class DetailActivity : AppCompatActivity() {
                             .show()
                     }
                 }
-            })
+            }
         } else {
-            viewModel.getDetailMovie.observe(this, { result ->
+            viewModel.getDetailMovie.observe(this) { result ->
                 when (result.status) {
                     Status.LOADING -> showLoading(true)
                     Status.SUCCESS -> if (result.data != null) {
@@ -116,7 +118,7 @@ class DetailActivity : AppCompatActivity() {
                             .show()
                     }
                 }
-            })
+            }
         }
     }
 
@@ -133,14 +135,20 @@ class DetailActivity : AppCompatActivity() {
 
             activityDetailBinding.btnRemind.setOnClickListener {
                 viewModel.addToRemind(
-                    tvTitleFilmDetail.text.toString(),
-                    tvDescriptionFilmDetail.text.toString(),
-                    data.releaseData ?: 0
+                    notificationData = NotificationData(
+                        title = data.title ?: "",
+                        description = data.overview ?: "",
+                        id = data.id,
+                        posterPath = data.imagePath,
+                        backDropPath = data.backDropPath,
+                        channelID = "ReminderToWatch"
+                    ),
+                    triggerTimeMillis = data.releaseData?.toMillisAt10AM() ?: 0
                 )
             }
 
             viewModel.getVideos(mediaType, data.id)
-                .observe(this@DetailActivity, { result ->
+                .observe(this@DetailActivity) { result ->
                     wvYoutube.apply {
                         settings.javaScriptEnabled = true
                         webChromeClient = object : WebChromeClient() {}
@@ -155,7 +163,7 @@ class DetailActivity : AppCompatActivity() {
                     }
 
 
-                })
+                }
 
         }
     }
@@ -180,7 +188,7 @@ class DetailActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.toolbar_detail_movie, menu)
         this.menu = menu
         if (mMediaType == "tv") {
-            viewModel.getDetailTV.observe(this, { result ->
+            viewModel.getDetailTV.observe(this) { result ->
                 if (result != null) {
                     when (result.status) {
                         Status.LOADING -> showLoading(true)
@@ -196,9 +204,9 @@ class DetailActivity : AppCompatActivity() {
                         }
                     }
                 }
-            })
+            }
         } else {
-            viewModel.getDetailMovie.observe(this, { result ->
+            viewModel.getDetailMovie.observe(this) { result ->
                 if (result != null) {
                     when (result.status) {
                         Status.LOADING -> showLoading(true)
@@ -218,7 +226,7 @@ class DetailActivity : AppCompatActivity() {
                         }
                     }
                 }
-            })
+            }
         }
         return true
     }

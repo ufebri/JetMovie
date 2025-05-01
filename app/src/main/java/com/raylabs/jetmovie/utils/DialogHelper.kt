@@ -5,6 +5,8 @@ import androidx.appcompat.app.AlertDialog
 
 object DialogHelper {
 
+    var builderProvider: ((Context) -> AlertDialog.Builder)? = null
+
     fun showDialog(
         context: Context,
         title: String,
@@ -14,8 +16,8 @@ object DialogHelper {
         onConfirm: (() -> Unit)? = null,
         onCancel: (() -> Unit)? = null
     ) {
-        val builder = AlertDialog.Builder(context)
-            .setTitle(title)
+        val builder = builderProvider?.invoke(context) ?: AlertDialog.Builder(context)
+        builder.setTitle(title)
             .setMessage(message)
             .setPositiveButton(positiveText) { _, _ -> onConfirm?.invoke() }
 

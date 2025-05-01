@@ -8,6 +8,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.raylabs.jetmovie.data.NetworkBoundResource
+import com.raylabs.jetmovie.data.scheduler.ScheduleWorkers
 import com.raylabs.jetmovie.data.source.local.LocalDataSource
 import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.raylabs.jetmovie.data.source.local.entity.GenreEntity
@@ -17,10 +18,9 @@ import com.raylabs.jetmovie.data.source.remote.RemoteDataSource
 import com.raylabs.jetmovie.data.source.remote.response.ResultsGenre
 import com.raylabs.jetmovie.data.source.remote.response.ResultsItem
 import com.raylabs.jetmovie.data.source.remote.response.ResultsVideos
-import com.raylabs.jetmovie.data.source.scheduler.AppWorkers
+import com.raylabs.jetmovie.domain.model.NotificationData
 import com.raylabs.jetmovie.utils.AppExecutors
 import com.raylabs.jetmovie.utils.DataHelper
-import com.raylabs.jetmovie.utils.DataHelper.toMillisAt10AM
 import com.raylabs.jetmovie.utils.DataMapper
 import com.raylabs.jetmovie.vo.Resource
 import java.util.concurrent.TimeUnit
@@ -72,7 +72,7 @@ class DataRepository private constructor(
                 data.isNullOrEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<ResultsItem>>> =
-                remoteDataSource.getAllTrending()
+                remoteDataSource.getAllTrending("2")
 
             override fun saveCallResult(data: List<ResultsItem>) {
                 val listTrending =
@@ -99,11 +99,11 @@ class DataRepository private constructor(
                 data.isNullOrEmpty()
 
             override fun createCall(): LiveData<ApiResponse<List<ResultsItem>>> =
-                remoteDataSource.getAllPopular()
+                remoteDataSource.getAllTrending("1")
 
             override fun saveCallResult(data: List<ResultsItem>) {
                 val listPopular =
-                    DataMapper.toListEntities(data, DataHelper.DataFrom.TRENDING.value)
+                    DataMapper.toListEntities(data, DataHelper.DataFrom.POPULAR.value)
                 localDataSource.insertPopular(listPopular)
             }
         }.asLiveData()
@@ -209,9 +209,9 @@ class DataRepository private constructor(
                     backDropPath = data.backdropPath,
                     imagePath = data.posterPath,
                     title = data.title ?: data.name,
-                    media_type = data.mediaType,
+                    mediaType = data.mediaType,
                     dataFrom = "detailTV",
-                    releaseData = data.firstAirDate?.toMillisAt10AM()
+                    releaseData = data.firstAirDate
                 )
                 localDataSource.updateDetail(detailResult, false)
             }
@@ -244,9 +244,9 @@ class DataRepository private constructor(
                     isFavorite = false,
                     backDropPath = data.backdropPath,
                     imagePath = data.posterPath,
-                    media_type = data.mediaType,
+                    mediaType = data.mediaType,
                     dataFrom = "detailMovie",
-                    releaseData = data.releaseDate?.toMillisAt10AM()
+                    releaseData = data.releaseDate
                 )
                 localDataSource.updateDetail(detailResult, false)
             }
@@ -268,8 +268,7 @@ class DataRepository private constructor(
                 ).build()
             }
 
-            override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean =
-                data.isNullOrEmpty()
+            override fun shouldFetch(data: PagedList<DataMovieTVEntity>?): Boolean = true
 
             override fun createCall(): LiveData<ApiResponse<List<ResultsItem>>> =
                 remoteDataSource.getAllUpcoming()
@@ -309,20 +308,23 @@ class DataRepository private constructor(
         }.asLiveData()
     }
 
-    override fun scheduleReminder(title: String, message: String, triggerTimeMillis: Long) {
-        val workRequest = OneTimeWorkRequestBuilder<AppWorkers>()
+    override fun scheduleReminder(notificationData: NotificationData, triggerTimeMillis: Long) {
+        val workRequest = OneTimeWorkRequestBuilder<ScheduleWorkers>()
             .setInputData(
                 workDataOf(
-                    "title" to title,
-                    "message" to message,
-                    "channel_id" to "default_channel"
+                    "title" to notificationData.title,
+                    "message" to notificationData.description,
+                    "channel_id" to notificationData.channelID,
+                    "id" to notificationData.id,
+                    "posterPath" to notificationData.posterPath,
+                    "backDropPath" to notificationData.backDropPath
                 )
             )
             .setInitialDelay(triggerTimeMillis - System.currentTimeMillis(), TimeUnit.MILLISECONDS)
             .build()
 
         workManager.enqueueUniqueWork(
-            "Reminder_$title",
+            "reminder_".plus(notificationData.title),
             ExistingWorkPolicy.REPLACE,
             workRequest
         )
