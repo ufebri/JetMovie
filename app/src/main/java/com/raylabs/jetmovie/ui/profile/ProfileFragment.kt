@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.raylabs.jetmovie.R
 import com.raylabs.jetmovie.databinding.ContentProfileBinding
 import com.raylabs.jetmovie.utils.DialogHelper
@@ -27,6 +28,11 @@ class ProfileFragment : Fragment(R.layout.content_profile) {
     private val themeViewModel: ThemeViewModel by viewModels {
         ViewModelFactory.getInstance(requireContext())
     }
+    private val schedulerViewModel: SchedulerViewModel by viewModels {
+        ViewModelFactory.getInstance(requireContext())
+    }
+
+
     private lateinit var permissionManager: PermissionManager
 
     private val requestPermissionLauncher =
@@ -59,37 +65,53 @@ class ProfileFragment : Fragment(R.layout.content_profile) {
                     themeViewModel.setDarkTheme(isChecked)
                 }
 
+                //Change Listener of Switch Reminder
                 viewModel.isReminderActive.observe(viewLifecycleOwner) { isReminderActive: Boolean ->
                     switchReminder.isChecked = isReminderActive
                 }
 
                 switchReminder.setOnCheckedChangeListener { _, isChecked ->
                     if (isChecked) {
-                        requestOrCheckPermission()
+                        requestOrCheckPermission(switchReminder, REMINDER)
                     } else {
-                        viewModel.setReminder(false)
+                        setActivationNotification(REMINDER, false)
+                    }
+                }
+
+                //Change Listener of Switch Discover Suggestion
+                viewModel.isDiscoverActive.observe(viewLifecycleOwner) { isActive ->
+                    switchDiscover.isChecked = isActive
+                }
+
+                switchDiscover.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        requestOrCheckPermission(switchDiscover, DISCOVER)
+                    } else {
+                        setActivationNotification(DISCOVER, false)
                     }
                 }
             }
         }
     }
 
-    private fun requestOrCheckPermission() {
+    private fun requestOrCheckPermission(switchMaterial: SwitchMaterial, key: String) {
         if (!permissionManager.isPermissionNotificationGranted()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             } else {
                 // Jika Android < 13, tidak perlu meminta izin notifikasi
-                binding.switchReminder.isChecked = true
+                switchMaterial.isChecked = true
+                // active when is for suggestion
+                if (key == DISCOVER) schedulerViewModel.setScheduler()
             }
         } else {
-            viewModel.setReminder(true)
+            setActivationNotification(key = key, true)
         }
     }
 
     private fun handlePermissionResult(isGranted: Boolean) {
         if (isGranted) {
-            viewModel.setReminder(true)
+            setActivationNotification(key = switchFlag, true)
         } else {
             DialogHelper.showDialog(
                 context = requireActivity(),
@@ -106,8 +128,34 @@ class ProfileFragment : Fragment(R.layout.content_profile) {
                     }
                 }
             )
-            binding.switchReminder.isChecked = false
+            setActivationNotification(switchFlag, false)
         }
+    }
+
+    private fun setActivationNotification(key: String, isActive: Boolean) {
+        binding.apply {
+            when (key) {
+                REMINDER -> {
+                    viewModel.setReminder(isActive)
+                    switchFlag = key
+                    switchReminder.isChecked = isActive
+                }
+
+                DISCOVER -> {
+                    viewModel.setDiscover(isActive)
+                    switchFlag = key
+                    switchDiscover.isChecked = isActive
+                    // active when is for suggestion
+                    if (isActive) schedulerViewModel.setScheduler()
+                }
+            }
+        }
+    }
+
+    companion object {
+        private const val REMINDER: String = "reminder"
+        private const val DISCOVER: String = "discover"
+        private var switchFlag: String = ""
     }
 
     override fun onDestroyView() {

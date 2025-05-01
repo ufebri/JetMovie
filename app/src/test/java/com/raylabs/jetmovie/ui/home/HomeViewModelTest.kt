@@ -116,4 +116,24 @@ class HomeViewModelTest {
         homeViewModel.genre("tv").observeForever(observerGenre)
         verify(observerGenre).onChanged(dummyGenre)
     }
+
+    @Test
+    fun getMovieByKeyword() {
+        val movieList = Resource.success(pagedList)
+        `when`(movieList.data?.size).thenReturn(20)
+
+        val movie = MutableLiveData<Resource<PagedList<DataMovieTVEntity>>>()
+        movie.value = movieList
+
+
+        `when`(dataRepository.getMovieByKeyword("test")).thenReturn(movie)
+        val keywordMovie = homeViewModel.getMovieByKeyword("test").value?.data
+        verify(dataRepository).getMovieByKeyword("test")
+
+        assertNotNull(keywordMovie)
+        assertEquals(20, keywordMovie?.size)
+
+        homeViewModel.getMovieByKeyword("test").observeForever(observer)
+        verify(observer).onChanged(movieList)
+    }
 }

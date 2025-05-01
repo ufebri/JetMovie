@@ -6,12 +6,12 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.raylabs.jetmovie.BuildConfig
 import com.raylabs.jetmovie.R
 import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.raylabs.jetmovie.databinding.ItemWatchlistBinding
 import com.raylabs.jetmovie.ui.detail.DetailActivity
-import com.bumptech.glide.Glide
 
 class WatchListAdapter :
     PagedListAdapter<DataMovieTVEntity, WatchListAdapter.MoviesViewHolder>(DIFF_CALLBACK) {

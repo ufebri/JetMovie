@@ -45,7 +45,7 @@ class DataMapperTest {
             backdropPath = "/backdrop_tv.jpg",
             posterPath = "/poster_tv.jpg",
             overview = "This is a TV show overview.",
-            releaseDate = null,
+            releaseDate = "2023-02-01",
             firstAirDate = "2023-02-01",
             genres = null// Hanya untuk TV Series
         )
@@ -65,7 +65,7 @@ class DataMapperTest {
             imagePath = mockResultsItem.posterPath,
             overview = mockResultsItem.overview,
             dataFrom = sourceData,
-            releaseData = mockResultsItem.releaseDate?.toMillisAt10AM()
+            releaseData = mockResultsItem.releaseDate
         )
 
         val result = DataMapper.toListEntities(mockList, sourceData)
@@ -88,7 +88,7 @@ class DataMapperTest {
             imagePath = mockResultsItemTV.posterPath,
             overview = mockResultsItemTV.overview,
             dataFrom = sourceData,
-            releaseData = mockResultsItemTV.firstAirDate?.toMillisAt10AM()
+            releaseData = mockResultsItemTV.firstAirDate
         )
 
         val result = DataMapper.toListEntities(mockList, sourceData)

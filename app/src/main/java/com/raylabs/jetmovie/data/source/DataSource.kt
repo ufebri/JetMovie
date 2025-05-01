@@ -5,6 +5,7 @@ import androidx.paging.PagedList
 import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.raylabs.jetmovie.data.source.local.entity.GenreEntity
 import com.raylabs.jetmovie.data.source.local.entity.VideoEntity
+import com.raylabs.jetmovie.domain.model.NotificationData
 import com.raylabs.jetmovie.vo.Resource
 
 interface DataSource {
@@ -29,5 +30,5 @@ interface DataSource {
 
     fun getMovieByKeyword(keyword: String): LiveData<Resource<PagedList<DataMovieTVEntity>>>
 
-    fun scheduleReminder(title: String, message: String, triggerTimeMillis: Long)
+    fun scheduleReminder(notificationData: NotificationData, triggerTimeMillis: Long)
 }

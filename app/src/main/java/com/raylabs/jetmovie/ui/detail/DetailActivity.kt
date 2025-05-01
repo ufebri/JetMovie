@@ -19,6 +19,8 @@ import com.raylabs.jetmovie.R
 import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.raylabs.jetmovie.databinding.ActivityDetailBinding
 import com.raylabs.jetmovie.databinding.ContentDetailMovieBinding
+import com.raylabs.jetmovie.domain.model.NotificationData
+import com.raylabs.jetmovie.utils.DataHelper.toMillisAt10AM
 import com.raylabs.jetmovie.utils.ViewModelFactory
 import com.raylabs.jetmovie.utils.getParcelableExtraCompat
 import com.raylabs.jetmovie.vo.Status
@@ -133,9 +135,15 @@ class DetailActivity : AppCompatActivity() {
 
             activityDetailBinding.btnRemind.setOnClickListener {
                 viewModel.addToRemind(
-                    tvTitleFilmDetail.text.toString(),
-                    tvDescriptionFilmDetail.text.toString(),
-                    data.releaseData ?: 0
+                    notificationData = NotificationData(
+                        title = data.title ?: "",
+                        description = data.overview ?: "",
+                        id = data.id,
+                        posterPath = data.imagePath,
+                        backDropPath = data.backDropPath,
+                        channelID = "ReminderToWatch"
+                    ),
+                    triggerTimeMillis = data.releaseData?.toMillisAt10AM() ?: 0
                 )
             }
 

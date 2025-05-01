@@ -3,14 +3,13 @@ package com.raylabs.jetmovie.data.source.local.entity
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Fts4
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-@Fts4
 @Entity(tableName = "dataMovieTVEntities")
 data class DataMovieTVEntity(
+    @PrimaryKey
     @ColumnInfo(name = "id")
     var id: String,
 
@@ -41,10 +40,6 @@ data class DataMovieTVEntity(
     @ColumnInfo(name = "dataFrom")
     var dataFrom: String? = "",
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "rowid")
-    var rowid: Int = 0,
-
     @ColumnInfo(name = "release_data")
-    var releaseData: Long? = null,
+    var releaseData: String? = null,
 ) : Parcelable
