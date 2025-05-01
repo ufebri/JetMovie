@@ -209,7 +209,7 @@ class DataRepository private constructor(
                     backDropPath = data.backdropPath,
                     imagePath = data.posterPath,
                     title = data.title ?: data.name,
-                    media_type = data.mediaType,
+                    mediaType = data.mediaType,
                     dataFrom = "detailTV",
                     releaseData = data.firstAirDate
                 )
@@ -244,7 +244,7 @@ class DataRepository private constructor(
                     isFavorite = false,
                     backDropPath = data.backdropPath,
                     imagePath = data.posterPath,
-                    media_type = data.mediaType,
+                    mediaType = data.mediaType,
                     dataFrom = "detailMovie",
                     releaseData = data.releaseDate
                 )

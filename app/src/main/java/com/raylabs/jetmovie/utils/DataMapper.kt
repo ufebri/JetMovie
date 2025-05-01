@@ -16,7 +16,7 @@ object DataMapper {
                 title = it.title ?: it.name, //title for movie, name for tv
                 vote = it.voteAverage,
                 genre = DataHelper.convertGenre(it.genreIds),
-                media_type = if (it.title.isNullOrEmpty()) "tv" else "movie",
+                mediaType = if (it.title.isNullOrEmpty()) "tv" else "movie",
                 backDropPath = it.backdropPath,
                 imagePath = it.posterPath,
                 overview = it.overview,

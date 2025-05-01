@@ -62,7 +62,7 @@ class FakeDataRepository(
                             title = title,
                             vote = voteAverage,
                             genre = DataHelper.convertGenre(genreIds),
-                            media_type = mediaType,
+                            mediaType = mediaType,
                             backDropPath = backdropPath,
                             imagePath = posterPath,
                             overview = overview
@@ -101,7 +101,7 @@ class FakeDataRepository(
                         val popular = DataMovieTVEntity(
                             id = id,
                             imagePath = posterPath,
-                            media_type = mediaType,
+                            mediaType = mediaType,
                             title = title,
                             backDropPath = backdropPath,
                             vote = voteAverage,
@@ -214,7 +214,7 @@ class FakeDataRepository(
                     backDropPath = data.backdropPath,
                     imagePath = data.posterPath,
                     title = null,
-                    media_type = data.mediaType
+                    mediaType = data.mediaType
                 )
                 localDataSource.updateDetail(detailResult, false)
             }
@@ -247,7 +247,7 @@ class FakeDataRepository(
                     isFavorite = false,
                     backDropPath = data.backdropPath,
                     imagePath = data.posterPath,
-                    media_type = data.mediaType
+                    mediaType = data.mediaType
                 )
                 localDataSource.updateDetail(detailResult, false)
             }
@@ -284,7 +284,7 @@ class FakeDataRepository(
                             title = title,
                             vote = voteAverage,
                             genre = DataHelper.convertGenre(genreIds),
-                            media_type = mediaType,
+                            mediaType = mediaType,
                             backDropPath = backdropPath,
                             imagePath = posterPath,
                             overview = overview
@@ -326,7 +326,7 @@ class FakeDataRepository(
                             title = title,
                             vote = voteAverage,
                             genre = DataHelper.convertGenre(genreIds),
-                            media_type = mediaType,
+                            mediaType = mediaType,
                             backDropPath = backdropPath,
                             imagePath = posterPath,
                             overview = overview

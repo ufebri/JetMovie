@@ -63,7 +63,7 @@ class DetailActivity : AppCompatActivity() {
         if (bundle != null) {
             val dataID = bundle.id
             dataTitle = bundle.title
-            mMediaType = bundle.media_type.toString()
+            mMediaType = bundle.mediaType.toString()
             viewModel.selectedData(dataID)
             populateDetailContent(mMediaType)
         }

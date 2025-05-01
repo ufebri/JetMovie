@@ -18,8 +18,8 @@ class DetailViewModel(private val dataRepository: DataRepository) : ViewModel() 
         this.dataID.value = dataID
     }
 
-    fun getVideos(media_type: String, idData: String): LiveData<Resource<List<VideoEntity>>> =
-        dataRepository.getVideoDetail(media_type, idData)
+    fun getVideos(mediaType: String, idData: String): LiveData<Resource<List<VideoEntity>>> =
+        dataRepository.getVideoDetail(mediaType, idData)
 
     var getDetailTV: LiveData<Resource<DataMovieTVEntity>> =
         dataID.switchMap { mDataID ->
