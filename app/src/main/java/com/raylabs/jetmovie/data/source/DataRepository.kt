@@ -103,7 +103,7 @@ class DataRepository private constructor(
 
             override fun saveCallResult(data: List<ResultsItem>) {
                 val listPopular =
-                    DataMapper.toListEntities(data, DataHelper.DataFrom.TRENDING.value)
+                    DataMapper.toListEntities(data, DataHelper.DataFrom.POPULAR.value)
                 localDataSource.insertPopular(listPopular)
             }
         }.asLiveData()

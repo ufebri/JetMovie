@@ -30,7 +30,7 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //Check Dark Theme
         lifecycleScope.launch {
-            themeViewModel.isDarkThemeActive.observe(this@DashboardActivity, { isDarkThemeActive ->
+            themeViewModel.isDarkThemeActive.observe(this@DashboardActivity) { isDarkThemeActive ->
                 AppCompatDelegate.setDefaultNightMode(
                     if (isDarkThemeActive) {
                         AppCompatDelegate.MODE_NIGHT_YES
@@ -38,7 +38,7 @@ class DashboardActivity : AppCompatActivity() {
                         AppCompatDelegate.MODE_NIGHT_NO
                     }
                 )
-            })
+            }
         }
 
         homeBinding = ActivityDashboardBinding.inflate(layoutInflater)
@@ -51,8 +51,8 @@ class DashboardActivity : AppCompatActivity() {
             insets
         }
 
-        viewModel.genre("tv").observe(this, {})
-        viewModel.genre("movie").observe(this, {})
+        viewModel.genre("tv").observe(this) {}
+        viewModel.genre("movie").observe(this) {}
         initToolbar() // Setup Toolbar
     }
 
