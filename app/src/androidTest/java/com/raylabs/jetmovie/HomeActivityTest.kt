@@ -11,7 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import com.raylabs.jetmovie.ui.MainActivity
+import com.raylabs.jetmovie.ui.DashboardActivity
 import com.raylabs.jetmovie.utils.DataDummy
 import com.raylabs.jetmovie.utils.EspressoIdlingResource
 import org.junit.After
@@ -24,7 +24,7 @@ class HomeActivityTest {
     private val dummyMovie = DataDummy.generateData()
 
     @get:Rule
-    var activityRule = ActivityScenarioRule(MainActivity::class.java)
+    var activityRule = ActivityScenarioRule(DashboardActivity::class.java)
 
 
     @Before

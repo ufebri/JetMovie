@@ -10,9 +10,9 @@ import android.view.WindowInsetsController
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.raylabs.jetmovie.databinding.ActivitySplashBinding
-import com.raylabs.jetmovie.ui.MainActivity
+import com.raylabs.jetmovie.ui.DashboardActivity
 
-class SplashActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var splashBinding: ActivitySplashBinding
 
@@ -29,7 +29,7 @@ class SplashActivity : AppCompatActivity() {
     private fun setupMotion() {
         splashBinding.motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                startActivity(Intent(this@MainActivity, DashboardActivity::class.java))
             }
 
             override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {}

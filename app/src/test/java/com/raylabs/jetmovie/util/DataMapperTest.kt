@@ -3,7 +3,6 @@ package com.raylabs.jetmovie.util
 import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.raylabs.jetmovie.data.source.remote.response.ResultsItem
 import com.raylabs.jetmovie.utils.DataHelper
-import com.raylabs.jetmovie.utils.DataHelper.toMillisAt10AM
 import com.raylabs.jetmovie.utils.DataMapper
 import org.junit.Assert.assertEquals
 import org.junit.Before
