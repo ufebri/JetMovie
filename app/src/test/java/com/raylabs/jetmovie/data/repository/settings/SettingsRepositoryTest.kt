@@ -1,14 +1,13 @@
-package com.raylabs.jetmovie.data.repository
+package com.raylabs.jetmovie.data.repository.settings
 
+import com.raylabs.jetmovie.data.repository.SettingsRepository
 import com.raylabs.jetmovie.data.source.preferences.SettingPreferences
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito
 
 class SettingsRepositoryTest {
 
@@ -17,20 +16,20 @@ class SettingsRepositoryTest {
 
     @Before
     fun setUp() {
-        mockPreferences = mock(SettingPreferences::class.java)
-        repository = SettingsRepository.getInstance(mockPreferences)
+        mockPreferences = Mockito.mock(SettingPreferences::class.java)
+        repository = SettingsRepository.Companion.getInstance(mockPreferences)
     }
 
     @Test
     fun `test isDarkTheme returns correct value`() = runBlocking {
         // Simulasi DataStore mengembalikan true untuk tema gelap
-        `when`(mockPreferences.getFlagSetting("theme_setting")).thenReturn(flowOf(true))
+        Mockito.`when`(mockPreferences.getFlagSetting("theme_setting")).thenReturn(flowOf(true))
 
         val result = repository.isDarkTheme()
 
         // Verifikasi bahwa nilai yang dikembalikan adalah true
         result.collect {
-            assertEquals(true, it)
+            Assert.assertEquals(true, it)
         }
     }
 
@@ -39,19 +38,19 @@ class SettingsRepositoryTest {
         repository.setDarkTheme(true)
 
         // Verifikasi bahwa metode saveFlagSetting dipanggil dengan benar
-        verify(mockPreferences).saveFlagSetting(true, "theme_setting")
+        Mockito.verify(mockPreferences).saveFlagSetting(true, "theme_setting")
     }
 
     @Test
     fun `test isReminderActive returns correct value`() = runBlocking {
         // Simulasi DataStore mengembalikan false untuk reminder
-        `when`(mockPreferences.getFlagSetting("reminder_setting")).thenReturn(flowOf(false))
+        Mockito.`when`(mockPreferences.getFlagSetting("reminder_setting")).thenReturn(flowOf(false))
 
         val result = repository.isReminderActive()
 
         // Verifikasi bahwa nilai yang dikembalikan adalah false
         result.collect {
-            assertEquals(false, it)
+            Assert.assertEquals(false, it)
         }
     }
 
@@ -60,19 +59,19 @@ class SettingsRepositoryTest {
         repository.setReminderStatus(true)
 
         // Verifikasi bahwa metode saveFlagSetting dipanggil dengan benar
-        verify(mockPreferences).saveFlagSetting(true, "reminder_setting")
+        Mockito.verify(mockPreferences).saveFlagSetting(true, "reminder_setting")
     }
 
     @Test
     fun `test isDiscoverActive returns correct value`() = runBlocking {
         // Simulasi DataStore mengembalikan false untuk dicover
-        `when`(mockPreferences.getFlagSetting("discover_setting")).thenReturn(flowOf(false))
+        Mockito.`when`(mockPreferences.getFlagSetting("discover_setting")).thenReturn(flowOf(false))
 
         val result = repository.isDiscoverActive()
 
         // Verifikasi bahwa nilai yang dikembalikan adalah false
         result.collect {
-            assertEquals(false, it)
+            Assert.assertEquals(false, it)
         }
     }
 
@@ -81,6 +80,6 @@ class SettingsRepositoryTest {
         repository.setDiscoverActive(true)
 
         // Verifikasi bahwa metode saveFlagSetting dipanggil dengan benar
-        verify(mockPreferences).saveFlagSetting(true, "discover_setting")
+        Mockito.verify(mockPreferences).saveFlagSetting(true, "discover_setting")
     }
 }

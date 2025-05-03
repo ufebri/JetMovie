@@ -48,18 +48,26 @@
 
         <TextView
             android:id="@+id/tv_popular_home"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_medium"
+            android:layout_marginHorizontal="@dimen/margin_medium"
             android:textColor="@color/colorTitle"
             android:textSize="@dimen/font_high"
             android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/rv_resultsMovie"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rv_resultTrending"
             tools:text="@string/popular"
-            tools:visibility="gone" />
+            tools:visibility="visible" />
+
+        <com.startapp.sdk.ads.banner.Banner
+            android:id="@+id/startAppBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_popular_home"
+            app:layout_constraintTop_toBottomOf="@id/tv_popular_home" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_resultsMovie"
@@ -70,7 +78,8 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_popular_home"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/startAppBanner"
             tools:listitem="@layout/item_home"
             tools:visibility="gone" />
 
