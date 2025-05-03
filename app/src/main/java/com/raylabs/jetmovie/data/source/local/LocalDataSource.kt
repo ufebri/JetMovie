@@ -37,6 +37,8 @@ class LocalDataSource(private val mJetMovieDao: JetMovieDao) {
     //Genre Operations
     fun getGenre(): LiveData<List<GenreEntity>> = mJetMovieDao.getGenre()
 
+    fun getGenres(): List<GenreEntity> = mJetMovieDao.getGenres()
+
     fun insertGenre(genre: List<GenreEntity>) = mJetMovieDao.insertGenre(genre)
 
 

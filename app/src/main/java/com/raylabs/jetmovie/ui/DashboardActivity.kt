@@ -51,8 +51,8 @@ class DashboardActivity : AppCompatActivity() {
             insets
         }
 
-        viewModel.genre("tv").observe(this) {}
-        viewModel.genre("movie").observe(this) {}
+        viewModel.genre("tv").observe(this, {})
+        viewModel.genre("movie").observe(this, {})
         initToolbar() // Setup Toolbar
     }
 
