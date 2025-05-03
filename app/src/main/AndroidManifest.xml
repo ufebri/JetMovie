@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.AD_ID" />
 
     <application
         android:allowBackup="true"
@@ -32,6 +33,16 @@
         <activity
             android:name="com.raylabs.jetmovie.ui.DashboardActivity"
             android:exported="false" />
+
+
+        <!-- ADS -->
+        <meta-data
+            android:name="com.startapp.sdk.APPLICATION_ID"
+            android:value="${START_IO_ADS}" />
+
+        <meta-data
+            android:name="com.startapp.sdk.MIXED_AUDIENCE"
+            android:value="true" />
     </application>
 
 </manifest>

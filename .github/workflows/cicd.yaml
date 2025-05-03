@@ -35,6 +35,7 @@ jobs:
           echo "MYAPP_RELEASE_KEYSTORE_PASSWORD=${{ secrets.MYAPP_RELEASE_KEYSTORE_PASSWORD }}" >> apikey.properties
           echo "MYAPP_RELEASE_KEY_ALIAS=${{ secrets.MYAPP_RELEASE_KEY_ALIAS }}" >> apikey.properties
           echo "MYAPP_RELEASE_KEY_PASSWORD=${{ secrets.MYAPP_RELEASE_KEY_PASSWORD }}" >> apikey.properties
+          echo "START_IO_ADS=${{ secrets.START_IO_ADS }}" >> apikey.properties
 
       # Step 4: Upload environment files as artifact
       - name: Upload environment files
@@ -47,7 +48,7 @@ jobs:
             ./app/jetmovie_key.jks
 
   firebase-distribution:
-    if: startsWith(github.ref, 'refs/heads/feature/')
+    if: github.event.pull_request.base.ref == 'master'
     runs-on: ubuntu-latest
     needs: setup-env
 
@@ -75,7 +76,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build APK
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleRelease
 
       - name: Distribute APK to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -83,7 +84,7 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           token: ${{ secrets.FIREBASE_AUTH_TOKEN }}
           groups: internal-tester
-          file: app/build/outputs/apk/debug/app-debug.apk
+          file: app/build/outputs/apk/release/app-release.apk
 
   github-release:
     if: github.event.pull_request.base.ref == 'development' # Berjalan hanya ketika PR ke development

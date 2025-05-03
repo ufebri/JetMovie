@@ -128,6 +128,7 @@ class PopularFragment : Fragment() {
                 itemNoConnection.ivNoConnection.isVisible = true
                 tvPopularHome.isGone = true
                 itemShimmer.containerShimmerHome.isGone = true
+
             }
         else
             binding?.apply {
@@ -174,6 +175,14 @@ class PopularFragment : Fragment() {
 
             it.tvPopularHome.text =
                 getString(R.string.popular)
+
+            showBannerAds()
+        }
+    }
+
+    private fun showBannerAds() {
+        binding?.apply {
+            startAppBanner.loadAd()
         }
     }
 

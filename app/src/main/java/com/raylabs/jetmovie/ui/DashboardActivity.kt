@@ -13,11 +13,13 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.raylabs.jetmovie.BuildConfig
 import com.raylabs.jetmovie.R
 import com.raylabs.jetmovie.databinding.ActivityDashboardBinding
 import com.raylabs.jetmovie.ui.home.HomeViewModel
 import com.raylabs.jetmovie.ui.profile.ThemeViewModel
 import com.raylabs.jetmovie.utils.ViewModelFactory
+import com.startapp.sdk.adsbase.StartAppSDK
 import kotlinx.coroutines.launch
 
 class DashboardActivity : AppCompatActivity() {
@@ -54,6 +56,8 @@ class DashboardActivity : AppCompatActivity() {
         viewModel.genre("tv").observe(this, {})
         viewModel.genre("movie").observe(this, {})
         initToolbar() // Setup Toolbar
+
+        StartAppSDK.setTestAdsEnabled(BuildConfig.DEBUG)
     }
 
     private fun initToolbar() {
