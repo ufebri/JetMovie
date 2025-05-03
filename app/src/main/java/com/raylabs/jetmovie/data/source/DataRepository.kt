@@ -102,11 +102,11 @@ class DataRepository private constructor(
             override fun saveCallResult(data: List<ResultsItem>) {
                 val genreList = localDataSource.getGenres()
                 data.map { result ->
-                    val genreList = DataMapper.convertGenre(genreList, result.genreIds)
+                    val mGenreList = DataMapper.convertGenre(genreList, result.genreIds)
                     val listPopular =
                         DataMapper.toListEntities(
                             data,
-                            genreList,
+                            mGenreList,
                             DataHelper.DataFrom.POPULAR.value
                         )
                     localDataSource.insertPopular(listPopular)
@@ -231,11 +231,11 @@ class DataRepository private constructor(
             override fun saveCallResult(data: List<ResultsItem>) {
                 val genreList = localDataSource.getGenres()
                 data.map { result ->
-                    val genreList = DataMapper.convertGenre(genreList, result.genreIds)
+                    val mGenreList = DataMapper.convertGenre(genreList, result.genreIds)
                     val listTrending =
                         DataMapper.toListEntities(
                             data,
-                            genreList,
+                            mGenreList,
                             DataHelper.DataFrom.UPCOMING.value
                         )
                     localDataSource.insertTrending(listTrending)
@@ -267,10 +267,10 @@ class DataRepository private constructor(
             override fun saveCallResult(data: List<ResultsItem>) {
                 val genreList = localDataSource.getGenres()
                 data.map { result ->
-                    val genreList = DataMapper.convertGenre(genreList, result.genreIds)
+                    val mGenreList = DataMapper.convertGenre(genreList, result.genreIds)
                     val listTrending = DataMapper.toListEntities(
                         data,
-                        genreList,
+                        mGenreList,
                         DataHelper.DataFrom.SEARCH.value
                     )
                     localDataSource.insertTrending(listTrending)
