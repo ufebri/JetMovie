@@ -1,104 +1,108 @@
 package com.raylabs.jetmovie.util
 
-import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
+import com.raylabs.jetmovie.data.source.local.entity.GenreEntity
+import com.raylabs.jetmovie.data.source.remote.response.ResultsGenre
 import com.raylabs.jetmovie.data.source.remote.response.ResultsItem
-import com.raylabs.jetmovie.utils.DataHelper
+import com.raylabs.jetmovie.data.source.remote.response.ResultsVideos
 import com.raylabs.jetmovie.utils.DataMapper
-import org.junit.Assert.assertEquals
-import org.junit.Before
+import junit.framework.TestCase.assertEquals
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
 
-@RunWith(MockitoJUnitRunner::class)
 class DataMapperTest {
 
-    private lateinit var mockResultsItem: ResultsItem
-    private lateinit var mockResultsItemTV: ResultsItem
-    private val sourceData = "API"
-
-    @Before
-    fun setup() {
-        mockResultsItem = ResultsItem(
-            id = "1",
-            title = "Movie Title",
-            voteAverage = 8.5,
-            genreIds = listOf(28, 12), // Action, Adventure
-            mediaType = "movie",
-            backdropPath = "/backdrop.jpg",
-            posterPath = "/poster.jpg",
-            overview = "This is a movie overview.",
-            releaseDate = "2023-01-01",
-            firstAirDate = null,
-            name = null,
-            genres = null// Hanya untuk TV Series
+    @Test
+    fun `toListEntities should map list of ResultsItem to DataMovieTVEntity`() {
+        val response = listOf(
+            ResultsItem(
+                id = "1",
+                title = "Movie Title",
+                voteAverage = 8.5,
+                name = null,
+                backdropPath = "/backdrop.jpg",
+                posterPath = "/poster.jpg",
+                overview = "Overview here",
+                releaseDate = "2024-01-01",
+                firstAirDate = null,
+                genreIds = listOf(),
+                mediaType = "api",
+                genres = listOf(ResultsGenre(1, "Drama"), ResultsGenre(2, "Thriller"))
+            )
         )
 
-        mockResultsItemTV = ResultsItem(
+        val result = DataMapper.toListEntities(response, "Action", "remote")
+
+        assertEquals(1, result.size)
+        assertEquals("Movie Title", result[0].title)
+        assertEquals("Action", result[0].genre)
+        assertEquals("remote", result[0].dataFrom)
+        assertEquals("movie", result[0].mediaType)
+    }
+
+    @Test
+    fun `toDataEntities should map ResultsItem to DataMovieTVEntity`() {
+        val data = ResultsItem(
             id = "2",
-            title = null, // Untuk TV, `name` digunakan
-            name = "TV Show Title",
-            voteAverage = 7.5,
-            genreIds = listOf(16, 35), // Animation, Comedy
+            title = null,
+            name = "TV Show",
+            voteAverage = 7.8,
+            overview = "TV Overview",
+            genres = listOf(ResultsGenre(1, "Drama"), ResultsGenre(2, "Thriller")),
+            posterPath = "/tv.jpg",
+            backdropPath = "/backtv.jpg",
             mediaType = "tv",
-            backdropPath = "/backdrop_tv.jpg",
-            posterPath = "/poster_tv.jpg",
-            overview = "This is a TV show overview.",
-            releaseDate = "2023-02-01",
-            firstAirDate = "2023-02-01",
-            genres = null// Hanya untuk TV Series
+            firstAirDate = "2023-05-10",
+            genreIds = listOf(1, 2)
         )
+
+        val result = DataMapper.toDataEntities(data, "remote")
+
+        assertEquals("TV Show", result.title)
+        assertEquals("Drama, Thriller", result.genre)
+        assertEquals("remote", result.dataFrom)
+        assertEquals("tv", result.mediaType)
     }
 
     @Test
-    fun `toListEntities should correctly map movie data`() {
-        val mockList = listOf(mockResultsItem)
-
-        val expected = DataMovieTVEntity(
-            id = mockResultsItem.id,
-            title = mockResultsItem.title ?: mockResultsItem.name,
-            vote = mockResultsItem.voteAverage,
-            genre = DataHelper.convertGenre(mockResultsItem.genreIds),
-            mediaType = mockResultsItem.mediaType,
-            backDropPath = mockResultsItem.backdropPath,
-            imagePath = mockResultsItem.posterPath,
-            overview = mockResultsItem.overview,
-            dataFrom = sourceData,
-            releaseData = mockResultsItem.releaseDate
+    fun `toVideoEntity should map ResultsVideos to VideoEntity`() {
+        val videos = listOf(
+            ResultsVideos(key = "abc123", site = "fake", name = "fake", type = "fake"),
+            ResultsVideos(key = "def456", site = "fake", name = "fake", type = "fake")
         )
 
-        val result = DataMapper.toListEntities(mockList, sourceData)
+        val result = DataMapper.toVideoEntity("movie_1", videos)
 
-        assertEquals(1, result.size)
-        assertEquals(expected, result[0])
+        assertEquals(2, result.size)
+        assertEquals("abc123", result[0].key)
+        assertEquals("movie_1", result[1].id)
     }
 
     @Test
-    fun `toListEntities should correctly map TV show data`() {
-        val mockList = listOf(mockResultsItemTV)
-
-        val expected = DataMovieTVEntity(
-            id = mockResultsItemTV.id,
-            title = mockResultsItemTV.title ?: mockResultsItemTV.name,
-            vote = mockResultsItemTV.voteAverage,
-            genre = DataHelper.convertGenre(mockResultsItemTV.genreIds),
-            mediaType = mockResultsItemTV.mediaType,
-            backDropPath = mockResultsItemTV.backdropPath,
-            imagePath = mockResultsItemTV.posterPath,
-            overview = mockResultsItemTV.overview,
-            dataFrom = sourceData,
-            releaseData = mockResultsItemTV.firstAirDate
+    fun `toGenreEntity should map ResultsGenre to GenreEntity`() {
+        val genres = listOf(
+            ResultsGenre(id = 1, name = "Action"),
+            ResultsGenre(id = 2, name = "Comedy")
         )
 
-        val result = DataMapper.toListEntities(mockList, sourceData)
+        val result = DataMapper.toGenreEntity(genres)
 
-        assertEquals(1, result.size)
-        assertEquals(expected, result[0])
+        assertEquals(2, result.size)
+        assertEquals("Action", result[0].name)
+        assertEquals(2, result[1].id)
     }
 
     @Test
-    fun `toListEntities should return empty list when input is empty`() {
-        val result = DataMapper.toListEntities(emptyList(), sourceData)
-        assertEquals(0, result.size)
+    fun `convertGenre should return genre names for given IDs`() {
+        val genreEntities = listOf(
+            GenreEntity(id = 1, name = "Action"),
+            GenreEntity(id = 2, name = "Horror"),
+            GenreEntity(id = 3, name = "Comedy")
+        )
+
+        val genreIds = listOf(1, 3)
+
+        val result = DataMapper.convertGenre(genreEntities, genreIds)
+
+        assertEquals("Action, Comedy", result)
     }
+
 }

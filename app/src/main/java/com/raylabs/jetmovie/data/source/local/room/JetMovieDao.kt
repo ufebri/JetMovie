@@ -32,6 +32,9 @@ interface JetMovieDao {
     @Query("SELECT * FROM GenreEntity")
     fun getGenre(): LiveData<List<GenreEntity>>
 
+    @Query("SELECT * FROM GENREENTITY")
+    fun getGenres(): List<GenreEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertGenre(genre: List<GenreEntity>)
 
