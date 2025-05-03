@@ -1,6 +1,5 @@
 package com.raylabs.jetmovie.utils
 
-import com.raylabs.jetmovie.data.source.local.entity.GenreEntity
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -8,23 +7,13 @@ import java.util.Locale
 
 object DataHelper {
 
-    var genres = ArrayList<GenreEntity>()
-
-    fun convertGenre(genreID: List<Int>): String {
-        val filteredGenre = ArrayList<GenreEntity>()
-        for (id in genreID) {
-            val genre = genres.find { it.id == id }
-            if (genre != null)
-                filteredGenre.add(genre)
-        }
-        return filteredGenre.joinToString { it.name }
-    }
-
     enum class DataFrom(val value: String) {
         TRENDING("trending"),
         UPCOMING("upcoming"),
         SEARCH("search"),
-        POPULAR("popular");
+        POPULAR("popular"),
+        DETAIL_TV("detailTV"),
+        DETAIL_MOVIE("detailMOVIE");
     }
 
     fun String.toMillisAt10AM(): Long {

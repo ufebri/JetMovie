@@ -7,6 +7,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
+import com.raylabs.jetmovie.data.scheduler.ScheduleWorkers
 import com.raylabs.jetmovie.data.source.DataSource
 import com.raylabs.jetmovie.data.source.local.LocalDataSource
 import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
@@ -17,10 +18,10 @@ import com.raylabs.jetmovie.data.source.remote.RemoteDataSource
 import com.raylabs.jetmovie.data.source.remote.response.ResultsGenre
 import com.raylabs.jetmovie.data.source.remote.response.ResultsItem
 import com.raylabs.jetmovie.data.source.remote.response.ResultsVideos
-import com.raylabs.jetmovie.data.scheduler.ScheduleWorkers
 import com.raylabs.jetmovie.domain.model.NotificationData
 import com.raylabs.jetmovie.utils.AppExecutors
 import com.raylabs.jetmovie.utils.DataHelper
+import com.raylabs.jetmovie.utils.DataMapper
 import com.raylabs.jetmovie.vo.Resource
 import java.util.concurrent.TimeUnit
 
@@ -54,23 +55,17 @@ class FakeDataRepository(
                 remoteDataSource.getAllTrending("2")
 
             override fun saveCallResult(data: List<ResultsItem>) {
-                val listTrending = ArrayList<DataMovieTVEntity>()
-                for (response in data) {
-                    with(response) {
-                        val trending = DataMovieTVEntity(
-                            id = id,
-                            title = title,
-                            vote = voteAverage,
-                            genre = DataHelper.convertGenre(genreIds),
-                            mediaType = mediaType,
-                            backDropPath = backdropPath,
-                            imagePath = posterPath,
-                            overview = overview
+                val genreList = localDataSource.getGenres()
+                data.map { result ->
+                    val genreList = DataMapper.convertGenre(genreList, result.genreIds)
+                    val listTrending =
+                        DataMapper.toListEntities(
+                            data,
+                            genreList,
+                            DataHelper.DataFrom.TRENDING.value
                         )
-                        listTrending.add(trending)
-                    }
+                    localDataSource.insertTrending(listTrending)
                 }
-                localDataSource.insertTrending(listTrending)
             }
         }.asLiveData()
     }
@@ -95,23 +90,17 @@ class FakeDataRepository(
                 remoteDataSource.getAllTrending("1")
 
             override fun saveCallResult(data: List<ResultsItem>) {
-                val listPopular = ArrayList<DataMovieTVEntity>()
-                for (response in data) {
-                    with(response) {
-                        val popular = DataMovieTVEntity(
-                            id = id,
-                            imagePath = posterPath,
-                            mediaType = mediaType,
-                            title = title,
-                            backDropPath = backdropPath,
-                            vote = voteAverage,
-                            overview = overview,
-                            genre = DataHelper.convertGenre(genreIds)
+                val genreList = localDataSource.getGenres()
+                data.map { result ->
+                    val genreList = DataMapper.convertGenre(genreList, result.genreIds)
+                    val listPopular =
+                        DataMapper.toListEntities(
+                            data,
+                            genreList,
+                            DataHelper.DataFrom.POPULAR.value
                         )
-                        listPopular.add(popular)
-                    }
+                    localDataSource.insertPopular(listPopular)
                 }
-                localDataSource.insertPopular(listPopular)
             }
         }.asLiveData()
 
@@ -159,17 +148,7 @@ class FakeDataRepository(
                 remoteDataSource.getAllGenre(mediaType)
 
             override fun saveCallResult(data: List<ResultsGenre>) {
-                val listGenre = ArrayList<GenreEntity>()
-                for (response in data) {
-                    with(response) {
-                        val genre = GenreEntity(
-                            id = id,
-                            name = name
-                        )
-                        listGenre.add(genre)
-                        DataHelper.genres.add(genre)
-                    }
-                }
+                val listGenre = DataMapper.toGenreEntity(data)
                 localDataSource.insertGenre(listGenre)
             }
         }.asLiveData()
@@ -276,23 +255,17 @@ class FakeDataRepository(
                 remoteDataSource.getAllUpcoming()
 
             override fun saveCallResult(data: List<ResultsItem>) {
-                val listTrending = ArrayList<DataMovieTVEntity>()
-                for (response in data) {
-                    with(response) {
-                        val trending = DataMovieTVEntity(
-                            id = id,
-                            title = title,
-                            vote = voteAverage,
-                            genre = DataHelper.convertGenre(genreIds),
-                            mediaType = mediaType,
-                            backDropPath = backdropPath,
-                            imagePath = posterPath,
-                            overview = overview
+                val genreList = localDataSource.getGenres()
+                data.map { result ->
+                    val genreList = DataMapper.convertGenre(genreList, result.genreIds)
+                    val listTrending =
+                        DataMapper.toListEntities(
+                            data,
+                            genreList,
+                            DataHelper.DataFrom.UPCOMING.value
                         )
-                        listTrending.add(trending)
-                    }
+                    localDataSource.insertTrending(listTrending)
                 }
-                localDataSource.insertTrending(listTrending)
             }
         }.asLiveData()
     }
@@ -318,23 +291,16 @@ class FakeDataRepository(
                 remoteDataSource.getMovieByKeyword(keyword)
 
             override fun saveCallResult(data: List<ResultsItem>) {
-                val listTrending = ArrayList<DataMovieTVEntity>()
-                for (response in data) {
-                    with(response) {
-                        val trending = DataMovieTVEntity(
-                            id = id,
-                            title = title,
-                            vote = voteAverage,
-                            genre = DataHelper.convertGenre(genreIds),
-                            mediaType = mediaType,
-                            backDropPath = backdropPath,
-                            imagePath = posterPath,
-                            overview = overview
-                        )
-                        listTrending.add(trending)
-                    }
+                val genreList = localDataSource.getGenres()
+                data.map { result ->
+                    val genreList = DataMapper.convertGenre(genreList, result.genreIds)
+                    val listTrending = DataMapper.toListEntities(
+                        data,
+                        genreList,
+                        DataHelper.DataFrom.SEARCH.value
+                    )
+                    localDataSource.insertTrending(listTrending)
                 }
-                localDataSource.insertTrending(listTrending)
             }
         }.asLiveData()
     }

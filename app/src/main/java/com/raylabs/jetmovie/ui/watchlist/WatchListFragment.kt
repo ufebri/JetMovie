@@ -46,7 +46,7 @@ class WatchListFragment : Fragment() {
             watchListAdapter = WatchListAdapter()
 
             showLoading(true)
-            viewModel.getWatchList().observe(viewLifecycleOwner) { result ->
+            viewModel.getWatchList().observe(viewLifecycleOwner, { result ->
                 if (result.isNotEmpty()) {
                     showLoading(false)
                     watchListAdapter.submitList(result)
@@ -54,7 +54,7 @@ class WatchListFragment : Fragment() {
                     showLoading(false)
                     showNoData()
                 }
-            }
+            })
             showRecyclerView()
         }
     }

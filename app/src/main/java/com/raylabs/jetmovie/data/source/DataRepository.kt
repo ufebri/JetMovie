@@ -75,9 +75,7 @@ class DataRepository private constructor(
                 remoteDataSource.getAllTrending("2")
 
             override fun saveCallResult(data: List<ResultsItem>) {
-                val listTrending =
-                    DataMapper.toListEntities(data, DataHelper.DataFrom.TRENDING.value)
-                localDataSource.insertTrending(listTrending)
+
             }
         }.asLiveData()
     }
@@ -102,9 +100,17 @@ class DataRepository private constructor(
                 remoteDataSource.getAllTrending("1")
 
             override fun saveCallResult(data: List<ResultsItem>) {
-                val listPopular =
-                    DataMapper.toListEntities(data, DataHelper.DataFrom.POPULAR.value)
-                localDataSource.insertPopular(listPopular)
+                val genreList = localDataSource.getGenres()
+                data.map { result ->
+                    val genreList = DataMapper.convertGenre(genreList, result.genreIds)
+                    val listPopular =
+                        DataMapper.toListEntities(
+                            data,
+                            genreList,
+                            DataHelper.DataFrom.POPULAR.value
+                        )
+                    localDataSource.insertPopular(listPopular)
+                }
             }
         }.asLiveData()
 
@@ -125,16 +131,7 @@ class DataRepository private constructor(
                 remoteDataSource.getDetailVideos(mediaType, id)
 
             override fun saveCallResult(data: List<ResultsVideos>) {
-                val listVideo = ArrayList<VideoEntity>()
-                for (response in data) {
-                    with(response) {
-                        val video = VideoEntity(
-                            id = id,
-                            key = key
-                        )
-                        listVideo.add(video)
-                    }
-                }
+                val listVideo = DataMapper.toVideoEntity(id, data)
                 localDataSource.insertVideo(listVideo)
             }
         }.asLiveData()
@@ -152,17 +149,7 @@ class DataRepository private constructor(
                 remoteDataSource.getAllGenre(mediaType)
 
             override fun saveCallResult(data: List<ResultsGenre>) {
-                val listGenre = ArrayList<GenreEntity>()
-                for (response in data) {
-                    with(response) {
-                        val genre = GenreEntity(
-                            id = id,
-                            name = name
-                        )
-                        listGenre.add(genre)
-                        DataHelper.genres.add(genre)
-                    }
-                }
+                val listGenre = DataMapper.toGenreEntity(data)
                 localDataSource.insertGenre(listGenre)
             }
         }.asLiveData()
@@ -195,24 +182,8 @@ class DataRepository private constructor(
                 remoteDataSource.getDetailTV(id)
 
             override fun saveCallResult(data: ResultsItem) {
-                val listGenre = ArrayList<String>()
-                for (i in data.genres?.indices!!) {
-                    listGenre.add(data.genres[0].name)
-                }
-
-                val detailResult = DataMovieTVEntity(
-                    id = data.id,
-                    vote = data.voteAverage,
-                    genre = listGenre.joinToString(),
-                    overview = data.overview,
-                    isFavorite = false,
-                    backDropPath = data.backdropPath,
-                    imagePath = data.posterPath,
-                    title = data.title ?: data.name,
-                    mediaType = data.mediaType,
-                    dataFrom = "detailTV",
-                    releaseData = data.firstAirDate
-                )
+                val detailResult =
+                    DataMapper.toDataEntities(data, DataHelper.DataFrom.DETAIL_TV.value)
                 localDataSource.updateDetail(detailResult, false)
             }
         }.asLiveData()
@@ -230,24 +201,8 @@ class DataRepository private constructor(
                 remoteDataSource.getDetailMovie(id)
 
             override fun saveCallResult(data: ResultsItem) {
-                val listGenre = ArrayList<String>()
-                for (i in data.genres?.indices!!) {
-                    listGenre.add(data.genres[0].name)
-                }
-
-                val detailResult = DataMovieTVEntity(
-                    id = data.id,
-                    title = data.title ?: data.name,
-                    vote = data.voteAverage,
-                    genre = listGenre.joinToString(),
-                    overview = data.overview,
-                    isFavorite = false,
-                    backDropPath = data.backdropPath,
-                    imagePath = data.posterPath,
-                    mediaType = data.mediaType,
-                    dataFrom = "detailMovie",
-                    releaseData = data.releaseDate
-                )
+                val detailResult =
+                    DataMapper.toDataEntities(data, DataHelper.DataFrom.DETAIL_MOVIE.value)
                 localDataSource.updateDetail(detailResult, false)
             }
         }.asLiveData()
@@ -274,9 +229,17 @@ class DataRepository private constructor(
                 remoteDataSource.getAllUpcoming()
 
             override fun saveCallResult(data: List<ResultsItem>) {
-                val listTrending =
-                    DataMapper.toListEntities(data, DataHelper.DataFrom.UPCOMING.value)
-                localDataSource.insertTrending(listTrending)
+                val genreList = localDataSource.getGenres()
+                data.map { result ->
+                    val genreList = DataMapper.convertGenre(genreList, result.genreIds)
+                    val listTrending =
+                        DataMapper.toListEntities(
+                            data,
+                            genreList,
+                            DataHelper.DataFrom.UPCOMING.value
+                        )
+                    localDataSource.insertTrending(listTrending)
+                }
             }
         }.asLiveData()
     }
@@ -302,8 +265,16 @@ class DataRepository private constructor(
                 remoteDataSource.getMovieByKeyword(keyword)
 
             override fun saveCallResult(data: List<ResultsItem>) {
-                val listTrending = DataMapper.toListEntities(data, DataHelper.DataFrom.SEARCH.value)
-                localDataSource.insertTrending(listTrending)
+                val genreList = localDataSource.getGenres()
+                data.map { result ->
+                    val genreList = DataMapper.convertGenre(genreList, result.genreIds)
+                    val listTrending = DataMapper.toListEntities(
+                        data,
+                        genreList,
+                        DataHelper.DataFrom.SEARCH.value
+                    )
+                    localDataSource.insertTrending(listTrending)
+                }
             }
         }.asLiveData()
     }
