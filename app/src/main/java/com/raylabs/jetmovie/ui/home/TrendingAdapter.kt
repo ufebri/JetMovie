@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.paging.PagedListAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.raylabs.jetmovie.BuildConfig
@@ -15,28 +14,16 @@ import com.raylabs.jetmovie.databinding.ItemImageSliderHomeBinding
 import com.raylabs.jetmovie.ui.detail.DetailActivity
 import com.raylabs.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
 import com.raylabs.jetmovie.ui.home.TrendingAdapter.TrendingViewHolder
+import com.raylabs.jetmovie.utils.createDiffCallback
 import java.util.Locale
 
 class TrendingAdapter :
-    PagedListAdapter<DataMovieTVEntity, TrendingViewHolder>(DIFF_CALLBACK) {
-
-    companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataMovieTVEntity>() {
-            override fun areItemsTheSame(
-                oldItem: DataMovieTVEntity,
-                newItem: DataMovieTVEntity
-            ): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(
-                oldItem: DataMovieTVEntity,
-                newItem: DataMovieTVEntity
-            ): Boolean {
-                return oldItem == newItem
-            }
-        }
-    }
+    PagedListAdapter<DataMovieTVEntity, TrendingViewHolder>(
+        createDiffCallback<DataMovieTVEntity>(
+            idSelector = { it.id },
+            contentEquality = { old, new -> old == new }
+        )
+    ) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
