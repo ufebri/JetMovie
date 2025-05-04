@@ -5,38 +5,28 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.paging.PagedListAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.raylabs.jetmovie.BuildConfig
 import com.raylabs.jetmovie.R
 import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
+import com.raylabs.jetmovie.data.source.local.entity.displayRating
+import com.raylabs.jetmovie.data.source.local.entity.primaryGenre
+import com.raylabs.jetmovie.data.source.local.entity.shouldShowReleaseDate
 import com.raylabs.jetmovie.databinding.ItemImageSliderHomeBinding
 import com.raylabs.jetmovie.ui.detail.DetailActivity
 import com.raylabs.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
 import com.raylabs.jetmovie.ui.home.TrendingAdapter.TrendingViewHolder
+import com.raylabs.jetmovie.utils.createDiffCallback
 import java.util.Locale
 
 class TrendingAdapter :
-    PagedListAdapter<DataMovieTVEntity, TrendingViewHolder>(DIFF_CALLBACK) {
-
-    companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataMovieTVEntity>() {
-            override fun areItemsTheSame(
-                oldItem: DataMovieTVEntity,
-                newItem: DataMovieTVEntity
-            ): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(
-                oldItem: DataMovieTVEntity,
-                newItem: DataMovieTVEntity
-            ): Boolean {
-                return oldItem == newItem
-            }
-        }
-    }
+    PagedListAdapter<DataMovieTVEntity, TrendingViewHolder>(
+        createDiffCallback<DataMovieTVEntity>(
+            idSelector = { it.id },
+            contentEquality = { old, new -> old == new }
+        )
+    ) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -65,18 +55,14 @@ class TrendingAdapter :
                     .placeholder(R.drawable.ic_no_image)
                     .into(ivSlideHome)
 
-                //Convert trending to double with  2 digit only
-                val mVote: Double = (trending.vote ?: 0.0) / 10.0 * 5.0
-
                 tvTitleFeatured.text = trending.title
                 tvRatingFeatured.text = String.format(Locale.getDefault(), "%.1f", trending.vote)
-                tvGenreFeatured.text = trending.genre?.split(",")?.first()
-                rbRatingFeatured.rating =
-                    String.format(Locale.getDefault(), "%.1f", mVote).toFloat()
+                tvGenreFeatured.text = trending.primaryGenre()
+                rbRatingFeatured.rating = trending.displayRating()
 
                 //Only show for upcoming type
                 tvReleasedDate.apply {
-                    isGone = !trending.dataFrom.equals("upcoming")
+                    isGone = !trending.shouldShowReleaseDate()
                     text = trending.releaseData.toString()
                 }
 

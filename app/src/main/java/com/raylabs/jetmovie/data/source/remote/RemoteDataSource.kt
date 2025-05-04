@@ -9,7 +9,7 @@ import com.raylabs.jetmovie.data.source.remote.response.GetDetailVideos
 import com.raylabs.jetmovie.data.source.remote.response.ResultsGenre
 import com.raylabs.jetmovie.data.source.remote.response.ResultsItem
 import com.raylabs.jetmovie.data.source.remote.response.ResultsVideos
-import com.raylabs.jetmovie.network.ApiConfig
+import com.raylabs.jetmovie.network.ApiService
 import com.raylabs.jetmovie.utils.EspressoIdlingResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -18,38 +18,38 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RemoteDataSource {
+class RemoteDataSource(private val apiService: ApiService) {
 
     companion object {
-        private val client = ApiConfig.getApiService()
+        //private val client = ApiConfig.getApiService()
         private const val TAG = "RemoteDataSource"
 
 
         @Volatile
         private var instance: RemoteDataSource? = null
 
-        fun getInstance(): RemoteDataSource =
+        fun getInstance(apiService: ApiService): RemoteDataSource =
             instance ?: synchronized(this) {
-                instance ?: RemoteDataSource()
+                instance ?: RemoteDataSource(apiService).also { instance = it }
             }
     }
 
     fun getMovieByKeyword(keyword: String): LiveData<ApiResponse<List<ResultsItem>>> {
-        EspressoIdlingResource.increment()
+        //EspressoIdlingResource.increment()
         val resultsItem = MutableLiveData<ApiResponse<List<ResultsItem>>>()
-        client.getMovieByKeyword(keyword = keyword).enqueue(object : Callback<DataResponse> {
+        apiService.getMovieByKeyword(keyword = keyword).enqueue(object : Callback<DataResponse> {
             override fun onResponse(
                 call: Call<DataResponse>,
                 response: Response<DataResponse>
             ) {
                 resultsItem.value =
-                    ApiResponse.success(response.body()?.results as List<ResultsItem>)
-                EspressoIdlingResource.decrement()
+                    ApiResponse.success(response.body()?.results.orEmpty())
+                //EspressoIdlingResource.decrement()
             }
 
             override fun onFailure(call: Call<DataResponse>, t: Throwable) {
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
-                EspressoIdlingResource.decrement()
+                //EspressoIdlingResource.decrement()
             }
 
         })
@@ -57,21 +57,21 @@ class RemoteDataSource {
     }
 
     fun getAllUpcoming(): LiveData<ApiResponse<List<ResultsItem>>> {
-        EspressoIdlingResource.increment()
+        //EspressoIdlingResource.increment()
         val resultsItem = MutableLiveData<ApiResponse<List<ResultsItem>>>()
-        client.getAllUpComingMovie().enqueue(object : Callback<DataResponse> {
+        apiService.getAllUpComingMovie().enqueue(object : Callback<DataResponse> {
             override fun onResponse(
                 call: Call<DataResponse>,
                 response: Response<DataResponse>
             ) {
                 resultsItem.value =
-                    ApiResponse.success(response.body()?.results as List<ResultsItem>)
-                EspressoIdlingResource.decrement()
+                    ApiResponse.success(response.body()?.results.orEmpty())
+                //EspressoIdlingResource.decrement()
             }
 
             override fun onFailure(call: Call<DataResponse>, t: Throwable) {
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
-                EspressoIdlingResource.decrement()
+                //EspressoIdlingResource.decrement()
             }
 
         })
@@ -79,21 +79,21 @@ class RemoteDataSource {
     }
 
     fun getAllTrending(page: String): LiveData<ApiResponse<List<ResultsItem>>> {
-        EspressoIdlingResource.increment()
+        //EspressoIdlingResource.increment()
         val resultsItem = MutableLiveData<ApiResponse<List<ResultsItem>>>()
-        client.getTrending(page = page).enqueue(object : Callback<DataResponse> {
+        apiService.getTrending(page = page).enqueue(object : Callback<DataResponse> {
             override fun onResponse(
                 call: Call<DataResponse>,
                 response: Response<DataResponse>
             ) {
                 resultsItem.value =
-                    ApiResponse.success(response.body()?.results as List<ResultsItem>)
-                EspressoIdlingResource.decrement()
+                    ApiResponse.success(response.body()?.results.orEmpty())
+                //EspressoIdlingResource.decrement()
             }
 
             override fun onFailure(call: Call<DataResponse>, t: Throwable) {
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
-                EspressoIdlingResource.decrement()
+                //EspressoIdlingResource.decrement()
             }
 
         })
@@ -101,7 +101,7 @@ class RemoteDataSource {
     }
 
     fun fetchMovies(page: String): Flow<DataResponse> = flow {
-        val response = client.fetchTrending(page = page)
+        val response = apiService.fetchTrending(page = page)
         emit(response)
     }.catch { e ->
         Log.e(TAG, "fetchMovies: ", e.cause)
@@ -113,20 +113,20 @@ class RemoteDataSource {
         dataID: String
     ): LiveData<ApiResponse<List<ResultsVideos>>> {
         val resultsVideos = MutableLiveData<ApiResponse<List<ResultsVideos>>>()
-        EspressoIdlingResource.increment()
-        client.getDetailVideo(mediaType, dataID).enqueue(object : Callback<GetDetailVideos> {
+        //EspressoIdlingResource.increment()
+        apiService.getDetailVideo(mediaType, dataID).enqueue(object : Callback<GetDetailVideos> {
             override fun onResponse(
                 call: Call<GetDetailVideos>,
                 response: Response<GetDetailVideos>
             ) {
                 resultsVideos.value =
-                    ApiResponse.success(response.body()?.results as List<ResultsVideos>)
-                EspressoIdlingResource.decrement()
+                    ApiResponse.success(response.body()?.results.orEmpty())
+                //EspressoIdlingResource.decrement()
             }
 
             override fun onFailure(call: Call<GetDetailVideos>, t: Throwable) {
                 Log.e(TAG, "onFailure: ${t.message}")
-                EspressoIdlingResource.decrement()
+                //EspressoIdlingResource.decrement()
             }
 
         })
@@ -134,34 +134,34 @@ class RemoteDataSource {
     }
 
     fun getDetailTV(dataID: String): LiveData<ApiResponse<ResultsItem>> {
-        EspressoIdlingResource.increment()
+        //EspressoIdlingResource.increment()
         val resultDetailItem = MutableLiveData<ApiResponse<ResultsItem>>()
-        client.getDetailTV(dataID).enqueue(object : Callback<ResultsItem> {
+        apiService.getDetailTV(dataID).enqueue(object : Callback<ResultsItem> {
             override fun onResponse(call: Call<ResultsItem>, response: Response<ResultsItem>) {
                 resultDetailItem.value = ApiResponse.success(response.body() as ResultsItem)
-                EspressoIdlingResource.decrement()
+                //EspressoIdlingResource.decrement()
             }
 
             override fun onFailure(call: Call<ResultsItem>, t: Throwable) {
                 Log.d(TAG, "onFailure: ${t.message}")
-                EspressoIdlingResource.decrement()
+                //EspressoIdlingResource.decrement()
             }
         })
         return resultDetailItem
     }
 
     fun getDetailMovie(dataID: String): LiveData<ApiResponse<ResultsItem>> {
-        EspressoIdlingResource.increment()
+        //EspressoIdlingResource.increment()
         val resultDetailItem = MutableLiveData<ApiResponse<ResultsItem>>()
-        client.getDetailMovie(dataID).enqueue(object : Callback<ResultsItem> {
+        apiService.getDetailMovie(dataID).enqueue(object : Callback<ResultsItem> {
             override fun onResponse(call: Call<ResultsItem>, response: Response<ResultsItem>) {
                 resultDetailItem.value = ApiResponse.success(response.body() as ResultsItem)
-                EspressoIdlingResource.decrement()
+                //EspressoIdlingResource.decrement()
             }
 
             override fun onFailure(call: Call<ResultsItem>, t: Throwable) {
                 Log.d(TAG, "onFailure: ${t.message}")
-                EspressoIdlingResource.decrement()
+                //EspressoIdlingResource.decrement()
             }
         })
         return resultDetailItem
@@ -169,17 +169,17 @@ class RemoteDataSource {
 
     fun getAllGenre(mediaType: String): LiveData<ApiResponse<List<ResultsGenre>>> {
         val resultsGenre = MutableLiveData<ApiResponse<List<ResultsGenre>>>()
-        EspressoIdlingResource.increment()
-        client.getGenre(mediaType).enqueue(object : Callback<DataGenre> {
+        //EspressoIdlingResource.increment()
+        apiService.getGenre(mediaType).enqueue(object : Callback<DataGenre> {
             override fun onResponse(call: Call<DataGenre>, response: Response<DataGenre>) {
                 resultsGenre.value =
-                    ApiResponse.success(response.body()?.genres as List<ResultsGenre>)
-                EspressoIdlingResource.decrement()
+                    ApiResponse.success(response.body()?.genres.orEmpty())
+                //EspressoIdlingResource.decrement()
             }
 
             override fun onFailure(call: Call<DataGenre>, t: Throwable) {
                 Log.e(TAG, "onFailure: ${t.message}")
-                EspressoIdlingResource.decrement()
+                //EspressoIdlingResource.decrement()
             }
         })
         return resultsGenre

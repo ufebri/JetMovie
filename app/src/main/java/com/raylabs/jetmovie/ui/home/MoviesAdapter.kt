@@ -4,7 +4,6 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.raylabs.jetmovie.BuildConfig
@@ -13,27 +12,15 @@ import com.raylabs.jetmovie.data.source.local.entity.DataMovieTVEntity
 import com.raylabs.jetmovie.databinding.ItemHomeBinding
 import com.raylabs.jetmovie.ui.detail.DetailActivity
 import com.raylabs.jetmovie.ui.detail.DetailActivity.Companion.DATA_RESULT
+import com.raylabs.jetmovie.utils.createDiffCallback
 
 class MoviesAdapter :
-    PagedListAdapter<DataMovieTVEntity, MoviesAdapter.MoviesViewHolder>(DIFF_CALLBACK) {
-
-    companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataMovieTVEntity>() {
-            override fun areItemsTheSame(
-                oldItem: DataMovieTVEntity,
-                newItem: DataMovieTVEntity
-            ): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(
-                oldItem: DataMovieTVEntity,
-                newItem: DataMovieTVEntity
-            ): Boolean {
-                return oldItem == newItem
-            }
-        }
-    }
+    PagedListAdapter<DataMovieTVEntity, MoviesAdapter.MoviesViewHolder>(
+        createDiffCallback<DataMovieTVEntity>(
+            idSelector = { it.id },
+            contentEquality = { old, new -> old == new }
+        )
+    ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
         val itemHomeBinding =

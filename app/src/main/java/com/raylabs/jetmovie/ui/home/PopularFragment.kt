@@ -25,8 +25,6 @@ class PopularFragment : Fragment() {
 
     private var _popularBinding: ContentHomePopularBinding? = null
     private val binding get() = _popularBinding
-    private lateinit var popularAdapter: MoviesAdapter
-    private lateinit var trendingAdapter: TrendingAdapter
     private lateinit var viewModel: HomeViewModel
 
     override fun onCreateView(
@@ -46,14 +44,9 @@ class PopularFragment : Fragment() {
             val factory = ViewModelFactory.getInstance(requireActivity())
             viewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
-            popularAdapter = MoviesAdapter()
-            trendingAdapter = TrendingAdapter()
-
             showLoading(true)
             viewModel.trending().observe(viewLifecycleOwner, trendingObserver)
             viewModel.popular().observe(viewLifecycleOwner, popularObserver)
-            showTrending()
-            showPopular()
 
             binding?.apply {
                 svHome.setupWithSearchBar(sbHome)
@@ -82,7 +75,7 @@ class PopularFragment : Fragment() {
 
                 Status.SUCCESS -> {
                     showLoading(false)
-                    popularAdapter.submitList(result.data)
+                    if (result.data != null) showPopular(result.data)
                 }
 
                 Status.ERROR -> {
@@ -107,7 +100,7 @@ class PopularFragment : Fragment() {
 
             Status.SUCCESS -> {
                 if (result.data != null) {
-                    trendingAdapter.submitList(result.data)
+                    showTrending(result.data)
                     showLoading(false)
                 }
             }
@@ -137,14 +130,16 @@ class PopularFragment : Fragment() {
             }
     }
 
-    private fun showTrending() {
+    private fun showTrending(mData: PagedList<DataMovieTVEntity>) {
         binding?.let {
             with(it.rvResultTrending) {
+                val trendingAdapter = TrendingAdapter()
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 setHasFixedSize(true)
                 val snapHelper = LinearSnapHelper()
                 snapHelper.attachToRecyclerView(it.rvResultTrending)
                 adapter = trendingAdapter
+                trendingAdapter.submitList(mData)
             }
         }
     }
@@ -154,7 +149,7 @@ class PopularFragment : Fragment() {
             Status.LOADING -> showLoading(true)
             Status.SUCCESS -> {
                 showLoading(false)
-                popularAdapter.submitList(result.data)
+                if (result.data != null) showPopular(result.data)
             }
 
             Status.ERROR -> {
@@ -165,12 +160,14 @@ class PopularFragment : Fragment() {
         }
     }
 
-    private fun showPopular() {
+    private fun showPopular(mData: PagedList<DataMovieTVEntity>) {
         binding?.let {
             with(it.rvResultsMovie) {
+                val popularAdapter = MoviesAdapter()
                 layoutManager =
                     GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
                 adapter = popularAdapter
+                popularAdapter.submitList(mData)
             }
 
             it.tvPopularHome.text =

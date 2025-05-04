@@ -75,7 +75,17 @@ class DataRepository private constructor(
                 remoteDataSource.getAllTrending("2")
 
             override fun saveCallResult(data: List<ResultsItem>) {
-
+                val genreList = localDataSource.getGenres()
+                data.map { result ->
+                    val mGenreList = DataMapper.convertGenre(genreList, result.genreIds)
+                    val listPopular =
+                        DataMapper.toListEntities(
+                            data,
+                            mGenreList,
+                            DataHelper.DataFrom.TRENDING.value
+                        )
+                    localDataSource.insertTrending(listPopular)
+                }
             }
         }.asLiveData()
     }
