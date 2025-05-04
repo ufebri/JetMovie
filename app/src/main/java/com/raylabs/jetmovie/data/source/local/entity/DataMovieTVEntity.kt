@@ -5,6 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
+import java.util.Locale
 
 @Parcelize
 @Entity(tableName = "dataMovieTVEntities")
@@ -43,3 +44,13 @@ data class DataMovieTVEntity(
     @ColumnInfo(name = "release_data")
     var releaseData: String? = null,
 ) : Parcelable
+
+fun DataMovieTVEntity.displayRating(): Float =
+    String.format(Locale.getDefault(), "%.1f", (vote ?: 0.0) / 2).toFloat()
+
+fun DataMovieTVEntity.primaryGenre(): String? =
+    genre?.split(",")?.firstOrNull()
+
+fun DataMovieTVEntity.shouldShowReleaseDate(): Boolean =
+    dataFrom.equals("upcoming", ignoreCase = true)
+
