@@ -10,12 +10,14 @@ import com.raylabs.jetmovie.data.source.local.room.JetMovieDatabase
 import com.raylabs.jetmovie.data.source.preferences.SettingPreferences
 import com.raylabs.jetmovie.data.source.preferences.dataStore
 import com.raylabs.jetmovie.data.source.remote.RemoteDataSource
+import com.raylabs.jetmovie.network.ApiConfig
 
 object Injection {
+    private val apiService = ApiConfig.getApiService()
+
     fun provideRepository(context: Context): DataRepository {
         val database = JetMovieDatabase.getInstance(context)
-
-        val remoteDataSource = RemoteDataSource.getInstance()
+        val remoteDataSource = RemoteDataSource.getInstance(apiService)
         val localDataSource = LocalDataSource.getInstance(database.jetMovieDao())
         val appExecutors = AppExecutors()
         val workManager = WorkManager.getInstance(context)
@@ -37,5 +39,5 @@ object Injection {
         return SchedulerRepository.getInstance(workManager)
     }
 
-    val remoteDataSource = RemoteDataSource.getInstance()
+    val remoteDataSource = RemoteDataSource.getInstance(apiService)
 }
